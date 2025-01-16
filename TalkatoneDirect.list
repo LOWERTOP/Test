@@ -8,5 +8,7 @@
 # 策略建议：DIRECT
 # 使用本集需要搭配以下代理规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneProxyOnly.list
-DOMAIN-SUFFIX,zz010.com
-DOMAIN-SUFFIX,zz011.com
+DOMAIN-SUFFIX,zz010.com,DIRECT
+DOMAIN-SUFFIX,zz011.com,DIRECT
+IP-CIDR,000.100.50.0/24,DIRECT,no-resolve
+IP-CIDR,000.100.50.0/24,DIRECT,no-resolve
