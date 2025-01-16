@@ -30,7 +30,6 @@ def update_list_file(list_file_path, reject_rules, direct_rules, proxy_rules):
         content = file.readlines()
 
     updated_content = []
-    inside_rules = False
     reject_updated = False
     direct_updated = False
     proxy_updated = False
@@ -43,24 +42,24 @@ def update_list_file(list_file_path, reject_rules, direct_rules, proxy_rules):
         elif 'DOMAIN-' in line:  # 检测到规则行
             # 如果规则行已经存在并且是 REJECT、DIRECT 或 PROXY 类型，则跳过
             if 'REJECT' in line and not reject_updated:
-                updated_content.extend(reject_rules)  # 替换 REJECT 规则
+                updated_content.extend([rule + '\n' for rule in reject_rules])  # 替换 REJECT 规则，并换行
                 reject_updated = True
             elif 'DIRECT' in line and not direct_updated:
-                updated_content.extend(direct_rules)  # 替换 DIRECT 规则
+                updated_content.extend([rule + '\n' for rule in direct_rules])  # 替换 DIRECT 规则，并换行
                 direct_updated = True
             elif 'PROXY' in line and not proxy_updated:
-                updated_content.extend(proxy_rules)  # 替换 PROXY 规则
+                updated_content.extend([rule + '\n' for rule in proxy_rules])  # 替换 PROXY 规则，并换行
                 proxy_updated = True
         else:
             updated_content.append(line)
 
     # 如果某些类型的规则没有被更新（例如没有 `REJECT` 规则），确保插入它们
     if not reject_updated:
-        updated_content.extend(reject_rules)
+        updated_content.extend([rule + '\n' for rule in reject_rules])  # 添加 REJECT 规则
     if not direct_updated:
-        updated_content.extend(direct_rules)
+        updated_content.extend([rule + '\n' for rule in direct_rules])  # 添加 DIRECT 规则
     if not proxy_updated:
-        updated_content.extend(proxy_rules)
+        updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
 
     # 写回更新后的内容
     with open(list_file_path, 'w') as file:
