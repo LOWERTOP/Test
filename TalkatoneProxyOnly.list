@@ -8,4 +8,3 @@
 # 策略建议：PROXY
 # 使用本集需要搭配以下直连规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneDirect.list
-# 以下规则必须走代理
