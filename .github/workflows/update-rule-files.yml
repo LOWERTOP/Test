@@ -1,0 +1,40 @@
+name: Update Rule Files
+
+on:
+  push:
+    paths:
+      - 'Talkatone.sgmodule'   # 监控这个文件的变化
+  pull_request:
+    paths:
+      - 'Talkatone.sgmodule'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest  # 使用 Ubuntu 环境
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # 检出仓库内容
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'  # 设置 Python 版本
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt  # 如果有需要的库，可以先创建 requirements.txt
+
+      - name: Run the script to update rule files
+        run: |
+          python3 update_rule_files.py  # 执行更新规则文件的脚本
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Update rule files based on latest module"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的 Token 提交修改
