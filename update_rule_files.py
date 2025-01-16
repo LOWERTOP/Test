@@ -37,18 +37,32 @@ def update_list_file(list_file_path, rules):
         else:
             updated_content.append(line)
 
-    with open(list_file_path, 'w') as file:
-        file.writelines(updated_content)
+    # 如果文件内容发生变化，则更新文件
+    if updated_content != content:
+        with open(list_file_path, 'w') as file:
+            file.writelines(updated_content)
+        print(f"Updated {list_file_path}")  # 日志输出
+        return True
+    else:
+        print(f"No changes for {list_file_path}")  # 日志输出
+        return False
 
 def update_rule_files():
     module_path = './Talkatone.sgmodule'
     reject_rules, direct_rules, proxy_rules = parse_module_file(module_path)
 
     # 更新每个 .list 文件
-    update_list_file('./TalkatoneAntiAds.list', "\n".join(reject_rules))
-    update_list_file('./TalkatoneDirect.list', "\n".join(direct_rules))
-    update_list_file('./TalkatoneProxyOnly.list', "\n".join(proxy_rules))
-    update_list_file('./TalkatoneProxy.list', "\n".join(reject_rules + direct_rules + proxy_rules))
+    updated = False
+    updated |= update_list_file('./TalkatoneAntiAds.list', "\n".join(reject_rules))
+    updated |= update_list_file('./TalkatoneDirect.list', "\n".join(direct_rules))
+    updated |= update_list_file('./TalkatoneProxyOnly.list', "\n".join(proxy_rules))
+    updated |= update_list_file('./TalkatoneProxy.list', "\n".join(reject_rules + direct_rules + proxy_rules))
+
+    return updated
 
 if __name__ == "__main__":
-    update_rule_files()
+    updated = update_rule_files()
+    if updated:
+        print("Changes have been made to the list files.")
+    else:
+        print("No changes detected.")
