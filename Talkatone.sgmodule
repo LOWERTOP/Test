@@ -12,7 +12,6 @@ DOMAIN-KEYWORD,googleads,REJECT
 DOMAIN-SUFFIX,ads.inmobi.com,REJECT
 DOMAIN-SUFFIX,adsappier.com,REJECT-DROP
 DOMAIN-SUFFIX,amazon-adsystem.com,REJECT-DROP
-DOMAIN-SUFFIX,appier.net,REJECT-DROP
 
 
 # 以下为该软件可能需要走代理的规则
