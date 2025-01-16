@@ -19,6 +19,11 @@ def parse_module_file(module_file_path):
     direct_rules += ip_cidr_direct_rules
     proxy_rules += ip_cidr_proxy_rules
 
+    # 只保留规则部分（去掉 REJECT、DIRECT、PROXY 等策略）
+    reject_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in reject_rules]
+    direct_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in direct_rules]
+    proxy_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in proxy_rules]
+
     return reject_rules, direct_rules, proxy_rules
 
 def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None):
