@@ -3,7 +3,7 @@ name: Update Rule Files
 on:
   push:
     paths:
-      - 'Talkatone.sgmodule'   # 仅当 Talkatone.sgmodule 文件发生变化时触发
+      - 'Talkatone.sgmodule'   # 监控 Talkatone.sgmodule 文件的变化
   pull_request:
     paths:
       - 'Talkatone.sgmodule'   # 同样适用于 pull request
