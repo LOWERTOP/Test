@@ -24,6 +24,11 @@ def parse_module_file(module_file_path):
     direct_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in direct_rules]
     proxy_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in proxy_rules]
 
+    # 去重并排序
+    reject_rules = sorted(set(reject_rules))
+    direct_rules = sorted(set(direct_rules))
+    proxy_rules = sorted(set(proxy_rules))
+
     return reject_rules, direct_rules, proxy_rules
 
 def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None):
