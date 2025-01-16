@@ -3,10 +3,10 @@ name: Update Rule Files
 on:
   push:
     paths:
-      - 'Talkatone.sgmodule'   # 监控这个文件的变化
+      - 'Talkatone.sgmodule'   # 仅当 Talkatone.sgmodule 文件发生变化时触发
   pull_request:
     paths:
-      - 'Talkatone.sgmodule'
+      - 'Talkatone.sgmodule'   # 同样适用于 pull request
 
 jobs:
   update:
@@ -29,8 +29,8 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add .
-          git commit -m "Update rule files based on latest module"
+          git add --all  # 强制添加所有更改
+          git commit -m "Update rule files based on latest module" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的 Token 提交修改
