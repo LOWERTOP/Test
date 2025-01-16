@@ -6,10 +6,6 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：PROXY
-
 # 使用本集需要搭配以下直连规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneDirect.list
-
 # 以下规则必须走代理
-DOMAIN-SUFFIX,tktn.at
-DOMAIN-SUFFIX,tktn.be
