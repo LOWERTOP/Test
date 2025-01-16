@@ -8,6 +8,6 @@
 # 策略建议：PROXY
 # 使用本集需要搭配以下直连规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneDirect.list
-DOMAIN,dd007.com
-DOMAIN-SUFFIX,dd008.com
-DOMAIN-SUFFIX,dd009.com
+DOMAIN,dd001.com
+DOMAIN-SUFFIX,dd002.com
+DOMAIN-SUFFIX,dd003.com
