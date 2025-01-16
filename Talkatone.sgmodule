@@ -1,5 +1,5 @@
 #!name=Talkatone
-#!desc=Talkatone 测试
+#!desc=Talkatone 测试模块内容
 # 本模块测试
 # 本模块测试
 # 整理作者：https://github.com/LOWERTOP
@@ -10,12 +10,12 @@
 # 以下为该软件部分去广告规则
 DOMAIN-KEYWORD,gg001.com,REJECT
 DOMAIN-SUFFIX,gg002.com,REJECT
-DOMAIN-SUFFIX,gg003.com,REJECT-DROP
+DOMAIN,gg003.com,REJECT
 DOMAIN-SUFFIX,gg004.com,REJECT-DROP
 DOMAIN-SUFFIX,gg005.com,REJECT-DROP
 
 # 以下为该软件可能需要走代理的规则
-DOMAIN-SUFFIX,dd007.com,PROXY
+DOMAIN,dd007.com,PROXY
 DOMAIN-SUFFIX,dd008.com,PROXY
 DOMAIN-SUFFIX,dd009.com,PROXY
 
