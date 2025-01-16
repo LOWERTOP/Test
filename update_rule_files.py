@@ -40,10 +40,10 @@ def update_list_file(list_file_path, rules, rule_type='ALL'):
         elif inside_rules and not line.startswith("#"):
             # 根据规则类型过滤要更新的内容
             if rule_type == 'ALL':
-                updated_content.append(rules)  # 更新所有规则
+                updated_content.append("\n".join(rules) + "\n")  # 更新所有规则
             elif rule_type == 'DIRECT/PROXY':
                 # 对于 TalkatoneProxy.list 仅更新 DIRECT 和 PROXY 规则
-                updated_content.append("\n".join(rules))
+                updated_content.append("\n".join(rules) + "\n")
             inside_rules = False
         else:
             updated_content.append(line)
@@ -64,7 +64,7 @@ def update_rule_files():
     proxy_rules_str = "\n".join(proxy_rules)
 
     # 更新 .list 文件
-    update_list_file('./TalkatoneAntiAds.list', reject_rules_str, rule_type='ALL')
+    update_list_file('./TalkatoneAntiAds.list', reject_rules + reject_rules, rule_type='ALL')
     update_list_file('./TalkatoneDirect.list', direct_rules_str, rule_type='ALL')
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules_str, rule_type='ALL')
     
