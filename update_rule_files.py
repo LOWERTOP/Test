@@ -31,31 +31,36 @@ def update_list_file(list_file_path, reject_rules, direct_rules, proxy_rules):
 
     updated_content = []
     inside_rules = False
-    rule_type = None  # 用于标记当前是更新 REJECT、DIRECT 还是 PROXY 规则
+    reject_updated = False
+    direct_updated = False
+    proxy_updated = False
 
+    # 遍历原文件内容
     for line in content:
-        # 保留注释行不变
+        # 保留注释行
         if line.startswith('#'):
             updated_content.append(line)
-        elif line.startswith("DOMAIN-") or line.startswith("DOMAIN-SUFFIX"):
-            # 跳过规则行，准备更新规则
-            if "REJECT" in line:
-                rule_type = "REJECT"
-            elif "DIRECT" in line:
-                rule_type = "DIRECT"
-            elif "PROXY" in line:
-                rule_type = "PROXY"
+        elif 'DOMAIN-' in line:  # 检测到规则行
+            # 如果规则行已经存在并且是 REJECT、DIRECT 或 PROXY 类型，则跳过
+            if 'REJECT' in line and not reject_updated:
+                updated_content.extend(reject_rules)  # 替换 REJECT 规则
+                reject_updated = True
+            elif 'DIRECT' in line and not direct_updated:
+                updated_content.extend(direct_rules)  # 替换 DIRECT 规则
+                direct_updated = True
+            elif 'PROXY' in line and not proxy_updated:
+                updated_content.extend(proxy_rules)  # 替换 PROXY 规则
+                proxy_updated = True
+        else:
+            updated_content.append(line)
 
-        # 根据 rule_type 更新规则
-        if rule_type == "REJECT":
-            updated_content.extend(reject_rules)
-            rule_type = None  # 更新完成后重置
-        elif rule_type == "DIRECT":
-            updated_content.extend(direct_rules)
-            rule_type = None
-        elif rule_type == "PROXY":
-            updated_content.extend(proxy_rules)
-            rule_type = None
+    # 如果某些类型的规则没有被更新（例如没有 `REJECT` 规则），确保插入它们
+    if not reject_updated:
+        updated_content.extend(reject_rules)
+    if not direct_updated:
+        updated_content.extend(direct_rules)
+    if not proxy_updated:
+        updated_content.extend(proxy_rules)
 
     # 写回更新后的内容
     with open(list_file_path, 'w') as file:
