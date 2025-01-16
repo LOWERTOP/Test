@@ -1,20 +1,23 @@
 import re
 
 def parse_module_file(module_file_path):
-    """解析 Talkatone.sgmodule 文件中的规则"""
+    """解析 Talkatone.sgmodule 文件中的所有规则"""
     with open(module_file_path, 'r') as file:
         content = file.read()
 
-    # 使用正则表达式提取不同类型的规则
-    reject_rules = re.findall(r'DOMAIN-[A-Z]+,[^,]+,REJECT.*', content)
-    reject_drop_rules = re.findall(r'DOMAIN-SUFFIX,[^,]+,REJECT-DROP.*', content)
-    direct_rules = re.findall(r'DOMAIN-SUFFIX,[^,]+,DIRECT.*', content)
-    proxy_rules = re.findall(r'DOMAIN-SUFFIX,[^,]+,PROXY.*', content)
+    # 使用正则表达式提取所有类型的规则（包括 IP-CIDR、DOMAIN-SUFFIX、DOMAIN-KEYWORD 等）
+    reject_rules = re.findall(r'([A-Z\-]+,[^,]+,REJECT.*)', content)
+    reject_drop_rules = re.findall(r'([A-Z\-]+,[^,]+,REJECT-DROP.*)', content)
+    direct_rules = re.findall(r'([A-Z\-]+,[^,]+,DIRECT.*)', content)
+    proxy_rules = re.findall(r'([A-Z\-]+,[^,]+,PROXY.*)', content)
+    ip_cidr_reject_rules = re.findall(r'(IP-CIDR,[^,]+,REJECT.*)', content)
+    ip_cidr_direct_rules = re.findall(r'(IP-CIDR,[^,]+,DIRECT.*)', content)
+    ip_cidr_proxy_rules = re.findall(r'(IP-CIDR,[^,]+,PROXY.*)', content)
 
-    # 只保留规则部分（去掉 REJECT、DIRECT、PROXY 等策略）
-    reject_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in reject_rules + reject_drop_rules]
-    direct_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in direct_rules]
-    proxy_rules = [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in proxy_rules]
+    # 合并所有相关的规则
+    reject_rules += reject_drop_rules + ip_cidr_reject_rules
+    direct_rules += ip_cidr_direct_rules
+    proxy_rules += ip_cidr_proxy_rules
 
     return reject_rules, direct_rules, proxy_rules
 
@@ -39,7 +42,7 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
         # 保留注释行
         if line.startswith('#'):
             updated_content.append(line)
-        elif 'DOMAIN-' in line:  # 检测到规则行
+        elif ',' in line:  # 检测到规则行
             # 如果规则行已经存在并且是 REJECT、DIRECT 或 PROXY 类型，则跳过
             if 'REJECT' in line and reject_rules and not reject_updated:
                 updated_content.extend([rule + '\n' for rule in reject_rules])  # 替换 REJECT 规则，并换行
