@@ -39,12 +39,29 @@ def read_existing_comments(file_path):
             break
     return "\n".join(comments)
 
+# 清空子文件中的规则内容，保留原始注释
+def clear_existing_rules(file_path):
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+
+    # 读取原始注释
+    comments = []
+    rules = []
+    for line in lines:
+        if line.strip().startswith('#'):
+            comments.append(line)
+        else:
+            rules.append(line)
+    
+    # 清空规则内容，保留注释
+    return comments, rules
+
 # 写入更新后的规则文件
-def write_file(file_path, rules, existing_comments):
+def write_file(file_path, comments, rules):
     with open(file_path, 'w') as f:
-        # 保留子文件中的现有注释，并在其下方添加空行和新规则
-        f.write(existing_comments)
-        f.write("\n\n")  # 保证注释后有空行
+        # 保留现有注释，并添加新的规则
+        f.write("\n".join(comments))
+        f.write("\n\n")  # 注释后面空一行
         for rule in rules:
             f.write(rule + "\n")
 
@@ -69,17 +86,17 @@ def process_module_file():
     proxy_rules = process_rules(proxy_rules)
     proxy_only_rules = process_rules(proxy_only_rules)
 
-    # 读取子文件中的现有注释
-    anti_ads_comments = read_existing_comments(anti_ads_file)
-    direct_comments = read_existing_comments(direct_file)
-    proxy_comments = read_existing_comments(proxy_file)
-    proxy_only_comments = read_existing_comments(proxy_only_file)
+    # 读取并清空子文件中的现有规则，保留原始注释
+    anti_ads_comments, _ = clear_existing_rules(anti_ads_file)
+    direct_comments, _ = clear_existing_rules(direct_file)
+    proxy_comments, _ = clear_existing_rules(proxy_file)
+    proxy_only_comments, _ = clear_existing_rules(proxy_only_file)
 
     # 更新规则到对应的文件，保留原有注释
-    write_file(anti_ads_file, reject_rules, anti_ads_comments)
-    write_file(direct_file, direct_rules, direct_comments)
-    write_file(proxy_file, proxy_rules, proxy_comments)
-    write_file(proxy_only_file, proxy_only_rules, proxy_only_comments)
+    write_file(anti_ads_file, anti_ads_comments, reject_rules)
+    write_file(direct_file, direct_comments, direct_rules)
+    write_file(proxy_file, proxy_comments, proxy_rules)
+    write_file(proxy_only_file, proxy_only_comments, proxy_only_rules)
 
 if __name__ == '__main__':
     process_module_file()
