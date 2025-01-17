@@ -3,7 +3,7 @@ name: Update Rule Files
 on:
   push:
     paths:
-      - Talkatone.sgmodule
+      - Talkatone.sgmodule  # 仅当母文件更新时触发
   workflow_dispatch:  # 允许手动触发
 
 jobs:
@@ -22,12 +22,15 @@ jobs:
     - name: Run update script
       run: |
         python update_rule_files.py
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "Update script finished"
 
-    - name: Check for changes
+    - name: Check for changes (git status)
       run: |
-        git diff --exit-code || echo "There are changes to commit"
+        git status
+
+    - name: Check for differences (git diff)
+      run: |
+        git diff
 
     - name: Commit and push changes
       run: |
