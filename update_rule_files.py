@@ -41,11 +41,6 @@ def add_no_resolve(rules):
     return updated_rules
 
 
-def remove_proxy(rules):
-    """去除代理策略（PROXY、DIRECT、REJECT）"""
-    return [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in rules]
-
-
 def clear_existing_rules(list_file_path):
     """清除子文件中除注释外的所有规则内容"""
     with open(list_file_path, 'r') as file:
