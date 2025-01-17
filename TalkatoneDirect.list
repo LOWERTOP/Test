@@ -9,16 +9,30 @@
 # 使用本集需要搭配以下代理规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneProxyOnly.list
 DOMAIN-SUFFIX,agkn.com
+DOMAIN-SUFFIX,akn.com
+DOMAIN-SUFFIX,coere.com
 DOMAIN-SUFFIX,cohere.com
 DOMAIN-SUFFIX,crashlytics.com
+DOMAIN-SUFFIX,crshlytics.com
+DOMAIN-SUFFIX,iner-active.mobi
 DOMAIN-SUFFIX,inmobi.com
 DOMAIN-SUFFIX,inner-active.mobi
+DOMAIN-SUFFIX,inobi.com
+DOMAIN-SUFFIX,ip-ap.com
 DOMAIN-SUFFIX,ip-api.com
+DOMAIN-SUFFIX,kocava.com
 DOMAIN-SUFFIX,kochava.com
 DOMAIN-SUFFIX,mobilefuse.com
+DOMAIN-SUFFIX,moblefuse.com
+DOMAIN-SUFFIX,talatone.com
 DOMAIN-SUFFIX,talkatone.com
+IP-CIDR,205.14.56.0/24
 IP-CIDR,205.164.56.0/24
+IP-CIDR,216.12.154.0/24
 IP-CIDR,216.172.154.0/24
 IP-CIDR,50.117.27.0/24
+IP-CIDR,50.117.27.0/24
 IP-CIDR,63.251.124.0/24
+IP-CIDR,63.251.124.0/24
+IP-CIDR,69.46.75.0/24
 IP-CIDR,69.46.75.0/24
