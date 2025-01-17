@@ -7,9 +7,9 @@ def update_list_file(source_file, target_file, rule_type):
     with open(source_file, 'r') as src:
         source_content = src.read()
     
-    # 解析母文件规则部分
-    start_marker = f'# {rule_type}'
-    end_marker = f'# END {rule_type}'
+    # 根据不同格式修改标记
+    start_marker = f'# {rule_type}'  # 或者使用其他标记如 "// {rule_type}"
+    end_marker = f'# END {rule_type}'  # 或者 "// END {rule_type}"
     
     start_idx = source_content.find(start_marker)
     end_idx = source_content.find(end_marker, start_idx)
