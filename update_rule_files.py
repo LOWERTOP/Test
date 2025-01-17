@@ -89,18 +89,13 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
     with open(list_file_path, 'r') as file:
         content = file.readlines()
 
-    # 打印原始文件内容
-    print(f"Original content of {list_file_path}:")
-    for line in content:
-        print(line.strip())
-
+    # 解析现有的注释部分
     updated_content = []
-    # 保留注释行
     for line in content:
         if line.startswith('#'):
             updated_content.append(line)
 
-    updated_content.append("\n")  # 保证注释与规则之间有空行
+    updated_content.append("\n")  # 在注释下方空一行
 
     # 根据 rule_type 选择性添加规则
     if rule_type == "REJECT":
@@ -119,17 +114,11 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
             updated_content.append("\n")  # 空一行
             updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])  # 添加 IP-CIDR PROXY 规则
 
-    # 打印更新后的内容
-    print(f"Updated content for {list_file_path}:")
-    for line in updated_content:
-        print(line.strip())
-
-    # 确认写入文件
-    print("Saving updated content to file...")
+    # 保存更新后的内容
     with open(list_file_path, 'w') as file:
         file.writelines(updated_content)
 
-    print(f"Updated {list_file_path}")  # 日志输出
+    print(f"Updated {list_file_path}")
 
 def update_rule_files():
     """强制更新所有相关的 .list 文件"""
@@ -155,6 +144,7 @@ def update_rule_files():
     update_list_file('./TalkatoneAntiAds.list', reject_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="REJECT")
     update_list_file('./TalkatoneDirect.list', direct_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="DIRECT")
     update_list_file('./TalkatoneProxy.list', proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
+    update_list_file('./TalkatoneProxyOnly.list', proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
 
 if __name__ == "__main__":
     update_rule_files()
