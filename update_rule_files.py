@@ -32,10 +32,19 @@ def parse_module_file(module_file_path):
     return reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
 def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules):
-    """对 IP-CIDR 类型的规则添加 no-resolve 参数"""
-    ip_cidr_reject_rules = [rule + ',no-resolve' if 'no-resolve' not in rule else rule for rule in ip_cidr_reject_rules]
-    ip_cidr_direct_rules = [rule + ',no-resolve' if 'no-resolve' not in rule else rule for rule in ip_cidr_direct_rules]
-    ip_cidr_proxy_rules = [rule + ',no-resolve' if 'no-resolve' not in rule else rule for rule in ip_cidr_proxy_rules]
+    """对 IP-CIDR 类型的规则添加 no-resolve 参数，仅当该规则不包含 no-resolve 时添加"""
+    def add_no_resolve(rules):
+        updated_rules = []
+        for rule in rules:
+            # 仅当规则不包含 no-resolve 时才添加
+            if 'no-resolve' not in rule:
+                rule += ',no-resolve'
+            updated_rules.append(rule)
+        return updated_rules
+
+    ip_cidr_reject_rules = add_no_resolve(ip_cidr_reject_rules)
+    ip_cidr_direct_rules = add_no_resolve(ip_cidr_direct_rules)
+    ip_cidr_proxy_rules = add_no_resolve(ip_cidr_proxy_rules)
 
     return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
@@ -48,6 +57,26 @@ def remove_duplicates(rules):
             seen.add(rule)
             clean_rules.append(rule)
     return clean_rules
+
+def remove_proxy_from_ip_cidr_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules):
+    """从 IP-CIDR 规则中删除代理策略（如 DIRECT, PROXY）"""
+    def remove_proxy(rules):
+        updated_rules = []
+        for rule in rules:
+            # 删除规则中的代理策略，只保留 IP 地址和 no-resolve 参数
+            parts = rule.split(',')
+            if len(parts) > 2:  # 如果规则包含代理策略
+                updated_rule = ','.join(parts[:2]) + ',no-resolve'  # 只保留前两部分并添加 no-resolve
+            else:
+                updated_rule = rule  # 没有代理策略的规则
+            updated_rules.append(updated_rule)
+        return updated_rules
+
+    ip_cidr_reject_rules = remove_proxy(ip_cidr_reject_rules)
+    ip_cidr_direct_rules = remove_proxy(ip_cidr_direct_rules)
+    ip_cidr_proxy_rules = remove_proxy(ip_cidr_proxy_rules)
+
+    return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
 def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type):
     """
@@ -104,6 +133,9 @@ def update_rule_files():
 
     # 对 IP 类的规则添加 no-resolve 参数
     ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules)
+
+    # 去除代理策略（DIRECT、PROXY）并保留 no-resolve 参数
+    ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = remove_proxy_from_ip_cidr_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules)
 
     # 最后去重和检查 no-resolve 参数
     reject_rules = remove_duplicates(reject_rules)
