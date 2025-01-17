@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - Talkatone.sgmodule
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   update_rules:
