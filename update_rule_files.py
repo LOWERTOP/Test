@@ -29,6 +29,11 @@ def parse_module_file(module_file_path):
     direct_rules = sorted(set(direct_rules))
     proxy_rules = sorted(set(proxy_rules))
 
+    print("Parsed rules:")
+    print(f"REJECT rules: {reject_rules}")
+    print(f"DIRECT rules: {direct_rules}")
+    print(f"PROXY rules: {proxy_rules}")
+
     return reject_rules, direct_rules, proxy_rules
 
 def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None):
