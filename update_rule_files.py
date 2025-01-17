@@ -61,29 +61,16 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
         if line.startswith('#'):
             updated_content.append(line)
         elif ',' in line:  # 检测到规则行
-            # 如果规则行已经存在并且是 REJECT、DIRECT 或 PROXY 类型，则跳过
-            if 'REJECT' in line and reject_rules and not reject_updated:
-                updated_content.extend([rule + '\n' for rule in reject_rules])  # 替换 REJECT 规则，并换行
-                reject_updated = True
-            elif 'DIRECT' in line and direct_rules and not direct_updated:
-                updated_content.extend([rule + '\n' for rule in direct_rules])  # 替换 DIRECT 规则，并换行
-                direct_updated = True
-            elif 'PROXY' in line and proxy_rules and not proxy_updated:
-                updated_content.extend([rule + '\n' for rule in proxy_rules])  # 替换 PROXY 规则，并换行
-                proxy_updated = True
+            updated_content.append(line)
         else:
             updated_content.append(line)
 
-    # 如果某些类型的规则没有被更新，确保插入它们
-    if reject_rules and not reject_updated:
-        updated_content.extend([rule + '\n' for rule in reject_rules])  # 添加 REJECT 规则
-    if direct_rules and not direct_updated:
-        updated_content.extend([rule + '\n' for rule in direct_rules])  # 添加 DIRECT 规则
-    if proxy_rules and not proxy_updated:
-        updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
-
+    # 规则排序，首先对有效规则进行处理
+    # 确保只有有效的规则被排序，避免出现错误
+    valid_rules = [rule for rule in updated_content if ',' in rule and len(rule.split(',')) > 1]
+    
     # 按照规则类型和首字母进行排序
-    sorted_rules = sorted(updated_content, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
+    sorted_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
 
     # 将排序后的内容更新到文件
     with open(list_file_path, 'w') as file:
@@ -101,6 +88,6 @@ def update_rule_files():
     update_list_file('./TalkatoneDirect.list', direct_rules=direct_rules)
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules=proxy_rules)
     update_list_file('./TalkatoneProxy.list', direct_rules=direct_rules, proxy_rules=proxy_rules)
-
+    
 if __name__ == "__main__":
     update_rule_files()
