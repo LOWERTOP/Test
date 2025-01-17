@@ -6,6 +6,7 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：DIRECT
+# IP-CIDR DIRECT rules
 
 DOMAIN-SUFFIX,agkn.com
 DOMAIN-SUFFIX,cohere.com

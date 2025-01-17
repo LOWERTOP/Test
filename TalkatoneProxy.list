@@ -6,6 +6,7 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：PROXY
+# IP-CIDR DIRECT rules
 
 DOMAIN-KEYWORD,googleads
 DOMAIN-SUFFIX,ads.inmobi.com
@@ -44,10 +45,3 @@ IP-CIDR,63.251.124.0/24
 IP-CIDR,69.46.75.0/24
 DOMAIN-SUFFIX,tktn.at
 DOMAIN-SUFFIX,tktn.be
-
-# IP-CIDR DIRECT rules
-IP-CIDR,205.164.56.0/24,DIRECT,no-resolve
-IP-CIDR,216.172.154.0/24,DIRECT,no-resolve
-IP-CIDR,50.117.27.0/24,DIRECT,no-resolve
-IP-CIDR,63.251.124.0/24,DIRECT,no-resolve
-IP-CIDR,69.46.75.0/24,DIRECT,no-resolve
