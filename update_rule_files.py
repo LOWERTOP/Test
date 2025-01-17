@@ -58,12 +58,13 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     direct_updated = False
     proxy_updated = False
 
-    # 遍历原文件内容，保留注释行
+    # 遍历原文件内容
     for line in content:
+        # 保留注释行
         if line.startswith('#'):
-            updated_content.append(line)  # 保留注释行
+            updated_content.append(line)
         else:
-            updated_content.append(line)  # 保留非注释行
+            updated_content.append(line)
 
     # 如果某些类型的规则没有被更新，确保插入它们
     if reject_rules and not reject_updated:
