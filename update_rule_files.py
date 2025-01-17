@@ -1,4 +1,5 @@
 import re
+import os
 
 def parse_module_file(module_file_path):
     """解析 Talkatone.sgmodule 文件中的所有规则"""
@@ -15,11 +16,6 @@ def parse_module_file(module_file_path):
     ip_cidr_direct_rules = re.findall(r'(IP-CIDR,[^,]+,DIRECT.*)', content)
     ip_cidr_proxy_rules = re.findall(r'(IP-CIDR,[^,]+,PROXY.*)', content)
 
-    print("Found the following rules:")
-    print(f"Reject rules: {len(reject_rules)}")
-    print(f"Direct rules: {len(direct_rules)}")
-    print(f"Proxy rules: {len(proxy_rules)}")
-    
     # 合并所有相关的规则
     reject_rules += reject_drop_rules + ip_cidr_reject_rules
     direct_rules += ip_cidr_direct_rules
@@ -35,11 +31,6 @@ def parse_module_file(module_file_path):
     direct_rules = sorted(set(direct_rules))
     proxy_rules = sorted(set(proxy_rules))
 
-    print("Rules after processing:")
-    print(f"Reject rules: {len(reject_rules)}")
-    print(f"Direct rules: {len(direct_rules)}")
-    print(f"Proxy rules: {len(proxy_rules)}")
-
     return reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
 def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules):
@@ -47,7 +38,6 @@ def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_ci
     def add_no_resolve(rules):
         updated_rules = []
         for rule in rules:
-            # 仅当规则不包含 no-resolve 时才添加
             if 'no-resolve' not in rule:
                 rule += ',no-resolve'
             updated_rules.append(rule)
@@ -56,11 +46,6 @@ def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_ci
     ip_cidr_reject_rules = add_no_resolve(ip_cidr_reject_rules)
     ip_cidr_direct_rules = add_no_resolve(ip_cidr_direct_rules)
     ip_cidr_proxy_rules = add_no_resolve(ip_cidr_proxy_rules)
-
-    print("IP-CIDR rules after adding no-resolve:")
-    print(f"Reject rules: {len(ip_cidr_reject_rules)}")
-    print(f"Direct rules: {len(ip_cidr_direct_rules)}")
-    print(f"Proxy rules: {len(ip_cidr_proxy_rules)}")
 
     return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
@@ -79,10 +64,9 @@ def remove_proxy_from_ip_cidr_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, 
     def remove_proxy(rules):
         updated_rules = []
         for rule in rules:
-            # 删除规则中的代理策略，只保留 IP 地址和 no-resolve 参数
             parts = rule.split(',')
             if len(parts) > 2:  # 如果规则包含代理策略
-                updated_rule = ','.join(parts[:2]) + ',no-resolve'  # 只保留前两部分并添加 no-resolve
+                updated_rule = ','.join(parts[:2]) + ',no-resolve'
             else:
                 updated_rule = rule  # 没有代理策略的规则
             updated_rules.append(updated_rule)
@@ -92,22 +76,20 @@ def remove_proxy_from_ip_cidr_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, 
     ip_cidr_direct_rules = remove_proxy(ip_cidr_direct_rules)
     ip_cidr_proxy_rules = remove_proxy(ip_cidr_proxy_rules)
 
-    print("IP-CIDR rules after removing proxy:")
-    print(f"Reject rules: {len(ip_cidr_reject_rules)}")
-    print(f"Direct rules: {len(ip_cidr_direct_rules)}")
-    print(f"Proxy rules: {len(ip_cidr_proxy_rules)}")
-
     return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
 def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type):
     """更新 .list 文件中的规则，保留原注释，替换规则部分"""
     print(f"Updating list file: {list_file_path}")
+    
+    if not os.path.exists(list_file_path):
+        print(f"File not found: {list_file_path}")
+        return
+
     with open(list_file_path, 'r') as file:
         content = file.readlines()
 
     updated_content = []
-    rules_updated = False
-
     # 保留注释行
     for line in content:
         if line.startswith('#'):
@@ -132,7 +114,8 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
             updated_content.append("\n")  # 空一行
             updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])  # 添加 IP-CIDR PROXY 规则
 
-    # 写回更新后的内容
+    # 确认写入文件
+    print("Saving updated content to file...")
     with open(list_file_path, 'w') as file:
         file.writelines(updated_content)
 
