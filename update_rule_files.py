@@ -46,20 +46,23 @@ def remove_proxy(rules):
     return [rule.split(',')[0] + ',' + rule.split(',')[1] for rule in rules]
 
 
-def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type):
-    """更新 .list 文件中的规则，保留原注释，替换规则部分"""
+def clear_existing_rules(list_file_path):
+    """清除子文件中除注释外的所有规则内容"""
     with open(list_file_path, 'r') as file:
         content = file.readlines()
 
-    updated_content = []
-    rules_updated = False
+    # 只保留注释行
+    updated_content = [line for line in content if line.startswith('#')]
 
-    # 保留注释行
-    for line in content:
-        if line.startswith('#'):
-            updated_content.append(line)
+    # 保证注释与规则之间有空行
+    updated_content.append("\n")
 
-    updated_content.append("\n")  # 保证注释与规则之间有空行
+    return updated_content
+
+
+def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type):
+    """更新 .list 文件中的规则，保留原注释，替换规则部分"""
+    updated_content = clear_existing_rules(list_file_path)
 
     # 根据 rule_type 选择性添加规则
     if rule_type == "REJECT":
@@ -106,7 +109,7 @@ def update_rule_files():
     ip_cidr_direct_rules = add_no_resolve(ip_cidr_direct_rules)
     ip_cidr_proxy_rules = add_no_resolve(ip_cidr_proxy_rules)
 
-    # 去除代理策略（DIRECT、PROXY）并保留 no-resolve 参数
+    # 去除代理策略（DIRECT、PROXY、REJECT）并保留 no-resolve 参数
     reject_rules = remove_proxy(reject_rules)
     direct_rules = remove_proxy(direct_rules)
     proxy_rules = remove_proxy(proxy_rules)
