@@ -8,7 +8,7 @@ def extract_rules(source_file, rule_type):
     with open(source_file, 'r') as f:
         source_content = f.read()
 
-    # 定义不同规则类型的正则匹配
+    # 定义正则匹配，寻找规则部分
     pattern = r'# 以下为该软件(.*?)规则[\s\S]*?((?:(?:DOMAIN|IP)-[A-Z]+\s[^\n]+,\s[^\n]+,\s' + rule_type + r'.*\n)+)'
     match = re.search(pattern, source_content)
 
