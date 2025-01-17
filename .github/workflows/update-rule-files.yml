@@ -19,6 +19,27 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Print current files
+      run: |
+        echo "Current files in the repo:"
+        ls -la  # 列出当前仓库中的文件
+
     - name: Run script to update rule files
       run: |
+        echo "Running update_rule_files.py..."
         python update_rule_files.py
+      continue-on-error: true  # 如果脚本失败，仍然继续执行，方便排查问题
+
+    - name: Check for changes
+      run: |
+        git status  # 显示当前文件的状态，检查是否有变化
+
+    - name: Commit and push updated files
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .  # 添加所有更改
+        git commit -m "${{ github.event.inputs.commit_message }}" || echo "No changes to commit"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
