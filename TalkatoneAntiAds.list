@@ -6,3 +6,8 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：REJECT-DROP 或者 REJECT
+DOMAIN,gg0003.com
+DOMAIN-KEYWORD,gg0001.com
+DOMAIN-SUFFIX,gg0002.com
+DOMAIN-SUFFIX,gg0004.com
+DOMAIN-SUFFIX,gg0005.com
