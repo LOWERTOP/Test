@@ -2,8 +2,11 @@ name: Update Rule Files
 
 on:
   push:
+    branches:
+      - main  # 确保指定触发分支，例如 main 或其他默认分支
     paths:
-      - "Talkatone.sgmodule"  # 只有当母文件发生变化时触发
+      - "Talkatone.sgmodule"  # 精确匹配母文件路径
+
   workflow_dispatch:  # 手动触发
     inputs:
       commit_message:
@@ -36,8 +39,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add .  # 添加所有更改
-        git status  # 输出当前状态，检查是否有文件被修改
+        git add .
         git commit -m "${{ github.event.inputs.commit_message }}" || echo "No changes to commit"
         git push
       env:
