@@ -22,10 +22,9 @@ def update_list_file(list_file_path, rule_type, new_rules):
     
     updated_content.append("\n")  # 保证注释与规则之间有空行
 
-    # 去重并添加新规则（去除重复规则和无代理策略的规则）
-    unique_rules = set(new_rules)  # 去重
-    updated_content.extend([rule + '\n' for rule in unique_rules])
-
+    # 添加新规则（去除重复规则和无代理策略的规则）
+    updated_content.extend([rule + '\n' for rule in new_rules])
+    
     # 输出更新后的内容长度，检查是否写入了内容
     print(f"Updated {len(updated_content)} lines in {list_file_path}")
 
@@ -101,9 +100,6 @@ def update_rule_files():
             new_rules = direct_rules + ip_cidr_direct_rules
         elif rule_type == "PROXY":
             new_rules = proxy_rules + ip_cidr_proxy_rules
-
-        # 再次去重处理
-        new_rules = list(set(new_rules))  # 统一去重
 
         # 更新子文件
         update_list_file(list_file_name, rule_type, new_rules)
