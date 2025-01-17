@@ -21,10 +21,6 @@ jobs:
         with:
           python-version: '3.9'  # 设置 Python 版本
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt  # 安装依赖（如果需要）
-
       - name: Run the script to update rule files
         run: |
           python3 update_rule_files.py  # 执行更新规则文件的脚本
