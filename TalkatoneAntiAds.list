@@ -1,21 +1,8 @@
-DOMAIN-KEYWORD,googleads
-DOMAIN-SUFFIX,ads.inmobi.com
-DOMAIN-SUFFIX,adsappier.com
-DOMAIN-SUFFIX,amazon-adsystem.com
-DOMAIN-SUFFIX,appier.net
-DOMAIN-SUFFIX,appiersig.com
-DOMAIN-SUFFIX,bidder.criteo.com
-DOMAIN-SUFFIX,c.amazon-adsystem.com
-DOMAIN-SUFFIX,cdn2.inner-active.mobi
-DOMAIN-SUFFIX,cr.adsappier.com
-DOMAIN-SUFFIX,criteo.com
-DOMAIN-SUFFIX,googleads.g.doubleclick-cn.net
-DOMAIN-SUFFIX,googleads.g.doubleclick.net
-DOMAIN-SUFFIX,gum.criteo.com
-DOMAIN-SUFFIX,ow.pubmatic.com
-DOMAIN-SUFFIX,pubmatic.com
-DOMAIN-SUFFIX,sdk-dnt.ad.smaato.net
-DOMAIN-SUFFIX,sdk-events.inner-active.mobi
-DOMAIN-SUFFIX,smaato.net
-DOMAIN-SUFFIX,tappx.com
-DOMAIN-SUFFIX,wv.inner-active.mobi
+#!name=Talkatone
+#!desc=Talkatone 去广告规则集
+# 本规则集的目的是去除 Talkatone APP 内的部分第三方广告
+# 整理作者：https://github.com/LOWERTOP
+# 仓库地址：https://github.com/LOWERTOP/Shadowrocket-First
+# 反馈渠道：https://t.me/ShadowrocketApp
+# 类型选择：RULE-SET
+# 策略建议：REJECT-DROP 或者 REJECT
