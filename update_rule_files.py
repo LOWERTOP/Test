@@ -1,33 +1,31 @@
 import re
 
-def extract_rules(source_file, rule_type):
+def extract_rules_by_keyword(source_file, keyword):
     """
-    从母文件中提取特定规则类型的规则。
+    从母文件中提取包含指定关键词（REJECT/DIRECT/PROXY）的规则，排除注释行。
     """
-    # 打开母文件并读取内容
     with open(source_file, 'r') as f:
         source_content = f.read()
 
-    # 定义正则匹配，寻找规则部分
-    pattern = r'# 以下为该软件(.*?)规则[\s\S]*?((?:(?:DOMAIN|IP)-[A-Z]+\s[^\n]+,\s[^\n]+,\s' + rule_type + r'.*\n)+)'
-    match = re.search(pattern, source_content)
+    # 按行分割并筛选出包含指定关键词的规则行，排除注释行
+    rules = []
+    for line in source_content.split('\n'):
+        # 忽略注释行（以 # 开头的行）
+        if not line.strip().startswith('#') and keyword in line:
+            rules.append(line.strip())
 
-    if match:
-        rules_content = match.group(2).strip()
-        return [rule.strip() for rule in rules_content.split('\n') if rule.strip()]
-    else:
-        print(f"未找到 {rule_type} 规则部分")
-        return []
+    return rules
 
-def update_list_file(source_file, target_file, rule_type):
+def update_list_file(source_file, target_file, keyword):
     """
     更新子文件，使其与母文件中的规则部分保持同步。
     """
-    print(f"Updating {target_file} based on {source_file} with {rule_type} rules...")
+    print(f"Updating {target_file} based on {source_file} with {keyword} rules...")
     
     # 从母文件中提取规则
-    rules = extract_rules(source_file, rule_type)
+    rules = extract_rules_by_keyword(source_file, keyword)
     if not rules:
+        print(f"未找到 {keyword} 规则部分")
         return
 
     # 读取子文件内容
@@ -71,7 +69,7 @@ def update_list_file(source_file, target_file, rule_type):
         f.write(new_content)
 
 if __name__ == '__main__':
-    update_list_file('Talkatone.sgmodule', 'TalkatoneAntiAds.list', 'REJECT-DROP')
+    update_list_file('Talkatone.sgmodule', 'TalkatoneAntiAds.list', 'REJECT')
     update_list_file('Talkatone.sgmodule', 'TalkatoneDirect.list', 'DIRECT')
     update_list_file('Talkatone.sgmodule', 'TalkatoneProxy.list', 'PROXY')
     update_list_file('Talkatone.sgmodule', 'TalkatoneProxyOnly.list', 'PROXY')
