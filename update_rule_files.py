@@ -1,3 +1,5 @@
+import re
+
 def update_list_file(source_file, target_file, rule_type):
     print(f"Updating {target_file} based on {source_file} with {rule_type} rules...")
     
@@ -44,7 +46,7 @@ def update_list_file(source_file, target_file, rule_type):
     other_rules = []
     
     for rule in new_rules:
-        if any(c.isdigit() for c in rule.split('.')):
+        if re.search(r'\d+\.\d+\.\d+\.\d+', rule):  # 检查是否为IP规则
             ip_rules.append(rule)
         else:
             other_rules.append(rule)
