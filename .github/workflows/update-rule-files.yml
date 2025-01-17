@@ -1,13 +1,15 @@
-name: Update Rules
+name: Update Rule Files
 
 on:
   push:
     paths:
-      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生变化时触发
-      - 'TalkatoneAntiAds.list'
-      - 'TalkatoneDirect.list'
-      - 'TalkatoneProxy.list'
-      - 'TalkatoneProxyOnly.list'
+      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生推送时触发
+  workflow_dispatch:  # 支持手动触发
+    inputs:
+      commit_message:
+        description: 'Commit message for updates'
+        required: true
+        default: 'Update rule files from Talkatone.sgmodule'
 
 jobs:
   update-rules:
@@ -29,3 +31,13 @@ jobs:
     - name: Run the update script
       run: |
         python update_rule_files.py
+
+    - name: Commit and push updated files
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .  # 添加所有更改
+        git commit -m "${{ github.event.inputs.commit_message }}" || echo "No changes to commit"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
