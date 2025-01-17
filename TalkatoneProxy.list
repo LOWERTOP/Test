@@ -6,9 +6,3 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：PROXY
-DOMAIN-SUFFIX,zz001.com
-DOMAIN-SUFFIX,zz002.com
-IP-CIDR,03.03.03.0/24
-DOMAIN,dd001.com
-DOMAIN-SUFFIX,dd002.com
-DOMAIN-SUFFIX,dd003.com
