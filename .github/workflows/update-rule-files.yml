@@ -25,10 +25,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Check for changes
+      run: |
+        git diff --exit-code || echo "There are changes to commit"
+
     - name: Commit and push changes
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         git add .
-        git commit -m "Update rule files based on Talkatone.sgmodule"
+        git diff --quiet || git commit -m "Update rule files based on Talkatone.sgmodule"
         git push
+      continue-on-error: true  # 即使没有更改，也不会导致任务失败
