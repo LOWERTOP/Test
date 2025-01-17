@@ -100,23 +100,34 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
             updated_content.append(line)
 
     updated_content.append("\n")  # 保证注释与规则之间有空行
-    
+
+    # 添加规则时，避免重复
+    def add_unique_rules(updated_content, rules):
+        existing_rules = set(line.strip() for line in updated_content if not line.startswith('#'))
+        for rule in rules:
+            if rule not in existing_rules:
+                updated_content.append(rule + '\n')
+                existing_rules.add(rule)
+        return updated_content
+
     # 根据 rule_type 选择性添加规则
     if rule_type == "REJECT":
-        updated_content.extend([rule + '\n' for rule in rules])  # 只添加 REJECT 规则
+        updated_content = add_unique_rules(updated_content, rules)
         if ip_cidr_reject_rules:
             updated_content.append("\n")  # 空一行
-            updated_content.extend([rule + '\n' for rule in ip_cidr_reject_rules])  # 添加 IP-CIDR REJECT 规则
+            updated_content = add_unique_rules(updated_content, ip_cidr_reject_rules)
+
     elif rule_type == "DIRECT":
-        updated_content.extend([rule + '\n' for rule in rules])  # 只添加 DIRECT 规则
+        updated_content = add_unique_rules(updated_content, rules)
         if ip_cidr_direct_rules:
             updated_content.append("\n")  # 空一行
-            updated_content.extend([rule + '\n' for rule in ip_cidr_direct_rules])  # 添加 IP-CIDR DIRECT 规则
+            updated_content = add_unique_rules(updated_content, ip_cidr_direct_rules)
+
     elif rule_type == "PROXY":
-        updated_content.extend([rule + '\n' for rule in rules])  # 只添加 PROXY 规则
+        updated_content = add_unique_rules(updated_content, rules)
         if ip_cidr_proxy_rules:
             updated_content.append("\n")  # 空一行
-            updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])  # 添加 IP-CIDR PROXY 规则
+            updated_content = add_unique_rules(updated_content, ip_cidr_proxy_rules)
 
     # 写回更新后的内容
     with open(list_file_path, 'w') as file:
