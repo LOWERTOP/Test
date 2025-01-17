@@ -82,17 +82,12 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     if proxy_rules and not proxy_updated:
         updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
 
-    # 在最后添加 IP-CIDR 规则
-    if ip_cidr_reject_rules:
-        updated_content.extend([rule + '\n' for rule in ip_cidr_reject_rules])  # 添加 IP-CIDR REJECT 规则
-    if ip_cidr_direct_rules:
-        updated_content.extend([rule + '\n' for rule in ip_cidr_direct_rules])  # 添加 IP-CIDR DIRECT 规则
-    if ip_cidr_proxy_rules:
-        updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])  # 添加 IP-CIDR PROXY 规则
+    # 按照规则类型和首字母进行排序
+    sorted_rules = sorted(updated_content, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
 
-    # 写回更新后的内容
+    # 将排序后的内容更新到文件
     with open(list_file_path, 'w') as file:
-        file.writelines(updated_content)
+        file.writelines(sorted_rules)
 
     print(f"Updated {list_file_path}")  # 日志输出
 
@@ -106,6 +101,6 @@ def update_rule_files():
     update_list_file('./TalkatoneDirect.list', direct_rules=direct_rules)
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules=proxy_rules)
     update_list_file('./TalkatoneProxy.list', direct_rules=direct_rules, proxy_rules=proxy_rules)
-    
+
 if __name__ == "__main__":
     update_rule_files()
