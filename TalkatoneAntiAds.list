@@ -6,3 +6,9 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：REJECT-DROP 或者 REJECT
+DOMAIN,gg0003.com
+DOMAIN-KEYWORD,gg0001.com
+DOMAIN-SUFFIX,gg0002.com
+IP-CIDR,01.03.03.01/24
+IP-CIDR,01.03.03.02/24
+IP-CIDR,01.03.03.03/24

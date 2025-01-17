@@ -9,3 +9,9 @@
 
 # 使用本集需要搭配以下直连规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneDirect.list
+DOMAIN,dd0001.com
+DOMAIN-SUFFIX,dd0002.com
+DOMAIN-SUFFIX,dd0003.com
+IP-CIDR,02.03.03.01/24
+IP-CIDR,02.03.03.02/24
+IP-CIDR,02.03.03.03/24

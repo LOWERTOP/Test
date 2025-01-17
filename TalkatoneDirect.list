@@ -9,3 +9,9 @@
 
 # 使用本集需要搭配以下代理规则集
 # https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/TalkatoneProxyOnly.list
+DOMAIN-SUFFIX,zz0001.com
+DOMAIN-SUFFIX,zz0002.com
+DOMAIN-SUFFIX,zz0003.com
+IP-CIDR,03.03.03.01/24
+IP-CIDR,03.03.03.02/24
+IP-CIDR,03.03.03.03/24
