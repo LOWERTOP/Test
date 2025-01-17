@@ -29,12 +29,16 @@ def parse_module_file(module_file_path):
     direct_rules = sorted(set(direct_rules))
     proxy_rules = sorted(set(proxy_rules))
 
-    # 对 IP 类型的规则添加 `no-resolve` 参数，并放到最后
+    # 返回规则列表，不对 IP-CIDR 规则添加 no-resolve 参数，保留到最后再处理
+    return reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
+
+def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules):
+    """对 IP-CIDR 类型的规则添加 no-resolve 参数"""
     ip_cidr_reject_rules = [rule + ',no-resolve' for rule in ip_cidr_reject_rules]
     ip_cidr_direct_rules = [rule + ',no-resolve' for rule in ip_cidr_direct_rules]
     ip_cidr_proxy_rules = [rule + ',no-resolve' for rule in ip_cidr_proxy_rules]
 
-    return reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
+    return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
 def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None, ip_cidr_reject_rules=None, ip_cidr_direct_rules=None, ip_cidr_proxy_rules=None):
     """
@@ -55,12 +59,9 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     direct_updated = False
     proxy_updated = False
 
-    # 遍历原文件内容
+    # 遍历原文件内容，保留注释行
     for line in content:
-        # 保留注释行
         if line.startswith('#'):
-            updated_content.append(line)
-        elif ',' in line:  # 检测到规则行
             updated_content.append(line)
         else:
             updated_content.append(line)
@@ -104,11 +105,14 @@ def update_rule_files():
     module_path = './Talkatone.sgmodule'
     reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = parse_module_file(module_path)
 
+    # 对 IP 类的规则添加 no-resolve 参数
+    ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules)
+
     # 更新各个 .list 文件
     update_list_file('./TalkatoneAntiAds.list', reject_rules=reject_rules)
     update_list_file('./TalkatoneDirect.list', direct_rules=direct_rules)
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules=proxy_rules)
     update_list_file('./TalkatoneProxy.list', direct_rules=direct_rules, proxy_rules=proxy_rules)
-    
+
 if __name__ == "__main__":
     update_rule_files()
