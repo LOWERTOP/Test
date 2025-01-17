@@ -60,7 +60,7 @@ def update_list_file(list_file_path, rule_type, rules=None, ip_cidr_reject_rules
         if line.startswith('#'):
             updated_content.append(line)
         elif ',' in line:  # 检测到规则行
-            if rule_type in line and rules and not rules_updated:
+            if rule_type in line and not rules_updated:
                 updated_content.append("\n")  # 添加空行
                 updated_content.extend([rule + '\n' for rule in rules])  # 替换规则
                 rules_updated = True
@@ -98,10 +98,10 @@ def update_rule_files():
     ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules)
 
     # 更新各个 .list 文件
-    update_list_file('./TalkatoneAntiAds.list', 'REJECT', reject_rules=reject_rules)
-    update_list_file('./TalkatoneDirect.list', 'DIRECT', direct_rules=direct_rules)
-    update_list_file('./TalkatoneProxyOnly.list', 'PROXY', proxy_rules=proxy_rules)
-    update_list_file('./TalkatoneProxy.list', 'ALL', direct_rules=direct_rules, proxy_rules=proxy_rules)
+    update_list_file('./TalkatoneAntiAds.list', 'REJECT', rules=reject_rules)
+    update_list_file('./TalkatoneDirect.list', 'DIRECT', rules=direct_rules)
+    update_list_file('./TalkatoneProxyOnly.list', 'PROXY', rules=proxy_rules)
+    update_list_file('./TalkatoneProxy.list', 'ALL', rules=direct_rules + proxy_rules)
 
 if __name__ == "__main__":
     update_rule_files()
