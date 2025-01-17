@@ -61,9 +61,9 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     # 遍历原文件内容，保留注释行
     for line in content:
         if line.startswith('#'):
-            updated_content.append(line)
+            updated_content.append(line)  # 保留注释行
         else:
-            updated_content.append(line)
+            updated_content.append(line)  # 保留非注释行
 
     # 如果某些类型的规则没有被更新，确保插入它们
     if reject_rules and not reject_updated:
@@ -76,13 +76,13 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
         updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
         proxy_updated = True
 
-    # 排序：根据类型和首字母进行排序
+    # 排序：根据规则的类型和首字母排序
     valid_rules = [rule for rule in updated_content if ',' in rule and len(rule.split(',')) > 1]
 
     # 按照规则类型和首字母进行排序
     sorted_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
 
-    # 将排序后的内容更新到文件
+    # 将排序后的规则更新到文件内容
     updated_content = sorted_rules
 
     # 在最后添加 IP-CIDR 规则
