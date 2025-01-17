@@ -39,13 +39,12 @@ def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_ci
 
     return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
-def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None, ip_cidr_reject_rules=None, ip_cidr_direct_rules=None, ip_cidr_proxy_rules=None):
+def update_list_file(list_file_path, rule_type, rules=None, ip_cidr_reject_rules=None, ip_cidr_direct_rules=None, ip_cidr_proxy_rules=None):
     """
     更新 .list 文件中的规则，保留原注释，替换规则部分
     :param list_file_path: .list 文件路径
-    :param reject_rules: REJECT 规则列表
-    :param direct_rules: DIRECT 规则列表
-    :param proxy_rules: PROXY 规则列表
+    :param rule_type: 规则类型，如 REJECT、DIRECT、PROXY
+    :param rules: 对应类型的规则列表
     :param ip_cidr_reject_rules: IP-CIDR REJECT 规则
     :param ip_cidr_direct_rules: IP-CIDR DIRECT 规则
     :param ip_cidr_proxy_rules: IP-CIDR PROXY 规则
@@ -54,32 +53,29 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
         content = file.readlines()
 
     updated_content = []
-    reject_updated = False
-    direct_updated = False
-    proxy_updated = False
+    rules_updated = False
 
-    # 保留所有注释行
+    # 保留注释行
     for line in content:
         if line.startswith('#'):
             updated_content.append(line)
+        elif ',' in line:  # 检测到规则行
+            if rule_type in line and rules and not rules_updated:
+                updated_content.append("\n")  # 添加空行
+                updated_content.extend([rule + '\n' for rule in rules])  # 替换规则
+                rules_updated = True
+        else:
+            updated_content.append(line)
 
-    # 添加排序后的规则
-    if reject_rules:
-        updated_content.extend([rule + '\n' for rule in reject_rules])  # 添加 REJECT 规则
-    if direct_rules:
-        updated_content.extend([rule + '\n' for rule in direct_rules])  # 添加 DIRECT 规则
-    if proxy_rules:
-        updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
+    # 排序规则并去重：将规则按类型和首字母排序
+    valid_rules = [line for line in updated_content if ',' in line]
+    valid_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
 
-    # 排序规则：根据规则类型和首字母进行排序
-    valid_rules = [rule for rule in updated_content if ',' in rule and len(rule.split(',')) > 1]
-    sorted_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
-
-    # 清空原规则，确保仅保留新的排序规则
+    # 更新文件内容：去除原规则，插入新的排序规则
     updated_content = [line for line in updated_content if ',' not in line]  # 去除原规则
-    updated_content.extend(sorted_rules)  # 添加排序后的规则
+    updated_content.extend(valid_rules)  # 添加排序后的规则
 
-    # 在最后添加 IP-CIDR 规则，并加上 no-resolve
+    # 在最后添加 IP-CIDR 规则
     if ip_cidr_reject_rules:
         updated_content.extend([rule + '\n' for rule in ip_cidr_reject_rules])  # 添加 IP-CIDR REJECT 规则
     if ip_cidr_direct_rules:
@@ -102,10 +98,10 @@ def update_rule_files():
     ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules)
 
     # 更新各个 .list 文件
-    update_list_file('./TalkatoneAntiAds.list', reject_rules=reject_rules)
-    update_list_file('./TalkatoneDirect.list', direct_rules=direct_rules)
-    update_list_file('./TalkatoneProxyOnly.list', proxy_rules=proxy_rules)
-    update_list_file('./TalkatoneProxy.list', direct_rules=direct_rules, proxy_rules=proxy_rules)
+    update_list_file('./TalkatoneAntiAds.list', 'REJECT', reject_rules=reject_rules)
+    update_list_file('./TalkatoneDirect.list', 'DIRECT', direct_rules=direct_rules)
+    update_list_file('./TalkatoneProxyOnly.list', 'PROXY', proxy_rules=proxy_rules)
+    update_list_file('./TalkatoneProxy.list', 'ALL', direct_rules=direct_rules, proxy_rules=proxy_rules)
 
 if __name__ == "__main__":
     update_rule_files()
