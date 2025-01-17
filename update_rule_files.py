@@ -59,7 +59,7 @@ def remove_duplicates(rules):
     return clean_rules
 
 def remove_proxy_from_ip_cidr_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules):
-    """从 IP-CIDR 规则中删除代理策略（如 DIRECT, PROXY）"""
+    """从 IP-CIDR 规则中删除代理策略（如 DIRECT、PROXY）"""
     def remove_proxy(rules):
         updated_rules = []
         for rule in rules:
@@ -125,7 +125,7 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
     print(f"Updated {list_file_path}")  # 日志输出
 
 def update_rule_files():
-    """更新所有相关的 .list 文件"""
+    """强制更新所有相关的 .list 文件"""
     module_path = './Talkatone.sgmodule'
     reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = parse_module_file(module_path)
 
@@ -144,11 +144,11 @@ def update_rule_files():
     ip_cidr_direct_rules = remove_duplicates(ip_cidr_direct_rules)
     ip_cidr_proxy_rules = remove_duplicates(ip_cidr_proxy_rules)
 
-    # 更新各个 .list 文件
+    # 更新各个 .list 文件，强制更新
     update_list_file('./TalkatoneAntiAds.list', reject_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="REJECT")
     update_list_file('./TalkatoneDirect.list', direct_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="DIRECT")
     update_list_file('./TalkatoneProxy.list', proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
 
-# 执行更新操作
+# 执行强制更新操作
 update_rule_files()
