@@ -7,5 +7,5 @@
 # 类型选择：RULE-SET
 # 策略建议：PROXY
 
-DOMAIN-SUFFIX,tktn.at,PROXY
-DOMAIN-SUFFIX,tktn.be,PROXY
+DOMAIN-SUFFIX,tktn.at
+DOMAIN-SUFFIX,tktn.be
