@@ -69,11 +69,14 @@ def update_rule_files():
     # 检查并添加 no-resolve 到 IP-CIDR 规则
     def add_no_resolve_to_ip_rules(rules):
         updated_rules = []
+        seen_rules = set()  # 用于检测重复规则
         for rule in rules:
-            if "no-resolve" not in rule:
-                updated_rules.append(rule + ",no-resolve")
-            else:
-                updated_rules.append(rule)
+            if rule not in seen_rules:
+                if "no-resolve" not in rule:
+                    updated_rules.append(rule + ",no-resolve")
+                else:
+                    updated_rules.append(rule)
+                seen_rules.add(rule)
         return updated_rules
 
     ip_cidr_reject_rules = add_no_resolve_to_ip_rules(ip_cidr_reject_rules)
