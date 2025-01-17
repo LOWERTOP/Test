@@ -26,35 +26,36 @@ def extract_rules(lines, rule_type):
             rules.append(line.strip())
     return rules
 
-# 写入更新后的规则文件
-def write_file(file_path, rules, comment):
-    with open(file_path, 'w') as f:
-        f.write(comment)
-        f.write("\n\n")
-        for rule in rules:
-            f.write(rule + "\n")
-
-# 获取注释内容
-def extract_comment(lines):
-    comment = []
+# 读取子文件并提取现有注释
+def read_existing_comments(file_path):
+    with open(file_path, 'r') as f:
+        lines = f.readlines()
+    
+    comments = []
     for line in lines:
         if line.strip().startswith('#'):
-            comment.append(line.strip())
+            comments.append(line.strip())
         else:
             break
-    return "\n".join(comment)
+    return "\n".join(comments)
+
+# 写入更新后的规则文件
+def write_file(file_path, rules, existing_comments):
+    with open(file_path, 'w') as f:
+        # 保留子文件中的现有注释，并在其下方添加空行和新规则
+        f.write(existing_comments)
+        f.write("\n\n")  # 保证注释后有空行
+        for rule in rules:
+            f.write(rule + "\n")
 
 # 去除重复规则并进行排序
 def process_rules(rules):
     unique_rules = list(dict.fromkeys(rules))  # 去除重复规则
     return unique_rules
 
-# 处理规则类型
+# 处理规则类型并更新子文件
 def process_module_file():
     lines = read_module_file()
-
-    # 提取注释
-    comment = extract_comment(lines)
 
     # 提取不同类型的规则
     reject_rules = extract_rules(lines, 'RECJECT')
@@ -68,11 +69,17 @@ def process_module_file():
     proxy_rules = process_rules(proxy_rules)
     proxy_only_rules = process_rules(proxy_only_rules)
 
-    # 更新规则到对应的文件
-    write_file(anti_ads_file, reject_rules, comment)
-    write_file(direct_file, direct_rules, comment)
-    write_file(proxy_file, proxy_rules, comment)
-    write_file(proxy_only_file, proxy_only_rules, comment)
+    # 读取子文件中的现有注释
+    anti_ads_comments = read_existing_comments(anti_ads_file)
+    direct_comments = read_existing_comments(direct_file)
+    proxy_comments = read_existing_comments(proxy_file)
+    proxy_only_comments = read_existing_comments(proxy_only_file)
+
+    # 更新规则到对应的文件，保留原有注释
+    write_file(anti_ads_file, reject_rules, anti_ads_comments)
+    write_file(direct_file, direct_rules, direct_comments)
+    write_file(proxy_file, proxy_rules, proxy_comments)
+    write_file(proxy_only_file, proxy_only_rules, proxy_only_comments)
 
 if __name__ == '__main__':
     process_module_file()
