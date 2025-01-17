@@ -6,45 +6,24 @@
 # 反馈渠道：https://t.me/ShadowrocketApp
 # 类型选择：RULE-SET
 # 策略建议：REJECT-DROP 或者 REJECT
-DOMAIN-KEYWORD,googeads
 DOMAIN-KEYWORD,googleads
 DOMAIN-SUFFIX,ads.inmobi.com
-DOMAIN-SUFFIX,ads.inobi.com
 DOMAIN-SUFFIX,adsappier.com
-DOMAIN-SUFFIX,adsppier.com
-DOMAIN-SUFFIX,amaon-adsystem.com
 DOMAIN-SUFFIX,amazon-adsystem.com
-DOMAIN-SUFFIX,apier.net
-DOMAIN-SUFFIX,appersig.com
 DOMAIN-SUFFIX,appier.net
 DOMAIN-SUFFIX,appiersig.com
 DOMAIN-SUFFIX,bidder.criteo.com
-DOMAIN-SUFFIX,bider.criteo.com
-DOMAIN-SUFFIX,c.amazn-adsystem.com
 DOMAIN-SUFFIX,c.amazon-adsystem.com
 DOMAIN-SUFFIX,cdn2.inner-active.mobi
-DOMAIN-SUFFIX,cdn2.nner-active.mobi
-DOMAIN-SUFFIX,cr.adsapier.com
 DOMAIN-SUFFIX,cr.adsappier.com
-DOMAIN-SUFFIX,crieo.com
 DOMAIN-SUFFIX,criteo.com
-DOMAIN-SUFFIX,googeads.g.doubleclick-cn.net
 DOMAIN-SUFFIX,googleads.g.doubleclick-cn.net
 DOMAIN-SUFFIX,googleads.g.doubleclick.net
-DOMAIN-SUFFIX,googleds.g.doubleclick.net
-DOMAIN-SUFFIX,gum.citeo.com
 DOMAIN-SUFFIX,gum.criteo.com
-DOMAIN-SUFFIX,ow.pubatic.com
 DOMAIN-SUFFIX,ow.pubmatic.com
-DOMAIN-SUFFIX,pubmaic.com
 DOMAIN-SUFFIX,pubmatic.com
 DOMAIN-SUFFIX,sdk-dnt.ad.smaato.net
-DOMAIN-SUFFIX,sdk-dt.ad.smaato.net
-DOMAIN-SUFFIX,sdk-eents.inner-active.mobi
 DOMAIN-SUFFIX,sdk-events.inner-active.mobi
 DOMAIN-SUFFIX,smaato.net
-DOMAIN-SUFFIX,smato.net
 DOMAIN-SUFFIX,tappx.com
-DOMAIN-SUFFIX,tapx.com
-DOMAIN-SUFFIX,wv.iner-active.mobi
 DOMAIN-SUFFIX,wv.inner-active.mobi
