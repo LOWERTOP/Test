@@ -2,45 +2,32 @@ name: Update Rule Files
 
 on:
   push:
-    branches:
-      - main  # 确保指定触发分支，例如 main 或其他默认分支
     paths:
-      - "Talkatone.sgmodule"  # 精确匹配母文件路径
-
-  workflow_dispatch:  # 手动触发
-    inputs:
-      commit_message:
-        description: 'Commit message'
-        required: true
-        default: 'Update rule files'
+      - Talkatone.sgmodule
 
 jobs:
   update_rules:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.x
+        python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-
-    - name: Run update_rule_files.py
+    - name: Run update script
       run: |
         python update_rule_files.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Commit and push updated files
+    - name: Commit and push changes
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         git add .
-        git commit -m "${{ github.event.inputs.commit_message }}" || echo "No changes to commit"
+        git commit -m "Update rule files based on Talkatone.sgmodule"
         git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
