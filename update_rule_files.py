@@ -29,20 +29,23 @@ def parse_module_file(module_file_path):
     direct_rules = sorted(set(direct_rules))
     proxy_rules = sorted(set(proxy_rules))
 
-    print("Parsed rules:")
-    print(f"REJECT rules: {reject_rules}")
-    print(f"DIRECT rules: {direct_rules}")
-    print(f"PROXY rules: {proxy_rules}")
+    # 对 IP 类型的规则添加 `no-resolve` 参数，并放到最后
+    ip_cidr_reject_rules = [rule + ',no-resolve' for rule in ip_cidr_reject_rules]
+    ip_cidr_direct_rules = [rule + ',no-resolve' for rule in ip_cidr_direct_rules]
+    ip_cidr_proxy_rules = [rule + ',no-resolve' for rule in ip_cidr_proxy_rules]
 
-    return reject_rules, direct_rules, proxy_rules
+    return reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
-def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None):
+def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy_rules=None, ip_cidr_reject_rules=None, ip_cidr_direct_rules=None, ip_cidr_proxy_rules=None):
     """
     更新 .list 文件中的规则，保留原注释，替换规则部分
     :param list_file_path: .list 文件路径
     :param reject_rules: REJECT 规则列表
     :param direct_rules: DIRECT 规则列表
     :param proxy_rules: PROXY 规则列表
+    :param ip_cidr_reject_rules: IP-CIDR REJECT 规则
+    :param ip_cidr_direct_rules: IP-CIDR DIRECT 规则
+    :param ip_cidr_proxy_rules: IP-CIDR PROXY 规则
     """
     with open(list_file_path, 'r') as file:
         content = file.readlines()
@@ -79,6 +82,14 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     if proxy_rules and not proxy_updated:
         updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
 
+    # 在最后添加 IP-CIDR 规则
+    if ip_cidr_reject_rules:
+        updated_content.extend([rule + '\n' for rule in ip_cidr_reject_rules])  # 添加 IP-CIDR REJECT 规则
+    if ip_cidr_direct_rules:
+        updated_content.extend([rule + '\n' for rule in ip_cidr_direct_rules])  # 添加 IP-CIDR DIRECT 规则
+    if ip_cidr_proxy_rules:
+        updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])  # 添加 IP-CIDR PROXY 规则
+
     # 写回更新后的内容
     with open(list_file_path, 'w') as file:
         file.writelines(updated_content)
@@ -88,13 +99,13 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
 def update_rule_files():
     """更新所有相关的 .list 文件"""
     module_path = './Talkatone.sgmodule'
-    reject_rules, direct_rules, proxy_rules = parse_module_file(module_path)
+    reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = parse_module_file(module_path)
 
     # 更新各个 .list 文件
     update_list_file('./TalkatoneAntiAds.list', reject_rules=reject_rules)
     update_list_file('./TalkatoneDirect.list', direct_rules=direct_rules)
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules=proxy_rules)
     update_list_file('./TalkatoneProxy.list', direct_rules=direct_rules, proxy_rules=proxy_rules)
-
+    
 if __name__ == "__main__":
     update_rule_files()
