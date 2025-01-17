@@ -63,7 +63,11 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
         if line.startswith('#'):
             updated_content.append(line)
 
-    # 添加排序后的规则
+    # 删除原有规则，只保留新的规则
+    # 清空原规则
+    updated_content = [line for line in updated_content if ',' not in line]
+
+    # 添加新的规则，首先是 REJECT，DIRECT，PROXY 规则
     if reject_rules:
         updated_content.extend([rule + '\n' for rule in reject_rules])  # 添加 REJECT 规则
     if direct_rules:
@@ -75,7 +79,7 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     valid_rules = [rule for rule in updated_content if ',' in rule and len(rule.split(',')) > 1]
     sorted_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
 
-    # 清空原规则，确保仅保留新的排序规则
+    # 更新文件内容，保持顺序
     updated_content = [line for line in updated_content if ',' not in line]  # 去除原规则
     updated_content.extend(sorted_rules)  # 添加排序后的规则
 
