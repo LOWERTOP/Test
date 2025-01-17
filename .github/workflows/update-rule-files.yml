@@ -3,8 +3,8 @@ name: Update Rule Files
 on:
   push:
     paths:
-      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生变化时触发工作流
-  workflow_dispatch:  # 手动触发工作流
+      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生推送时触发工作流
+  workflow_dispatch:  # 支持手动触发
     inputs:
       commit_message:
         description: 'Commit message for updates'
