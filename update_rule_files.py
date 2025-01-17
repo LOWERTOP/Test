@@ -39,6 +39,16 @@ def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_ci
 
     return ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
+def remove_duplicates_and_check_no_resolve(rules):
+    """检查规则中是否有重复，并确保 no-resolve 仅出现在 IP 类型规则中"""
+    seen = set()
+    clean_rules = []
+    for rule in rules:
+        if rule not in seen:
+            seen.add(rule)
+            clean_rules.append(rule)
+    return clean_rules
+
 def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type):
     """
     更新 .list 文件中的规则，保留原注释，替换规则部分
@@ -95,6 +105,15 @@ def update_rule_files():
 
     # 对 IP 类的规则添加 no-resolve 参数
     ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules = add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules)
+
+    # 去重和检查 no-resolve 参数
+    reject_rules = remove_duplicates_and_check_no_resolve(reject_rules)
+    direct_rules = remove_duplicates_and_check_no_resolve(direct_rules)
+    proxy_rules = remove_duplicates_and_check_no_resolve(proxy_rules)
+
+    ip_cidr_reject_rules = remove_duplicates_and_check_no_resolve(ip_cidr_reject_rules)
+    ip_cidr_direct_rules = remove_duplicates_and_check_no_resolve(ip_cidr_direct_rules)
+    ip_cidr_proxy_rules = remove_duplicates_and_check_no_resolve(ip_cidr_proxy_rules)
 
     # 更新各个 .list 文件
     update_list_file('./TalkatoneAntiAds.list', reject_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="REJECT")
