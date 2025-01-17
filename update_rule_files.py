@@ -58,32 +58,42 @@ def update_list_file(list_file_path, reject_rules=None, direct_rules=None, proxy
     direct_updated = False
     proxy_updated = False
 
-    # 保留所有注释行
+    # 遍历原文件内容
     for line in content:
+        # 保留注释行
         if line.startswith('#'):
             updated_content.append(line)
+        elif ',' in line:  # 检测到规则行
+            # 如果规则行已经存在并且是 REJECT、DIRECT 或 PROXY 类型，则跳过
+            if 'REJECT' in line and reject_rules and not reject_updated:
+                updated_content.extend([rule + '\n' for rule in reject_rules])  # 替换 REJECT 规则，并换行
+                reject_updated = True
+            elif 'DIRECT' in line and direct_rules and not direct_updated:
+                updated_content.extend([rule + '\n' for rule in direct_rules])  # 替换 DIRECT 规则，并换行
+                direct_updated = True
+            elif 'PROXY' in line and proxy_rules and not proxy_updated:
+                updated_content.extend([rule + '\n' for rule in proxy_rules])  # 替换 PROXY 规则，并换行
+                proxy_updated = True
+        else:
+            updated_content.append(line)
 
-    # 删除原有规则，只保留新的规则
-    # 清空原规则
-    updated_content = [line for line in updated_content if ',' not in line]
-
-    # 添加新的规则，首先是 REJECT，DIRECT，PROXY 规则
-    if reject_rules:
+    # 如果某些类型的规则没有被更新，确保插入它们
+    if reject_rules and not reject_updated:
         updated_content.extend([rule + '\n' for rule in reject_rules])  # 添加 REJECT 规则
-    if direct_rules:
+    if direct_rules and not direct_updated:
         updated_content.extend([rule + '\n' for rule in direct_rules])  # 添加 DIRECT 规则
-    if proxy_rules:
+    if proxy_rules and not proxy_updated:
         updated_content.extend([rule + '\n' for rule in proxy_rules])  # 添加 PROXY 规则
 
-    # 排序规则：根据规则类型和首字母进行排序
-    valid_rules = [rule for rule in updated_content if ',' in rule and len(rule.split(',')) > 1]
-    sorted_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
+    # 排序规则：将规则按类型和首字母排序
+    valid_rules = [line for line in updated_content if ',' in line]
+    valid_rules = sorted(valid_rules, key=lambda x: (x.split(',')[0], x.split(',')[1].lower()))
 
-    # 更新文件内容，保持顺序
+    # 更新文件内容：保留注释，删除原有规则，插入新的排序规则
     updated_content = [line for line in updated_content if ',' not in line]  # 去除原规则
-    updated_content.extend(sorted_rules)  # 添加排序后的规则
+    updated_content.extend(valid_rules)  # 添加排序后的规则
 
-    # 在最后添加 IP-CIDR 规则，并加上 no-resolve
+    # 在最后添加 IP-CIDR 规则
     if ip_cidr_reject_rules:
         updated_content.extend([rule + '\n' for rule in ip_cidr_reject_rules])  # 添加 IP-CIDR REJECT 规则
     if ip_cidr_direct_rules:
