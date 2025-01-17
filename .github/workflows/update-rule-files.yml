@@ -3,38 +3,41 @@ name: Update Rule Files
 on:
   push:
     paths:
-      - 'Talkatone.sgmodule'   # 监控 Talkatone.sgmodule 文件的变化
-  pull_request:
-    paths:
-      - 'Talkatone.sgmodule'   # 同样适用于 pull request
+      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生变化时触发工作流
+  workflow_dispatch:  # 手动触发工作流
+    inputs:
+      commit_message:
+        description: 'Commit message for updates'
+        required: true
+        default: 'Update rule files from Talkatone.sgmodule'
 
 jobs:
-  update:
-    runs-on: ubuntu-latest  # 使用 Ubuntu 环境
+  update-rules:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2  # 检出仓库内容
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'  # 设置 Python 版本
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
 
-      - name: Run the script to update rule files
-        run: |
-          python3 update_rule_files.py  # 执行更新规则文件的脚本
+    - name: Install dependencies
+      run: |
+        pip install pyyaml
 
-      - name: Check if changes were made
-        run: |
-          git status  # 打印 git 状态，检查是否有变更
+    - name: Update list files from Talkatone.sgmodule
+      run: |
+        python update_rule_files.py  # 运行自定义脚本
 
-      - name: Commit and push changes
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add --all  # 强制添加所有更改
-          git commit -m "Update rule files based on latest module" || echo "No changes to commit"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的 Token 提交修改
+    - name: Commit and push updated files
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .  # 添加所有更改
+        git commit -m "${{ github.event.inputs.commit_message }}" || echo "No changes to commit"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
