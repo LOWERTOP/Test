@@ -104,11 +104,6 @@ def update_rule_files():
     ip_cidr_direct_rules = add_no_resolve(ip_cidr_direct_rules)
     ip_cidr_proxy_rules = add_no_resolve(ip_cidr_proxy_rules)
 
-    # 去除代理策略（DIRECT、PROXY、REJECT）并保留 no-resolve 参数
-    reject_rules = remove_proxy(reject_rules)
-    direct_rules = remove_proxy(direct_rules)
-    proxy_rules = remove_proxy(proxy_rules)
-
     # 去重并排序
     reject_rules = sorted(set(reject_rules))
     direct_rules = sorted(set(direct_rules))
