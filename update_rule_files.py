@@ -29,7 +29,6 @@ def parse_module_file(module_file_path):
     direct_rules = sorted(set(direct_rules))
     proxy_rules = sorted(set(proxy_rules))
 
-    # 返回规则列表，不对 IP-CIDR 规则添加 no-resolve 参数，保留到最后再处理
     return reject_rules, direct_rules, proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules
 
 def add_no_resolve_to_ip_rules(ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules):
