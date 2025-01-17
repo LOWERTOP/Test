@@ -3,13 +3,8 @@ name: Update Rule Files
 on:
   push:
     paths:
-      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生推送时触发工作流
-  workflow_dispatch:  # 支持手动触发
-    inputs:
-      commit_message:
-        description: 'Commit message for updates'
-        required: true
-        default: 'Update rule files from Talkatone.sgmodule'
+      - 'Talkatone.sgmodule'  # 仅当 Talkatone.sgmodule 文件发生推送时触发
+  workflow_dispatch:  # 允许手动触发工作流
 
 jobs:
   update-rules:
@@ -17,27 +12,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: Set up Python environment
-      uses: actions/setup-python@v2
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        python-version: '3.9'
+        python-version: '3.x'
 
-    - name: Install dependencies
+    - name: Run script to update rule files
       run: |
-        pip install pyyaml
-
-    - name: Update list files from Talkatone.sgmodule
-      run: |
-        python update_rule_files.py  # 运行自定义脚本
-
-    - name: Commit and push updated files
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git add .  # 添加所有更改
-        git commit -m "${{ github.event.inputs.commit_message }}" || echo "No changes to commit"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        python update_rule_files.py
