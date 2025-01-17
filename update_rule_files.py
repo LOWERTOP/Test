@@ -78,6 +78,17 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
             updated_content.append("\n")
             updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])
 
+    # 添加 IP 类型规则到文件末尾
+    if ip_cidr_reject_rules:
+        updated_content.append("\n# IP-CIDR REJECT rules\n")
+        updated_content.extend([rule + '\n' for rule in ip_cidr_reject_rules])
+    if ip_cidr_direct_rules:
+        updated_content.append("\n# IP-CIDR DIRECT rules\n")
+        updated_content.extend([rule + '\n' for rule in ip_cidr_direct_rules])
+    if ip_cidr_proxy_rules:
+        updated_content.append("\n# IP-CIDR PROXY rules\n")
+        updated_content.extend([rule + '\n' for rule in ip_cidr_proxy_rules])
+
     # 写回更新后的内容
     with open(list_file_path, 'w') as file:
         file.writelines(updated_content)
