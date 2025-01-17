@@ -1,4 +1,6 @@
 def update_list_file(source_file, target_file, rule_type):
+    print(f"Updating {target_file} based on {source_file} with {rule_type} rules...")
+    
     # 读取母文件
     with open(source_file, 'r') as src:
         source_content = src.read()
@@ -7,7 +9,6 @@ def update_list_file(source_file, target_file, rule_type):
     start_marker = f'# {rule_type}'
     end_marker = f'# END {rule_type}'
     
-    # 提取规则部分
     start_idx = source_content.find(start_marker)
     end_idx = source_content.find(end_marker, start_idx)
     
@@ -18,6 +19,8 @@ def update_list_file(source_file, target_file, rule_type):
     # 获取规则内容
     rules_content = source_content[start_idx + len(start_marker): end_idx].strip()
     rules = [rule.strip() for rule in rules_content.split('\n') if rule.strip()]
+
+    print(f"Extracted {len(rules)} rules of type {rule_type}")
 
     # 读取子文件
     with open(target_file, 'r') as tgt:
@@ -41,7 +44,6 @@ def update_list_file(source_file, target_file, rule_type):
     other_rules = []
     
     for rule in new_rules:
-        # 判断是否是IP规则（简单判断：是否是类似 192.168.1.1 的形式）
         if any(c.isdigit() for c in rule.split('.')):
             ip_rules.append(rule)
         else:
@@ -50,8 +52,10 @@ def update_list_file(source_file, target_file, rule_type):
     # 添加no-resolve标记到IP规则
     ip_rules = [rule + ' ,no-resolve' for rule in ip_rules]
 
-    # 合并规则并排序，确保IP类规则放在末尾
+    # 合并规则并排序
     sorted_rules = sorted(other_rules) + sorted(ip_rules)
+
+    print(f"Writing {len(sorted_rules)} rules to {target_file}...")
 
     # 更新子文件内容
     new_content += '\n'.join(sorted_rules) + '\n'
