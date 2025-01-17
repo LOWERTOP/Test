@@ -98,8 +98,6 @@ def update_list_file(list_file_path, rules, ip_cidr_reject_rules, ip_cidr_direct
     for line in content:
         if line.startswith('#'):
             updated_content.append(line)
-        elif ',' in line:  # 检测到规则行
-            continue  # 如果是规则行，则跳过，不保留
 
     updated_content.append("\n")  # 保证注释与规则之间有空行
     
@@ -149,8 +147,8 @@ def update_rule_files():
     # 更新各个 .list 文件
     update_list_file('./TalkatoneAntiAds.list', reject_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="REJECT")
     update_list_file('./TalkatoneDirect.list', direct_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="DIRECT")
+    update_list_file('./TalkatoneProxy.list', proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
     update_list_file('./TalkatoneProxyOnly.list', proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
-    update_list_file('./TalkatoneProxy.list', reject_rules + direct_rules + proxy_rules, ip_cidr_reject_rules, ip_cidr_direct_rules, ip_cidr_proxy_rules, rule_type="PROXY")
 
-if __name__ == "__main__":
-    update_rule_files()
+# 执行更新操作
+update_rule_files()
