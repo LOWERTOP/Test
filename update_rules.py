@@ -2,12 +2,12 @@ import re
 
 # 父文件和子文件的路径
 parent_file_path = 'Talkatone.sgmodule'
-child_files = [
-    'TalkatoneAntiAds.list',
-    'TalkatoneProxy.list',
-    'TalkatoneDirect.list',
-    'TalkatoneProxyOnly.list'
-]
+child_files = {
+    'TalkatoneAntiAds.list': 'Reject',
+    'TalkatoneProxy.list': ['Direct', 'Proxy'],
+    'TalkatoneDirect.list': 'Direct',
+    'TalkatoneProxyOnly.list': 'Proxy'
+}
 
 def extract_rules(content):
     """从内容中提取规则部分"""
@@ -19,15 +19,13 @@ def extract_rules(content):
     rules = content[start:]
     return rules
 
-def filter_rules(rules, include_ip=False):
-    """过滤规则，保留特定策略的规则"""
+def filter_rules(rules, rule_types):
+    """过滤规则，保留特定类型的规则"""
     filtered_rules = []
     for line in rules.splitlines():
-        if "IP-CIDR" in line and include_ip:
+        if any(rule_type in line for rule_type in rule_types):
             filtered_rules.append(line)
-        elif "IP-CIDR" not in line and not include_ip:
-            # 移除策略部分
-            line = re.sub(r",(REJECT-DROP|PROXY|DIRECT)", "", line)
+        elif "IP-CIDR" in line and "no-resolve" in line and 'Direct' in rule_types:
             filtered_rules.append(line)
     return "\n".join(filtered_rules)
 
@@ -53,9 +51,10 @@ def main():
     parent_rules = extract_rules(parent_content)
     
     # 更新每个子文件
-    for child_file in child_files:
-        include_ip = "Direct" in child_file or "Proxy" in child_file  # 判断是否包含 IP 类规则
-        filtered_rules = filter_rules(parent_rules, include_ip)
+    for child_file, rule_types in child_files.items():
+        if isinstance(rule_types, str):
+            rule_types = [rule_types]
+        filtered_rules = filter_rules(parent_rules, rule_types)
         update_child_file(child_file, filtered_rules)
 
 if __name__ == '__main__':
