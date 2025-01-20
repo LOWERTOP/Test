@@ -1,75 +1,62 @@
 import re
 
-def extract_rules_by_keyword(source_file, keyword):
-    """
-    从母文件中提取包含指定关键词（REJECT/DIRECT/PROXY）的规则，排除注释行。
-    """
-    with open(source_file, 'r') as f:
-        source_content = f.read()
+# 父文件和子文件的路径
+parent_file_path = 'Talkatone.sgmodule'
+child_files = [
+    'TalkatoneAntiAds.list',
+    'TalkatoneProxy.list',
+    'TalkatoneDirect.list',
+    'TalkatoneProxyOnly.list'
+]
 
-    # 按行分割并筛选出包含指定关键词的规则行，排除注释行
-    rules = []
-    for line in source_content.split('\n'):
-        # 忽略注释行（以 # 开头的行）
-        if not line.strip().startswith('#') and keyword in line:
-            rules.append(line.strip())
-
+def extract_rules(content):
+    """从内容中提取规则部分"""
+    start = content.find('[Rule]')
+    if start == -1:
+        return ''
+    
+    # 从 [Rule] 开始到文件末尾的内容
+    rules = content[start:]
     return rules
 
-def update_list_file(source_file, target_file, keyword):
-    """
-    更新子文件，使其与母文件中的规则部分保持同步。
-    """
-    print(f"Updating {target_file} based on {source_file} with {keyword} rules...")
+def filter_rules(rules, include_ip=False):
+    """过滤规则，保留特定策略的规则"""
+    filtered_rules = []
+    for line in rules.splitlines():
+        if "IP-CIDR" in line and include_ip:
+            filtered_rules.append(line)
+        elif "IP-CIDR" not in line and not include_ip:
+            # 移除策略部分
+            line = re.sub(r",(REJECT-DROP|PROXY|DIRECT)", "", line)
+            filtered_rules.append(line)
+    return "\n".join(filtered_rules)
+
+def update_child_file(child_file_path, filtered_rules):
+    """更新子文件的规则部分，保留注释内容"""
+    with open(child_file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
     
-    # 从母文件中提取规则
-    rules = extract_rules_by_keyword(source_file, keyword)
-    if not rules:
-        print(f"未找到 {keyword} 规则部分")
-        return
+    # 提取注释内容，假设注释部分在文件开头
+    comments = re.findall(r'^(#.*\n)+', content)
+    comments = comments[0] if comments else ''
+    
+    # 保留注释内容并写入文件
+    final_content = comments + filtered_rules + '\n'
+    with open(child_file_path, 'w', encoding='utf-8') as file:
+        file.write(final_content)
 
-    # 读取子文件内容
-    with open(target_file, 'r') as f:
-        target_content = f.read()
-
-    # 提取子文件中的注释部分
-    comment_section = []
-    lines = target_content.split('\n')
-    for line in lines:
-        if line.strip().startswith('#'):
-            comment_section.append(line)
-
-    # 保留注释并删除原有规则
-    new_content = '\n'.join(comment_section) + '\n\n'
-
-    # 排除 PROXY/DIRECT/REJECT 标签的规则
-    new_rules = [rule for rule in rules if 'PROXY' not in rule and 'DIRECT' not in rule and 'REJECT' not in rule]
-
-    # IP 类规则和其他规则分开处理
-    ip_rules = []
-    other_rules = []
-
-    for rule in new_rules:
-        if re.search(r'\d+\.\d+\.\d+\.\d+', rule):  # 判断是否为 IP 类规则
-            ip_rules.append(rule)
-        else:
-            other_rules.append(rule)
-
-    # 添加 no-resolve 标签到 IP 类规则
-    ip_rules = [rule + ' ,no-resolve' for rule in ip_rules]
-
-    # 合并规则并排序
-    sorted_rules = sorted(other_rules) + sorted(ip_rules)
-
-    # 写入更新后的规则
-    new_content += '\n'.join(sorted_rules) + '\n'
-
-    # 保存更新后的子文件
-    with open(target_file, 'w') as f:
-        f.write(new_content)
+def main():
+    with open(parent_file_path, 'r', encoding='utf-8') as file:
+        parent_content = file.read()
+    
+    # 提取父文件的规则部分
+    parent_rules = extract_rules(parent_content)
+    
+    # 更新每个子文件
+    for child_file in child_files:
+        include_ip = "Direct" in child_file or "Proxy" in child_file  # 判断是否包含 IP 类规则
+        filtered_rules = filter_rules(parent_rules, include_ip)
+        update_child_file(child_file, filtered_rules)
 
 if __name__ == '__main__':
-    update_list_file('Talkatone.sgmodule', 'TalkatoneAntiAds.list', 'REJECT')
-    update_list_file('Talkatone.sgmodule', 'TalkatoneDirect.list', 'DIRECT')
-    update_list_file('Talkatone.sgmodule', 'TalkatoneProxy.list', 'PROXY')
-    update_list_file('Talkatone.sgmodule', 'TalkatoneProxyOnly.list', 'PROXY')
+    main()
