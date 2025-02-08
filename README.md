@@ -113,7 +113,7 @@
 
 ### 添加节点
 
-> * 首页 - 右上角➕ - 类型Subscribe - URL栏输入机场订阅链接 - 保存
+> * 首页 - 右上角➕ - 类型Subscribe - URL栏输入服务器订阅链接 - 保存
 > 
 >   `订阅链接后面加上#1、#2、#3…，可以重复添加同一个订阅`
 > 
@@ -122,6 +122,8 @@
 >   `Shadowrocket已支持的类型：Shadowsocks、ShadowsocksR、Subscribe（订阅）、Vmess、VLESS、Relay、Socks5、Socks5 Over TLS、HTTP、HTTPS、HTTP2、Trojan、Hysteria、Hysteria2、TUIC、Juicity、WireGuard、Snell、Brook、Lua`
 > 
 > * 复制节点链接，如`trojan://xxx`、`vmess://xxx`、`vless://xxx`等，打开Shadowrocket时会自动识别导入
+>   
+>   `须开启剪贴板读取权限`
 > 
 > * 首页 - 左上角 - 扫码添加
 
