@@ -5,7 +5,7 @@
 
 > [!NOTE]
 > 
-> 原懒人配置文件及关键词列表的原作者因故退出维护，其仓库已不可达，本仓库现基于其最终版本文件进行后续基本维护。[Johnshall仓库](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) 的版本也将以本仓文件为基础继续更新。本仓以普通用户的身份对原作者及 [Johnshall](https://github.com/Johnshall) 等所有对相关项目做出过贡献的人表示由衷的感谢！
+> 原懒人配置文件及关键词列表的原作者因故退出维护，原仓库已不可查，本仓库现基于其最终版本文件进行后续基本维护。[Johnshall仓库](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) 的版本也将以本仓文件为基础继续更新。本仓以普通用户的身份对原作者及 [Johnshall](https://github.com/Johnshall) 等所有对相关项目做出过贡献的人表示由衷的感谢！
 
 > 本仓库现由 [Shadowrocket 官方TG交流群](https://t.me/ShadowrocketApp) 相关人员管理，主要维护懒人系列配置文件和 Shadowrocket 说明手册，如有其他需求可以访问 [配色与配置](https://github.com/LOWERTOP/Shadowrocket-First) 仓库查看相关内容或移步 [官方群组](https://t.me/ShadowrocketApp) 交流沟通
 
