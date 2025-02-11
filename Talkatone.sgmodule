@@ -72,9 +72,11 @@ DOMAIN-SUFFIX,wv.inner-active.mobi,REJECT-DROP
 DOMAIN-SUFFIX,www.googletagservices-cn.com,REJECT-DROP
 
 
-# 以下为该软件可能需要走代理的规则
+# 以下为该软件可能需要走代理的规则，若尝试登录时失败可以将tktn.at的策略改为DIERECT后再试
 DOMAIN-SUFFIX,tktn.at,PROXY
 DOMAIN-SUFFIX,tktn.be,PROXY
+# 语音留言地址，需要代理
+DOMAIN-SUFFIX,vm.talkatone.com,PROXY
 
 # 以下为该软件可能需要走直连的规则
 DOMAIN-SUFFIX,agkn.com,DIRECT
