@@ -1,0 +1,38 @@
+name: Sync Files from Shadowrocket
+
+on:
+  schedule:
+    - cron: '0 22 * * *'  # 每天UTC时间22点（北京时间6点）
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Shadowrocket-First
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: target
+
+      - name: Download and Prepare Files
+        run: |
+          # 创建目标目录
+          mkdir -p target/OfficialFiles
+
+          # 下载并复制文件
+          curl -fsSL -o target/OfficialFiles/lazy.conf https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf
+          curl -fsSL -o target/OfficialFiles/lazy_group.conf https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf
+          curl -fsSL -o target/OfficialFiles/Manual.md https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md
+
+      - name: Commit and Push Changes
+        run: |
+          cd target
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add OfficialFiles/*
+          if ! git diff-index --quiet HEAD --; then
+            git commit -m "Auto-sync: Updated files from Shadowrocket"
+            git push
+          else
+            echo "No changes detected."
+          fi
