@@ -23,9 +23,9 @@ jobs:
           rm target/OfficialFiles/lazy.conf target/OfficialFiles/lazy_group.conf target/OfficialFiles/Manual.md
 
           # 使用原始链接下载文件（强制覆盖）
-          curl -fsSL -o target/OfficialFiles/lazy.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf?$(date +%s)"
-          curl -fsSL -o target/OfficialFiles/lazy_group.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf?$(date +%s)"
-          curl -fsSL -o target/OfficialFiles/Manual.md "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md?$(date +%s)"
+          curl -o target/OfficialFiles/lazy.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf?$(date +%s)"
+          curl -o target/OfficialFiles/lazy_group.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf?$(date +%s)"
+          curl -o target/OfficialFiles/Manual.md "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md?$(date +%s)"
 
       - name: Force Commit 和 Push
         run: |
