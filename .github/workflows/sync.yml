@@ -1,4 +1,4 @@
-name: Daily Force Sync
+name: Official Files Sync
 
 on:
   schedule:
