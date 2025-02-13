@@ -10,7 +10,7 @@
 > 
 > 原懒人配置文件及关键词列表的作者因故撤销所有更新，为继续改进相关文件且使用户平滑过渡，本仓库将基于其文件的最终版本进行后续基本维护。[Johnshall 仓库](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) 提供的版本也将以本仓文件为基础继续更新。本仓以普通用户的身份对原作者及 [Johnshall](https://github.com/Johnshall) 等所有对相关项目做出贡献的人表示由衷的感谢！
 
-> 本仓库现由 [Shadowrocket 官方TG交流群](https://t.me/ShadowrocketApp) 相关人员管理，主要维护懒人系列配置文件和 Shadowrocket 说明手册，如有其他需求可以访问 [配色与配置](https://github.com/LOWERTOP/Shadowrocket-First) 仓库查看相关内容或移步 [官方群组](https://t.me/ShadowrocketApp) 交流沟通
+> 本仓库现由 [Shadowrocket 官方TG交流群](https://t.me/ShadowrocketApp) 相关人员管理，主要维护懒人系列配置文件和 Shadowrocket 使用手册，如有其他需求可访问 [配色与配置仓库](https://github.com/LOWERTOP/Shadowrocket-First) 查看相关内容或移步 [官方群组](https://t.me/ShadowrocketApp) 交流沟通
 
 ------
 
@@ -515,9 +515,9 @@
 
 > 规则的匹配是从上到下逐条匹配的，一旦匹配到某条规则，Shadowrocket就会停止继续匹配。因此，规则的顺序非常重要，优先级高的规则应该放在前面
 >
->   * 模块中的规则优先于配置文件
 >   * 上面的规则优先于下面的规则
 >   * 域名类的规则优先于IP类规则
+>   * 模块中的规则优先于配置文件
 
 ### 规则类型
 
