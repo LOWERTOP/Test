@@ -1,9 +1,10 @@
 [![Shadowrocket](https://socialify.git.ci/LOWERTOP/Shadowrocket/image?custom_description=%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C+%E4%B8%8E+%E6%87%92%E4%BA%BA%E9%85%8D%E7%BD%AE&description=1&font=Raleway&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLOWERTOP%2FShadowrocket-First%2Frefs%2Fheads%2Fmain%2Fimg%2FShadowrocket.png&name=1&pattern=Diagonal+Stripes&theme=Light)](https://lowertop.github.io/Shadowrocket "发布页面")
 
 [![README in English](https://img.shields.io/static/v1?label=&message=English&color=blue&logo=googletranslate&logoColor=white&labelColor=blue&messageColor=white)](https://translate.google.com/translate?hl=en&sl=zh-CN&tl=en&u=https://lowertop.github.io/Shadowrocket "README in English via Google Translate")
-[![App Introduction](https://img.shields.io/static/v1?label=&message=Introduction&color=blue&logo=rocket&logoColor=white&labelColor=blue&messageColor=white)](https://shadowlaunch.com "Shadowrocket 介绍页面")
+[![App Intro](https://img.shields.io/static/v1?label=&message=Intro&color=blue&logo=rocket&logoColor=white&labelColor=blue&messageColor=white)](https://shadowlaunch.com "Shadowrocket 介绍页面")
 [![App Author](https://img.shields.io/static/v1?label=&message=Author&color=blue&logo=rocket&logoColor=white&labelColor=blue&messageColor=white)](https://liguangming.com/Shadowrocket "Shadowrocket 作者主页")
 [![Official Group](https://img.shields.io/static/v1?label=&message=Group&color=blue&logo=telegram&logoColor=white&labelColor=blue&messageColor=white)](https://t.me/ShadowrocketApp "Shadowrocket 官方群组")
+[![Official Mod](https://img.shields.io/static/v1?label=&message=Mod&color=blue&logo=github&logoColor=white&labelColor=blue&messageColor=white)](https://github.com/LOWERTOP/Shadowrocket-First "Shadowrocket 配色与配置仓库")
 
 > [!NOTE]
 > 
@@ -85,6 +86,8 @@
 >     * [no-resolve的作用](#no-resolve的作用)
 >     * [代理分组/策略组](#代理分组策略组)
 >     * [代理分组类型](#代理分组类型)
+>     * [脚本URL](#脚本url)
+>     * [规则集URL](#规则集url)
 >     * [复制配置文件](#复制配置文件)
 >     * [自动切换节点](#自动切换节点)
 >     * [Hosts](#hosts)
@@ -511,9 +514,10 @@
 ### 规则优先级
 
 > 规则的匹配是从上到下逐条匹配的，一旦匹配到某条规则，Shadowrocket就会停止继续匹配。因此，规则的顺序非常重要，优先级高的规则应该放在前面
-> 
->   * 上面规则优先于下面规则
->   * 域名规则优先于IP类规则
+>
+>   * 模块中的规则优先于配置文件
+>   * 上面的规则优先于下面的规则
+>   * 域名类的规则优先于IP类规则
 
 ### 规则类型
 
@@ -664,10 +668,14 @@
 
 ### 脚本URL
 
+> 配置 -配置文件 - 编辑配置 - 脚本URL
+> 
 > 当前使用的所有脚本的展示页面，√ 表示当前脚本状态生效，× 表示当前脚本状态失效，点击脚本地址可重新拉取并弹出状态提示
 
 ### 规则集URL
 
+> 配置 -配置文件 - 编辑配置 - 规则集URL
+> 
 > 当前使用的所有规则集的展示页面，√ 表示当前规则集状态生效，× 表示当前规则集状态失效，点击规则集地址可重新拉取并弹出状态提示
 
 ### 复制配置文件
