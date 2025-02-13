@@ -1,47 +1,54 @@
-name: Force Sync Files from Shadowrocket
+name: Sync Shadowrocket Files
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # UTC时间22点（北京时间6点）
-  workflow_dispatch:  # 可选：允许手动触发
+    # 每日6点（UTC时间）
+    - cron: '0 6 * * *'
+  
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
-  force-sync:
+  sync:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Shadowrocket-First
+      # 检出 Shadowrocket 仓库
+      - name: Checkout Shadowrocket Repo
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: target
+          repository: LOWERTOP/Shadowrocket
+          ref: main
+          path: shadowrocket_repo
 
-      - name: Download 和 Overwrite Files
+      # 检出当前仓库
+      - name: Checkout Current Repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: current_repo
+
+      # 删除 OfficialFiles 目录中的旧文件
+      - name: Delete Old Files in OfficialFiles
         run: |
-          # 强制创建/覆盖目标目录
-          mkdir -p target/OfficialFiles
-          # 删除旧版官方文件
-          rm target/OfficialFiles/lazy.conf target/OfficialFiles/lazy_group.conf target/OfficialFiles/Manual.md
+          rm -rf current_repo/OfficialFiles/*
 
-          # 使用原始链接下载文件（强制覆盖）
-          curl -o target/OfficialFiles/lazy.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf?$(date +%s)"
-          curl -o target/OfficialFiles/lazy_group.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf?$(date +%s)"
-          curl -o target/OfficialFiles/Manual.md "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md?$(date +%s)"
-
-      - name: Force Commit 和 Push
+      # 同步 lazy.conf 和 lazy_group.conf
+      - name: Sync lazy.conf and lazy_group.conf
         run: |
-          cd target
-          # 配置为 github-actions[bot] 身份
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          cp shadowrocket_repo/lazy.conf current_repo/OfficialFiles/
+          cp shadowrocket_repo/lazy_group.conf current_repo/OfficialFiles/
 
-          # 强制添加所有更改（包括未修改的文件）
-          git add --force OfficialFiles/
-          
-          # 生成时间戳确保每次提交不同
-          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          
-          # 强制提交（无论文件是否变化）
-          git commit --allow-empty -m "Force Sync at ${TIMESTAMP}"
-          
-          # 强制推送覆盖远程
-          git push --force origin HEAD
+      # 重命名 README.md 为 Manual.md 并同步
+      - name: Rename README.md to Manual.md and Sync
+        run: |
+          mv shadowrocket_repo/README.md current_repo/OfficialFiles/Manual.md
+
+      # 提交并推送更新到当前仓库
+      - name: Commit and Push Changes
+        run: |
+          cd current_repo
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "Sync files from Shadowrocket repo"
+          git push
