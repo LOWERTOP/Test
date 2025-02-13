@@ -20,7 +20,7 @@ jobs:
           # 强制创建/覆盖目标目录
           mkdir -p target/OfficialFiles
           # 删除旧版官方文件
-          rm lazy.conf lazy_group.conf Manual.md
+          rm target/OfficialFiles/lazy.conf target/OfficialFiles/lazy_group.conf target/OfficialFiles/Manual.md
 
           # 使用原始链接下载文件（强制覆盖）
           curl -fsSL -o target/OfficialFiles/lazy.conf "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf?$(date +%s)"
