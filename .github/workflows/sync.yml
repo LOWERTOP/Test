@@ -1,6 +1,6 @@
 name: Force Sync Files from Shadowrocket
 
-于:
+on:
   schedule:
     - cron: '0 22 * * *'  # UTC时间22点（北京时间6点）
   workflow_dispatch:  # 可选：允许手动触发
