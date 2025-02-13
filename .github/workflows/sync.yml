@@ -34,5 +34,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
-          git commit --allow-empty -m "Daily Force Sync: $(date -u +'%Y-%m-%d %H:%M:%S')"
+          git commit --allow-empty -m "Files Sync: $(date -u +'%Y-%m-%d')"
           git push origin HEAD
