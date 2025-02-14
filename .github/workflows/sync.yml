@@ -5,20 +5,6 @@ on:
     # 每日北京时间6时（即UTC 10时）开始
     - cron:  '0 10 * * *'
   
-  push:
-    branches:
-      - main  # 只针对 main 分支
-    paths-ignore: 
-      - '**.md'
-      - 'LICENSE'
-      
-  pull_request_target:
-    branches:
-      - main  # 只针对 main 分支
-    paths-ignore: 
-      - '**.md'
-      - 'LICENSE'
-
   workflow_dispatch:  # 允许手动运行工作流
   
 jobs:
