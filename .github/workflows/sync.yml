@@ -1,4 +1,4 @@
-name: Release Shadowrocket Rules
+name: Update and Move Files
 
 on:
   schedule:
@@ -7,14 +7,14 @@ on:
   
   push:
     branches:
-      - build
+      - main  # 只针对 main 分支
     paths-ignore: 
       - '**.md'
       - 'LICENSE'
       
   pull_request_target:
     branches:
-      - build
+      - main  # 只针对 main 分支
     paths-ignore: 
       - '**.md'
       - 'LICENSE'
@@ -22,46 +22,29 @@ on:
   workflow_dispatch:  # 允许手动运行工作流
   
 jobs:
-  Release:
+  UpdateFiles:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: build
-          path: build
-
-      - uses: actions/checkout@v4
-        with:
-          ref: release
-          path: release
+          ref: main  # 检出 main 分支
 
       - name: Update lazy rules
         run: |
-          cd release || exit 1
-          rm lazy.conf lazy_group.conf
+          # 在当前目录中下载 lazy.conf 和 lazy_group.conf 文件
           curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf
           curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf
 
       - name: Download and rename README
         run: |
-          cd release || exit 1
+          # 下载 README.md 文件并重命名为 Manual.md
           curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md
           mv README.md Manual.md
 
       - name: Move files to OfficialFiles directory
         run: |
-          cd release || exit 1
+          # 创建 OfficialFiles 目录（如果不存在的话）
           mkdir -p OfficialFiles
-          cp lazy.conf lazy_group.conf Manual.md ../release/OfficialFiles/
-
-      - name: Remove commits
-        run: |
-          cd release || exit 1
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git checkout --orphan latest_branch
-          git add -A
-          git commit -am "Nightly build"
-          git branch -D release
-          git branch -m release
-          git push -f origin release
+          
+          # 将文件移动到 OfficialFiles 目录
+          mv lazy.conf lazy_group.conf Manual.md OfficialFiles/
