@@ -15,6 +15,11 @@ jobs:
         with:
           ref: main  # 检出 main 分支
 
+      - name: Delete old files
+        run: |
+          # 删除旧的文件（如果存在的话）
+          rm -f OfficialFiles/lazy.conf OfficialFiles/lazy_group.conf OfficialFiles/Manual.md
+          
       - name: Update lazy rules
         run: |
           # 在当前目录中下载 lazy.conf 和 lazy_group.conf 文件
