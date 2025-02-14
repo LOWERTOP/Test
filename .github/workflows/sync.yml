@@ -1,38 +1,67 @@
-name: Official Files Sync
+name: Release Shadowrocket Rules
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # UTC时间22点（北京时间6点）
-  workflow_dispatch:       # 可选：允许手动触发
+    # 每日8时开始
+    - cron:  '0 23 * * *'
+  
+  push:
+    branches:
+      - build
+    paths-ignore: 
+      - '**.md'
+      - 'LICENSE'
+      
+  pull_request_target:
+    branches:
+      - build
+    paths-ignore: 
+      - '**.md'
+      - 'LICENSE'
 
+  workflow_dispatch:  # 允许手动运行工作流
+  
 jobs:
-  sync:
+  Release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Target Repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: target
+          ref: build
+          path: build
 
-      - name: Clean Old Files
-        run: |
-          # 强制删除旧文件（忽略是否存在）
-          rm -rf target/OfficialFiles/*
-          
-      - name: Download Fresh Files
-        run: |
-          # 重新创建目录并下载最新文件
-          mkdir -p target/OfficialFiles
-          curl -fsSL -o target/OfficialFiles/lazy.conf https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf
-          curl -fsSL -o target/OfficialFiles/lazy_group.conf https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf
-          curl -fsSL -o target/OfficialFiles/Manual.md https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md
+      - uses: actions/checkout@v4
+        with:
+          ref: release
+          path: release
 
-      - name: Commit Changes
+      - name: Update lazy rules
         run: |
-          cd target
-          git config user.name "LOWERBOT"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add --all
-          git commit --allow-empty -m "Files Sync: $(date -u +'%Y-%m-%d')"
-          git push origin HEAD
+          cd release || exit 1
+          rm lazy.conf lazy_group.conf
+          curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf
+          curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf
+
+      - name: Download and rename README
+        run: |
+          cd release || exit 1
+          curl -O https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/README.md
+          mv README.md Manual.md
+
+      - name: Move files to OfficialFiles directory
+        run: |
+          cd release || exit 1
+          mkdir -p OfficialFiles
+          cp lazy.conf lazy_group.conf Manual.md ../release/OfficialFiles/
+
+      - name: Remove commits
+        run: |
+          cd release || exit 1
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout --orphan latest_branch
+          git add -A
+          git commit -am "Nightly build"
+          git branch -D release
+          git branch -m release
+          git push -f origin release
