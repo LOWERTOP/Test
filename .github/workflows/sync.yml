@@ -2,8 +2,8 @@ name: Official Files Update
 
 on:
   schedule:
-    # 每日8时开始
-    - cron:  '0 23 * * *'
+    # 每日6时开始
+    - cron:  '0 21 * * *'
   
   push:
     branches:
