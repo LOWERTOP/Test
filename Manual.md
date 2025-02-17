@@ -26,7 +26,7 @@
 
 ------
 
-# [Shadowrocket 使用手册](https://lowertop.github.io/Shadowrocket)
+# [Shadowrocket 使用手册](#shadowrocket-使用手册)
 
 __Shadowrocket 快速使用方法__
 > 
@@ -103,7 +103,7 @@ __Shadowrocket 快速使用方法__
 
 ------
 
-### 添加节点
+### [添加节点](#shadowrocket-使用手册)
 
 * 首页 - 右上角➕ - 类型Subscribe - URL栏输入机场订阅链接 - 保存。
 
