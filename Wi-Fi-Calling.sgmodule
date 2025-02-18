@@ -1,0 +1,16 @@
+#!name=Wi-Fi Calling AnyWhere
+#!desc=无论何地，任意启用 WiFi Calling 模块
+# 本模块适用于 美国、英国、香港 SIM 卡的 WiFi Calling 功能
+# 整理作者：https://github.com/LOWERTOP
+# 仓库地址：https://github.com/LOWERTOP/Shadowrocket-First
+# 反馈渠道：https://t.me/ShadowrocketApp
+
+[Proxy Group]
+US Call = url-test,url=http://www.gstatic.com/generate_204,interval=600,tolerance=0,timeout=5,select=0,policy-regex-filter=US|USA|America|america|United States|us|美国|凤凰城|洛杉矶|西雅图|芝加哥|纽约|沪美|美
+HK Call = url-test,url=http://www.gstatic.com/generate_204,interval=600,tolerance=0,timeout=5,select=0,policy-regex-filter=HK|Hong|hong|香港|深港|沪港|京港|港
+UK Call = url-test,url=http://www.gstatic.com/generate_204,interval=600,tolerance=0,timeout=5,select=0,policy-regex-filter=UK|Kingdom|England|uk|Britain|London|英国|伦敦|沪英|英
+
+[Rule]
+AND,((GEOIP,US),(AND,((PROTOCOL,UDP),(OR,((DEST-PORT,500),(DEST-PORT,4500)))))), US Call
+AND,((GEOIP,HK),(AND,((PROTOCOL,UDP),(OR,((DEST-PORT,500),(DEST-PORT,4500)))))), HK Call
+AND,((GEOIP,GB),(AND,((PROTOCOL,UDP),(OR,((DEST-PORT,500),(DEST-PORT,4500)))))), UK Call
