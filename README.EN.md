@@ -1,19 +1,19 @@
 [<img src="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/01.png" width="100%" height="100%">](https://lowertop.github.io/Shadowrocket-First)
 
-[![README in English](https://img.shields.io/static/v1?label=README&message=in%20English&color=grey&logo=googletranslate&logoColor=white&labelColor=red&messageColor=white)](https://translate.google.com/translate?hl=en&sl=zh-CN&tl=en&u=https://lowertop.github.io/Shadowrocket-First/ "README in English via Google Translate")
+[![README in Chinese](https://img.shields.io/static/v1?label=README&message=in%20Chinese&color=grey&logo=googletranslate&logoColor=white&labelColor=red&messageColor=white)](https://lowertop.github.io/Shadowrocket-First/ "README in Chinese")
 
 
 > [!CAUTION]
 > 
-> __禁止使用本仓库内的任何内容违法或用以牟利！如需转载请 `标明作者` 或 `注明来源`__
+> __Any content in this repository is prohibited from being used for illegal activities or for profit! If you need to repost, please credit the author or indicate the source.__
 
 ------
 
-# [Shadowrocket-First 简介](https://github.com/LOWERTOP/Shadowrocket-First)
+# [Shadowrocket-First Introduction](https://github.com/LOWERTOP/Shadowrocket-First)
 
-[![GitHub Repo stars](https://img.shields.io/github/stars/LOWERTOP/Shadowrocket-First?style=flat&logo=github&logoColor=white&label=星标次数&labelColor=grey&color=blue)](https://github.com/LOWERTOP/Shadowrocket-First/stargazers "已被星标")
-[![GitHub forks](https://img.shields.io/github/forks/LOWERTOP/Shadowrocket-First?style=flat&logo=github&logoColor=white&label=复刻次数&labelColor=grey&color=blue)](https://github.com/LOWERTOP/Shadowrocket-First/forks "已被复刻")
-[![GitHub last commit](https://img.shields.io/github/last-commit/LOWERTOP/Shadowrocket-First?style=flat&logo=github&label=更新时间&color=blue "更新时间")](https://lowertop.github.io/Shadowrocket-First "查看发布页面")
+[![GitHub Repo stars](https://img.shields.io/github/stars/LOWERTOP/Shadowrocket-First?style=flat&logo=github&logoColor=white&label=Stars&labelColor=grey&color=blue)](https://github.com/LOWERTOP/Shadowrocket-First/stargazers "Stars")
+[![GitHub forks](https://img.shields.io/github/forks/LOWERTOP/Shadowrocket-First?style=flat&logo=github&logoColor=white&label=Forks&labelColor=grey&color=blue)](https://github.com/LOWERTOP/Shadowrocket-First/forks "Forks")
+[![GitHub last commit](https://img.shields.io/github/last-commit/LOWERTOP/Shadowrocket-First?style=flat&logo=github&label=Update&color=blue "Update")](https://lowertop.github.io/Shadowrocket-First "GitHub Pages")
 
 > [!NOTE]
 > 
