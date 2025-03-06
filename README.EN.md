@@ -30,7 +30,7 @@
 > * Click **section titles** to jump to content.
 > * Click **blue titles** in content to return to the table of contents.
 
-> * [主页](#home)
+> * [Home](#home)
 >     * [Add Node](#add-node)
 >     * [Add WireGuard Node](#add-wireguard-node)
 >     * [Update Subscription Nodes](#update-subscription-nodes)
