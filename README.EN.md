@@ -13,7 +13,7 @@
 
 > [!NOTE]
 > 
-> **[Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118)** is a network proxy tool developed by **[Shadow Launch Technology Limited](https://shadowlaunch.com/)** for iOS devices, also supporting Apple TV and Mac (M-series chips). It offers flexible configuration options to forward device traffic through proxy servers, helping users bypass network restrictions, access blocked content, enhance privacy, 和 meet diverse needs.
+> **[Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118)** is a network proxy tool developed by **[Shadow Launch Technology Limited](https://shadowlaunch.com/)** for iOS devices, also supporting Apple TV and Mac (M-series chips Only). It offers flexible configuration options to forward device traffic through proxy servers, helping users bypass network restrictions, access blocked content, enhance privacy, 和 meet diverse needs.
 
 > [!TIP]
 > 
