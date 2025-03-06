@@ -4,7 +4,7 @@
 
 > [!NOTE]
 > 
-> The original repository for the "Lazy Config" series and keyword lists has been deactivated. This repository will maintain its final version and possible subsequent updates, with plans to gradually refine the original keyword lists into a comprehensive manual. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The [Johnshall repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will continue updates based on this repository. For other needs, refer to the **[Theme & Config Repository](https://github.com/LOWERTOP/Shadowrocket-First)**.  
+> The original repository for the "Lazy Config" series and keyword lists has been deactivated. This repository will maintain its final version and possible subsequent updates, with plans to gradually refine the original keyword lists into a comprehensive manual. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The [Johnshall's Repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will continue updates based on this repository. For other needs, refer to the **[Theme & Config Repository](https://github.com/LOWERTOP/Shadowrocket-First)**
 > We sincerely thank the original authors and all contributors to related projects!
 
 ------
@@ -13,7 +13,7 @@
 
 > [!NOTE]
 > 
-> **[Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118)** (commonly known as "Rocket") is a network proxy tool developed by **[Shadow Launch Technology Limited](https://shadowlaunch.com/)** for iOS devices, also supporting Apple TV and Mac (M-series chips). It offers flexible configuration options to forward device traffic through proxy servers, helping users bypass network restrictions, access blocked content, enhance privacy, and meet diverse needs.
+> **[Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118)** is a network proxy tool developed by **[Shadow Launch Technology Limited](https://shadowlaunch.com/)** for iOS devices, also supporting Apple TV and Mac (M-series chips). It offers flexible configuration options to forward device traffic through proxy servers, helping users bypass network restrictions, access blocked content, enhance privacy, 和 meet diverse needs.
 
 > [!TIP]
 > 
@@ -30,7 +30,7 @@
 > * Click **section titles** to jump to content.
 > * Click **blue titles** in content to return to the table of contents.
 
-> * [Home](#home)
+> * [主页](#home)
 >     * [Add Node](#add-node)
 >     * [Add WireGuard Node](#add-wireguard-node)
 >     * [Update Subscription Nodes](#update-subscription-nodes)
