@@ -4,7 +4,7 @@
 
 > [!NOTE]
 > 
-> The original repository for the "Lazy Config" series and keyword lists has been deactivated. This repository will maintain its final version and possible subsequent updates, with plans to gradually refine the original keyword lists into a comprehensive manual. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The [Johnshall's Repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will continue updates based on this repository. For other needs, refer to the **[Theme & Config Repository](https://github.com/LOWERTOP/Shadowrocket-First)**
+> The original repository for the "Lazy Config" series and keyword lists has been deactivated. This repository will maintain its final version and possible subsequent updates, with plans to gradually refine the original keyword lists into a comprehensive manual. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The [Johnshall's Repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will continue updates based on this repository. For other needs, refer to the **[Theme & Config Repository](https://github.com/LOWERTOP/Shadowrocket-First)** <br>
 > We sincerely thank the original authors and all contributors to related projects!
 
 ------
