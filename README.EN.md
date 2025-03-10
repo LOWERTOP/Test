@@ -4,7 +4,7 @@
 
 > [!NOTE]
 > 
-> The original repository for the Lazy Series config files and keyword list has become inactive. This repository will continue maintenance based on its final version or possible subsequent updates, with plans to refine the original keyword lists into a user manual for reference. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The Lazy configurations provided by the [Johnshall repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will also be updated based on this repository. For other needs, please visit the **[Themes & Configurations Repository](https://github.com/LOWERTOP/Shadowrocket-First)**. <br>
+> The original repository for the Lazy Series config files and keyword list has become inactive. This repository will continue maintenance based on its final version or possible subsequent updates, with plans to refine the original keyword lists into a user manual for reference. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The Lazy configurations provided by the [Johnshall's Repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will also be updated based on this repository. For other needs, please visit the **[Themes & Configs Repository](https://github.com/LOWERTOP/Shadowrocket-First)**. <br>
 > We sincerely thank the original authors and all contributors to related projects!
 
 ------
