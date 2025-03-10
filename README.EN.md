@@ -1,10 +1,10 @@
 [![Shadowrocket](https://socialify.git.ci/LOWERTOP/Shadowrocket/image?custom_description=User%20Manual&description=1&font=Rokkitt&forks=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLOWERTOP%2FShadowrocket-First%2Frefs%2Fheads%2Fmain%2Fimg%2FShadowrocket.png&name=1&pattern=Plus&stargazers=1&theme=Light)](https://github.com/LOWERTOP/Shadowrocket "Repository URL")
 
-[![README in Chinese](https://img.shields.io/static/v1?label=&message=README%20in%20Chinese&color=blue&logo=googletranslate&logoColor=white&labelColor=blue&messageColor=white)](https://lowertop.github.io/Shadowrocket "Chinese")
+[![README in Chinese](https://img.shields.io/static/v1?label=&message=README%20in%20Chinese&color=blue&logo=googletranslate&logoColor=white&labelColor=blue&messageColor=white)](https://lowertop.github.io/Shadowrocket "README in Chinese")
 
 > [!NOTE]
 > 
-> The original repository for the "Lazy Config" series and keyword lists has been deactivated. This repository will maintain its final version and possible subsequent updates, with plans to gradually refine the original keyword lists into a comprehensive manual. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The [Johnshall's Repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will continue updates based on this repository. For other needs, refer to the **[Theme & Config Repository](https://github.com/LOWERTOP/Shadowrocket-First)** <br>
+> The original repository for the Lazy Series config files and keyword list has become inactive. This repository will continue maintenance based on its final version or possible subsequent updates, with plans to refine the original keyword lists into a user manual for reference. The [Original branch](https://github.com/LOWERTOP/Shadowrocket/tree/Original) contains legacy files. The Lazy configurations provided by the [Johnshall repository](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) will also be updated based on this repository. For other needs, please visit the **[Themes & Configurations Repository](https://github.com/LOWERTOP/Shadowrocket-First)**. <br>
 > We sincerely thank the original authors and all contributors to related projects!
 
 ------
@@ -13,63 +13,63 @@
 
 > [!NOTE]
 > 
-> **[Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118)** is a network proxy tool developed by **[Shadow Launch Technology Limited](https://shadowlaunch.com/)** for iOS devices, also supporting Apple TV and Mac (M-series chips Only). It offers flexible configuration options to forward device traffic through proxy servers, helping users bypass network restrictions, access blocked content, enhance privacy, 和 meet diverse needs.
+> **[Shadowrocket](https://apps.apple.com/us/app/shadowrocket/id932747118)** is a network proxy tool developed by **[Shadow Launch Technology Limited](https://shadowlaunch.com/)** specifically for iOS devices, also supporting Apple TV and Mac devices (M-series chips Only). Shadowrocket offers flexible configuration options, forwarding device network traffic through proxy servers to bypass specific network restrictions, access blocked content, enhance online privacy, and meet diverse user needs.
 
 > [!TIP]
 > 
-> **Quick Start**
+> **Quick Start Guide**
 > 
 > > * Home > Add Node
 > > * Settings > Latency Test Method > **`CONNECT`**
-> > * Home > Connectivity Test, then select an available node.
+> > * Home > Connectivity Test, select an available node after testing
 > 
-> On first launch, you will be prompted to **`Install VPN Profile`**. Click **`Allow`** to proceed.
+> Upon first launch, you will be prompted to **`Install VPN Configuration Profile`**. Click **`Allow`** to proceed.
 
 ## [Table of Contents](#table-of-contents)
 > [!TIP]
-> * Click **section titles** to jump to content.
-> * Click **blue titles** in content to return to the table of contents.
+> * Click **section titles** to jump to related content.
+> * Click **blue titles** in the body to return to the table of contents.
 
-> * [Home](#home)
+> * [Home Page](#home-page)
 >     * [Add Node](#add-node)
 >     * [Add WireGuard Node](#add-wireguard-node)
 >     * [Update Subscription Nodes](#update-subscription-nodes)
 >     * [Node Sorting](#node-sorting)
->     * [Node Sharing & Management](#node-sharing--management)
+>     * [Node Sharing & Organization](#node-sharing--organization)
 >     * [Subscription Node Filtering](#subscription-node-filtering)
->     * [Proxy Chain](#proxy-chain)
->     * [Global Routing Modes](#global-routing-modes)
+>     * [Proxy Pass/Chain](#proxy-passproxy-chain)
+>     * [Global Routing Differences](#global-routing-differences)
 >     * [Connectivity Test](#connectivity-test)
 >     * [Modify Test Address](#modify-test-address)
 >     * [Scenarios](#scenarios)
 >     * [Simple Mode](#simple-mode)
 >     * [Enable Fallback](#enable-fallback)
-> * [Configurations](#configurations)
->     * [Configuration Files](#configuration-files)
->     * [Apply Configuration](#apply-configuration)
->     * [Edit Configuration](#edit-configuration)
+> * [Config File](#config-page)
+>     * [Config File](#config-file)
+>     * [Use Config](#use-config)
+>     * [Edit Config](#edit-config)
 >     * [Edit Plain Text](#edit-plain-text)
->     * [Preview Configuration](#preview-configuration)
->     * [Update Configuration](#update-configuration)
+>     * [Preview Config](#preview-config)
+>     * [Update Config](#update-config)
 >     * [Rename](#rename)
->     * [Export Configuration](#export-configuration)
->     * [Extended Configuration](#extended-configuration)
+>     * [Export Config](#export-config)
+>     * [Extend Config](#extend-config)
 >     * [General Parameters](#general-parameters)💡
->     * [Add Rules](#add-rules)
+>     * [Add Rule](#add-rule)
 >     * [Rule Priority](#rule-priority)
 >     * [Rule Types](#rule-types)
 >     * [Rule Policies](#rule-policies)
->     * [App-Based Routing](#app-based-routing)
->     * [Update Rule Sets](#update-rule-sets)
->     * [Preview Rule Sets](#preview-rule-sets)
+>     * [App Traffic Routing](#app-traffic-routing)
+>     * [Update Rule Set](#update-rule-set)
+>     * [Preview Rule Set](#preview-rule-set)
 >     * [Modify DNS](#modify-dns)
 >     * [DNS-over-PROXY](#dns-over-proxy)
->     * [no-resolve Function](#no-resolve-function)
->     * [Proxy Groups/Policy Groups](#proxy-groups-policy-groups)
+>     * [Role of `no-resolve`](#role-of-no-resolve)
+>     * [Proxy Group/Policy Group](#proxy-grouppolicy-group)
 >     * [Proxy Group Types](#proxy-group-types)
->     * [Script URLs](#script-urls)
->     * [Rule Set URLs](#rule-set-urls)
->     * [Copy Configuration](#copy-configuration)
+>     * [Script URL](#script-url)
+>     * [Rule Set URL](#rule-set-url)
+>     * [Copy Config File](#copy-config-file)
 >     * [Hosts](#hosts)
 >     * [URL Rewrite](#url-rewrite)
 >     * [HTTPS Decryption](#https-decryption)
@@ -77,17 +77,17 @@
 >     * [Modules](#modules)
 >     * [Certificate Module](#certificate-module)
 >     * [Identity Certificate Password](#identity-certificate-password)
-> * [Data](#data)
+> * [Data Page](#data-page)
 >     * [Proxy Logs](#proxy-logs)
 >     * [DNS Logs](#dns-logs)
->     * [iCloud Auto-Sync](#icloud-auto-sync)
+>     * [iCloud Auto Sync](#icloud-auto-sync)
 >     * [Node Data Management](#node-data-management)
 >     * [Traffic Statistics](#traffic-statistics)
-> * [Settings](#settings)
+> * [Settings Page](#settings-page)
 >     * [Latency Test Method](#latency-test-method)
 >     * [Widgets](#widgets)
 >     * [On-Demand Connection](#on-demand-connection)
->     * [Tunnels](#tunnels)
+>     * [Tunnel](#tunnel)
 >     * [Upstream Proxy](#upstream-proxy)
 >     * [Proxy Sharing](#proxy-sharing)
 >     * [Proxy Detection](#proxy-detection)
@@ -95,48 +95,44 @@
 >     * [Enable UDP Forwarding](#enable-udp-forwarding)
 >     * [Hide VPN Icon](#hide-vpn-icon)
 >     * [GEOIP Database](#geoip-database)
->     * [Auto-Update](#auto-update)
+>     * [Auto Update](#auto-update)
 >     * [Graceful Policy Mechanism](#graceful-policy-mechanism)
-> * [Miscellaneous](#miscellaneous)
->     * [Auto-Switch Nodes](#auto-switch-nodes)
+> * [Other Issues](#other-issues)
+>     * [Auto Switch Nodes](#auto-switch-nodes)
 >     * [SSL Errors](#ssl-errors)
 >     * [Node Flags](#node-flags)
 >     * [Node Exclamation Mark](#node-exclamation-mark)
->     * [WeChat Loading Issues](#wechat-loading-issues)
+>     * [WeChat Loading Issue](#wechat-loading-issue)
 >     * [Missing Modules](#missing-modules)
 >     * [Module Failure](#module-failure)
->     * [VPN Auto-Disconnect](#vpn-auto-disconnect)
->     * [Location Permissions](#location-permissions)
->     * [Compilation Notes](#compilation-notes)
+>     * [VPN Auto Disconnect](#vpn-auto-disconnect)
+>     * [Location Permission](#location-permission)
+>     * [Compilation Reasons](#compilation-reasons)
 >     * [Download Shadowrocket](#download-shadowrocket)
 >     * [URL-Schemes](#url-schemes)
 
 ------
 
-## [Home](#home)
+## [Home Page](#home-page)
 
 ### [Add Node](#table-of-contents)
 
 > * Home > Top-left > Scan QR Code
 >   
-> * Copy node links (e.g., `trojan://*`, `vmess://*`, `vless://*`). Shadowrocket will auto-import when opened.
->   
->   `Requires clipboard access permission`
+> * Copy node links (e.g., `trojan://*`, `vmess://*`, `vless://*`). Shadowrocket will auto-detect and import them when opened.  
+>   `Requires clipboard access permission.`
 > 
-> * Home > Top-right `➕` > Type `Subscribe` > Enter subscription URL > Save
+> * Home > Top-right `➕` > Type `Subscribe` > Enter subscription URL > Save.  
+>   `Append "#1", "#2", "#3", etc., to reuse the same subscription.`
 > 
->   `Add "#1", "#2", "#3" to the subscription URL to add duplicates`
-> 
-> * Home > Top-right `➕`, select protocol type, fill in node details, and save.
-> 
->   **Supported protocols**: `Shadowsocks, ShadowsocksR, Subscribe, Vmess, VLESS, Relay, Socks5, Socks5 Over TLS, HTTP, HTTPS, HTTP2, Trojan, Hysteria, Hysteria2, TUIC, Juicity, WireGuard, Snell v2, Brook, Lua`
+> * Home > Top-right `➕` > Select node type > Fill in details > Save.  
+>   **Supported protocols**: `Shadowsocks, ShadowsocksR, Subscribe, Vmess, VLESS, Relay, Socks5, Socks5 Over TLS, HTTP, HTTPS, HTTP2, Trojan, Hysteria, Hysteria2, TUIC, Juicity, WireGuard, Snell v2, Brook, Lua`.
 
 ### [Add WireGuard Node](#table-of-contents)
 
-> * Home > Top-right `➕` > Type `WireGuard`, fill in config details.
+> * Home > Top-right `➕` > Select `WireGuard` > Fill in details.
 > 
-> * Copy WireGuard config in the following format. Shadowrocket will auto-detect and prompt for import:
->   
+> * Copy WireGuard config in the following format. Shadowrocket will auto-detect and prompt for addition:
 >   ```ruby
 >   [Interface]
 >   PrivateKey = xxxxxx
@@ -150,251 +146,237 @@
 >   Endpoint = engage.cloudflareclient.com:2408
 >   Reserved = 12,34,56
 >   ```
->   If not auto-detected, check if `Allow Clipboard Detection` is enabled in settings, or manually paste via the `Paste` button below the connectivity test.
+>   If not prompted, enable `Detect Clipboard` in settings or manually paste via `Paste` under the Connectivity Test.
 
 ### [Update Subscription Nodes](#table-of-contents)
 
-> * Swipe left on subscription > Update
-> 
-> * Tap the refresh button 🔄 on Home
-> 
-> * Settings > Subscriptions > Update on Launch (reopen app to auto-update)
-> 
-> * Settings > Subscriptions > Auto-Background Update (enable in system `Settings > General > Background App Refresh`, cycle: 1-24 hours)
-> 
-> * Use Shadowrocket's Shortcuts for automated updates
-> 
-> * Long-press app icon > Update Subscriptions
->   
+> * Swipe left on subscription > Update.
+> * Click refresh button 🔄 on Home.
+> * Settings > Subscription > Update on Launch (reopen app).
+> * Settings > Subscription > Auto Background Update (enable in `Settings > General > Background App Refresh`).
+> * Use Shortcuts for automation.
+> * Long-press app icon > Update Subscription.
 > 
 > **Common errors**:
-> * **Forbidden**: Subscription reset or token error
-> * **Not Found**: Incorrect path
-> * **Service Unavailable**: Domain blocked or incorrect
+> * **Forbidden**: Subscription reset or token error.
+> * **Not Found**: Incorrect path.
+> * **Service Unavailable**: Domain blocked or incorrect.
 
 ### [Node Sorting](#table-of-contents)
 
-> Settings > Subscriptions > Sort by `Ping`
+> Settings > Subscription > Sort by `Ping`.
 
-### [Node Sharing & Management](#table-of-contents)
+### [Node Sharing & Organization](#table-of-contents)
 
-> **Sharing Nodes**
+> **Sharing**:
+> > * Long-press node > Copy to share.
+> > * Swipe left on node > QR Code. Other devices can scan to add.  
+> >   `Note: QR standards vary. Some Vmess nodes may lose info when scanned by other tools.`
+> > * Tap node’s `ⓘ` > Share options.
+> > * Edit mode (`•••`) > Select nodes > Copy multiple links.
 > 
-> > * Long-press node > Copy to share via link
-> > 
-> > * Swipe left on node > QR Code. Other devices can scan to add (use `Share` button to send QR)
-> > 
-> >   `QR standards vary. Some Vmess nodes may lose info when scanned by other tools. Verify configs if issues occur`
-> > 
-> > * Tap node's `ⓘ` > Scroll to bottom for sharing options
-> > 
-> > * Tap `•••` > Select nodes > Copy to share multiple
-> 
-> **Node Management**
-> 
-> > * **Reorder**: Tap `•••` > Drag `≡` icon
-> > 
-> > * **Categorize**: Use `Collapse` to group local nodes
-> > 
-> > * **Delete**: Tap `•••` > Delete All/Timeout Nodes
-> > 
-> > * **Swipe Actions**: Swipe right on node to `Test` or `Copy`
+> **Organization**:
+> > * Reorder subscriptions via drag (`≡` icon).
+> > * Group local nodes via `Fold` in edit mode.
+> > * Delete nodes via edit mode > Delete.
+> > * Swipe nodes for Test/Copy options.
 
 ### [Subscription Node Filtering](#table-of-contents)
 
-> **Filtering**
-> 
-> > Home > Tap `ⓘ` on subscription > Filter
-> > 
-> > `Use regex without "/"`
-> > 
-> > * Include nodes with keywords A and B:
+> **Filtering**:
+> > * Home > Subscription’s `ⓘ` > Filter.
+> > * Regex examples:
 > >   ```ruby
-> >   /(?=.*(A))^(?=.*(B))^.*$/
-> >   ```
-> > * Include A or B:
-> >   ```ruby
-> >   A|B
-> >   ```
-> > * Exclude A or B:
-> >   ```ruby
-> >   /^((?!(A|B)).)*$/
-> >   ```
-> > * Include A but exclude B:
-> >   ```ruby
-> >   /(?=.*(A))^((?!(B)).)*$/
+> >   /(?=.*(A))^(?=.*(B))^.*$/  # Retain nodes with A and B
+> >   A|B                        # Retain nodes with A or B
+> >   /^((?!(A|B)).)*$/          # Exclude nodes with A or B
+> >   /(?=.*(A))^((?!(B)).)*$/   # Retain A, exclude B
 > >   ```
 > 
-> **Batch Scripts**
-> 
-> > * Replace keyword a with b:
+> **Batch Processing**:
+> > * Rename nodes:
 > >   ```ruby
-> >   $server.title=$server.title.replace(/a/g,'b')
+> >   $server.title=$server.title.replace(/KeywordA/g,'KeywordB')
 > >   ```
-> > * Add prefix:
+> > * Enable features:
 > >   ```ruby
-> >   $server.title='abc'+$server.title
+> >   $server.mux=1  # Enable multiplexing
 > >   ```
-> > * Enable reserved ports:
-> >   ```ruby
-> >   $server.reserved="1,40-60,30-50"
-> >   ```
-> > * Enable multiplexing:
-> >   ```ruby
-> >   $server.mux=1
-> >   ```
-> > * Set proxy chain:
+> > * Proxy chain setup:
 > >   ```ruby
 > >   $server.chain="Subscription/Node"
 > >   ```
-> 
-> **Advanced Scripts**: Refer to [examples](https://github.com/LOWERTOP/Shadowrocket-First#filter-scripts)
 
-### [Proxy Chain](#table-of-contents)
+### [Proxy Pass/Chain](#table-of-contents)
 
-> Route traffic through another proxy (supports multi-level chains):
-> 
-> * Node A > `ⓘ` > Proxy Via > Node B. Path: `Client > B > A > Web`
-> * Use entire subscription as chain (random node selected). Check logs for `backend chain`
-> * Cancel chain: `ⓘ` > Proxy Via > Cancel
+> Chain proxies through multiple nodes:
+> * Select Node A > `ⓘ` > Proxy Pass > Choose Node B. Traffic path: `Client > B > A > Server`.
+> * Use entire subscription as chain (random node selection).
+> * Cancel via `ⓘ` > Proxy Pass > Remove.
 
-### [Global Routing Modes](#table-of-contents)
+### [Global Routing Differences](#table-of-contents)
 
-> * **Config**: Traffic routed per rules
-> * **Proxy**: All traffic via one node
-> * **Direct**: No proxy
-> * **Scenario**: Auto-switch mode based on network type (Wi-Fi/Cellular)
+> * **Config**: Traffic routed per rules.
+> * **Proxy**: All traffic via one node.
+> * **Direct**: No proxy.
+> * **Scenario**: Auto-switch routing based on network type (Wi-Fi/Cellular).
 
 ### [Connectivity Test](#table-of-contents)
 
-> Home > `Connectivity Test` shows latency in ms. Test methods:
-> 
-> Settings > Latency Test Method:
-> 
-> * **TCP**: TCP handshake time
-> * **ICMP**: ICMP echo round-trip
-> * **CONNECT**: HTTP HEAD request (recommended)
-> 
+> Home > Connectivity Test. Delays shown in ms.  
+> **Methods** (Settings > Latency Test Method):
+> * **TCP**: TCP handshake time.
+> * **ICMP**: Ping time.
+> * **CONNECT**: HTTP HEAD request (recommended).  
 > Use <https://www.speedtest.net> for speed tests.
 
 ### [Modify Test Address](#table-of-contents)
 
 > **For Home/Group Tests**:
+> > * Settings > Latency Test Method > URL Settings.
+> > * Home > Test URL icon > URL Settings.
 > 
-> > * Settings > Latency Test Method > URL Settings
-> > * Home > Tap circular icon next to test > URL Settings
-> 
-> **For Proxy Groups**:
-> 
-> > * Configuration > Proxy Group > Edit > URL field
+> **For Proxy Group Tests**:
+> > * Config > `ⓘ` > Proxy Group > Edit > URL field.
 
 ### [Scenarios](#table-of-contents)
 
 > Auto-switch routing based on network type:
-> > * Home > Global Routing > Scenarios > Add
-> > * Set mode (Config/Direct/Proxy) per network (Wi-Fi/Cellular)
-> > * For multiple cellular interfaces, check `Settings > Diagnostics > Network`
-> 
-> Location permission may be required. Scenarios work without permission but won’t auto-switch indicators.
+> * Home > Global Routing > Scenarios > Add.
+> * Set rules per Wi-Fi/SSID or Cellular interface (e.g., `pdp_ip0`).
+> * Location permission required for SSID detection.
 
 ### [Simple Mode](#table-of-contents)
 
-> Auto-test and switch to low-latency nodes:
-> 
-> * Home > Global Routing > Group > Simple Mode
-> 
-> **Node Range**: All nodes or selected group
-> 
-> **Test Interval**: Default 600s (10 mins)
-> 
-> **Tolerance**: Lower tolerance triggers more frequent switches
-> 
-> **Proxy Policy**: Routes all `proxy`-tagged rules
+> Auto-switch to low-latency nodes:
+> * Home > Global Routing > Group > Simple Mode.
+> * Test interval: 600s (default). Tolerance: 0ms (strict switching).
+> * Affects `proxy` policy rules. Works even when Global Routing is set to Proxy.
 
 ### [Enable Fallback](#table-of-contents)
 
-> Home > Global Routing > Enable Fallback
-> 
-> * Switches nodes after 3 failures
-> * Random selection within `proxy` or group nodes
-> * Check [Proxy Logs](#proxy-logs) for details
+> Home > Global Routing > Enable Fallback.  
+> Switches nodes after 3 failures. Random selection. Check [Proxy Logs](#proxy-logs) for details.
 
 ------
 
-## [Configurations](#configurations)
+## [Config Page](#config-page)
 
-### [Configuration Files](#table-of-contents)
+### [Config File](#table-of-contents)
 
-> Config files (`.conf`) simplify setup and sync across devices. The default `default.conf` is updated with app releases. Restore via `Config > Restore Default`.
-> 
+> Shadowrocket config files (`.conf`) simplify setup. Built-in `default.conf` covers basic rules.  
 > **Add Config**:
-> > * From URL: `Config > ➕ > Paste URL > Download`
-> > * From local/cloud: `Config > Import from Cloud`
+> > * From URL: Config > `➕` > Paste link > Download > Use.
+> > * From local/cloud: Config > Import.
 > 
 > **Actions**:
-> > * [Apply Configuration](#apply-configuration)
-> > * [Edit Configuration](#edit-configuration)
-> > * [Edit Plain Text](#edit-plain-text)
-> > * [Preview Configuration](#preview-configuration)
-> > * [Update Configuration](#update-configuration)
-> > * [Extended Configuration](#extended-configuration)
-> > * [Rename](#rename)
-> > * [Export Configuration](#export-configuration)
+> > * Use Config, Edit, Edit Plain Text, Preview, Update, Extend, Rename, Export.
 
-### [Apply Configuration](#table-of-contents)
+### [Use Config](#table-of-contents)
 
-> Tap `Apply` to enable and update remote resources (rule sets, scripts).
+> Activate config and update remote resources (rule sets, scripts).
 
-### [Edit Configuration](#table-of-contents)
+### [Edit Config](#table-of-contents)
 
-> Modify settings via UI. Advanced options require [plain text editing](#edit-plain-text).
+> Adjust settings via UI. Some options require [plain text editing](#edit-plain-text).
 
 ### [Edit Plain Text](#table-of-contents)
 
-> Directly edit config text. Reference:
+> Directly edit config text. Reference examples:
 > > * [Lazy Config](https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy.conf)
-> > * [Lazy Config (with Groups)](https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf)
+> > * [Lazy Config with Groups](https://raw.githubusercontent.com/LOWERTOP/Shadowrocket/main/lazy_group.conf)
 
-### [Preview Configuration](#table-of-contents)
+### [Preview Config](#table-of-contents)
 
-> View raw text of remote configs (available only for remote configs).
+> View raw text of remote configs.
 
-### [Update Configuration](#table-of-contents)
+### [Update Config](#table-of-contents)
 
-> Update remote config and resources (for remote configs). See [Auto-Update](#auto-update).
+> Pull updates for remote configs. Enable auto-update in settings.
 
 ### [Rename](#table-of-contents)
 
 > Rename the config file.
 
-### [Export Configuration](#table-of-contents)
+### [Export Config](#table-of-contents)
 
-> Export config as a file.
+> Export as file.
 
-### [Extended Configuration](#table-of-contents)
+### [Extend Config](#table-of-contents)
 
-> Config B inherits from Config A. Modify via `Config > ⓘ > General > Include Config`.
+> Inherit settings from another config. Modify via `ⓘ` > General > Include Config.
 
 ### [General Parameters](#table-of-contents)
 
-> **Bypass System**: Disabling may cause system issues (e.g., delayed notifications)
-> 
-> **Skip Proxy**: Force traffic through TUN instead of proxy (fixes app compatibility)
-> 
-> **TUN Bypass Routes**: Bypass non-TCP protocols
-> 
-> **DNS Override**: Use custom DNS (e.g., DoH, DoT)
-> 
-> **Fallback DNS**: Used if override fails (default: system DNS)
-> 
-> **IPv6 Support**: `false` to disable. Node domains with IPv6 will still use IPv6 unless blocked via `[Host]`.
-> 
-> **Prefer IPv6**: `false` by default
-> 
-> **Private IP Answer**: Block domains resolving to private IPs
-> 
-> **TUN Included Routes**: Add smaller routes for TUN handling
-> 
-> **Always Real IP**: Return real IPs in DNS queries
-> 
-> **DNS Hijacking**: Redirect hardcoded DNS
+> Key parameters (💡 = text-only):
+> * **bypass-system**: Disabling may cause system issues.
+> * **dns-server**: Override DNS (e.g., `https://dns.alidns.com/dns-query`).
+> * **ipv6**: Enable/disable IPv6 support.
+> * **hijack-dns**: Redirect hardcoded DNS queries.
+> * **stun-response-ip**: Mask real IP for WebRTC.
+> * **compatibility-mode**: TUN/proxy behavior.
+
+### [Add Rule](#table-of-contents)
+
+> Define traffic routing rules. Match order: top-down, domain > IP.  
+> Use Proxy Logs to capture and add rules.
+
+### [Rule Priority](#table-of-contents)
+
+> Higher rules take precedence. Domain rules > IP rules. Module rules > config rules.
+
+### [Rule Types](#table-of-contents)
+
+> **DOMAIN-SUFFIX**: Match domain suffix.  
+> **DOMAIN-KEYWORD**: Match keyword in domain.  
+> **IP-CIDR**: Match IP range. Add `no-resolve` to skip DNS.  
+> **GEOIP**: Geo-based IP matching.  
+> **FINAL**: Fallback policy.
+
+### [Rule Policies](#table-of-contents)
+
+> **PROXY**, **DIRECT**, **REJECT** variants. Can also target proxy groups.
+
+### [App Traffic Routing](#table-of-contents)
+
+> Route specific apps via rules. Example for YouTube:
+> ```ruby
+> RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Shadowrocket/YouTube/YouTube.list,PROXY
+> ```
+
+### [Update Rule Set](#table-of-contents)
+
+> Manually: Use Config. Automatically: [Auto Update](#auto-update).
+
+### [Preview Rule Set](#table-of-contents)
+
+> Swipe left on rule set > Preview.
+
+### [Modify DNS](#table-of-contents)
+
+> **Override DNS**:
+> ```ruby
+> dns-server = 1.1.1.1, tls://dns.google
+> ```
+> **Fallback DNS**:
+> ```ruby
+> fallback-dns-server = system
+> ```
+
+### [DNS-over-PROXY](#table-of-contents)
+
+> Route DNS via proxy:
+> ```ruby
+> dns-server=https://dns.google/dns-query#proxy=NodeName&ecs=1.1.0.0/14
+> ```
+
+### [Role of `no-resolve`](#table-of-contents)
+
+> Skip DNS resolution for IP rules. Example:
+> ```ruby
+> IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+> ```
+
+### [Proxy Group/Policy Group](#table-of-contents)
+
+> Create groups (select, url-test
