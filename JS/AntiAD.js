@@ -1,15 +1,9 @@
 /**
- * Shadowrocket 移除 twmanga.com & baozimh.com 相关广告
- * 
- * 目标：
- * - 删除 twmanga & baozimh 广告 class: "mobadsq", "recommend", "footer"
- * - 删除 twmanga.com 的 div[style="overflow:hidden; flex: 1;"]
- * - 删除 id="download-swiper" 的 div
- * 
+ * Shadowrocket 移除 twmanga.com & baozimh.com 相关正文插入广告
  * 作者: LOWERTOP
  */
 
-// 确保响应体存在
+// 确保 $response 存在
 if (!$response || !$response.body) {
     $done({});
     return;
@@ -17,18 +11,18 @@ if (!$response || !$response.body) {
 
 let modifiedBody = $response.body;
 
-// 统一删除指定 class 广告元素
-const adClasses = ["mobadsq", "recommend", "footer"];
+// **批量删除正文插入广告的 `class`**
+const adClasses = ["mobadsq", "ad-container", "video-ad", "floating-banner", "popup-ads"];
 adClasses.forEach(adClass => {
     const regex = new RegExp(`<div[^>]*class=["']?${adClass}["']?[^>]*>.*?<\\/div>`, "gis");
     modifiedBody = modifiedBody.replace(regex, '');
 });
 
-// 删除 div[style="overflow:hidden; flex: 1;"]
-modifiedBody = modifiedBody.replace(/<div[^>]*style=["']?overflow:\s?hidden;\s?flex:\s?1;["']?[^>]*>.*?<\/div>/gis, '');
+// **批量删除带有 `style="margin: 0px auto;"` 的广告**
+modifiedBody = modifiedBody.replace(/<div[^>]*style=["']?margin:\s?0px\s?auto;["']?[^>]*>.*?<\/div>/gis, '');
 
-// **删除 id="download-swiper" 的 div**
-modifiedBody = modifiedBody.replace(/<div[^>]*id=["']?download-swiper["']?[^>]*>.*?<\/div>/gis, '');
+// **删除 `div_adhost` 相关广告**
+modifiedBody = modifiedBody.replace(/<div[^>]*class=["']?div_adhost["']?[^>]*>.*?<\/div>/gis, '');
 
-// 返回修改后的 HTML
+// **返回修改后的 HTML**
 $done({ body: modifiedBody });
