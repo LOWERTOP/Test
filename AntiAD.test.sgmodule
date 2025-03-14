@@ -6,12 +6,8 @@
 # 整理作者：https://github.com/LOWERTOP
 # 仓库地址：https://github.com/LOWERTOP/Shadowrocket-First
 
-[URL Rewrite]
-^https?:\/\/(www\.)?twmanga\.com\/ads\/.*$ reject
-^https?:\/\/(www\.)?baozimh\.com\/ads\/.*$ reject
-
 [Script]
-block-twmanga-ads = type=http-response, pattern=^https?:\/\/([^\/]+\.)?twmanga\.com\/.*, script-path=https://raw.githubusercontent.com/LOWERTOP/Test/main/JS/AntiAD.js, requires-body=true, max-size=-1, timeout=30
+block-twmanga-ads = type=http-response, pattern=^https?:\/\/(www\.)?twmanga\.com\/.*, script-path=https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/JS/AntiAD.js, requires-body=true, timeout=30
 
 [MITM]
-hostname = %APPEND% *.twmanga.com, *.baozimh.com
+hostname = %APPEND% www.twmanga.com, twmanga.com, cdn.twmanga.com
