@@ -1,0 +1,43 @@
+name: Sync README.md Between Branches
+
+on:
+  push:
+    branches:
+      - main
+      - README
+    paths:
+      - "README.md"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 获取完整的 commit 历史，避免 push 被拒绝
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine Source and Target Branches
+        id: branch-check
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "SOURCE=main" >> $GITHUB_ENV
+            echo "TARGET=README" >> $GITHUB_ENV
+          else
+            echo "SOURCE=README" >> $GITHUB_ENV
+            echo "TARGET=main" >> $GITHUB_ENV
+          fi
+
+      - name: Sync README.md
+        run: |
+          git checkout $TARGET
+          git pull origin $TARGET
+          git checkout $SOURCE -- README.md
+          git add README.md
+          git commit -m "Sync README.md from $SOURCE to $TARGET" || echo "No changes to commit"
+          git push origin $TARGET
