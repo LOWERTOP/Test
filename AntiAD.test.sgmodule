@@ -1,13 +1,16 @@
-#!name=LOWERSERV.test
+#!name=测试
 #!desc=test
-# 模块包含以下内容：Spotify解锁及去广告、Talkatone分流及去广告，包子漫画网页、阿里云盘、Blued、百度网盘、e充电、中国移动、中国联通、郑好办、招商银行、掌上生活、一淘、闲鱼、小蚁、小米有品、瑞幸咖啡、夸克等去广告内容
-# 代码转载：https://raw.githubusercontent.com/fmz200
-# 代码转载：https://raw.githubusercontent.com/app2smile
-# 整理作者：https://github.com/LOWERTOP
-# 仓库地址：https://github.com/LOWERTOP/Shadowrocket-First
 
 [Script]
-block-twmanga-ads = type=http-response, pattern=^https?:\/\/(www\.)?twmanga\.com\/.*, script-path=https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/JS/AntiAD.js, requires-body=true, timeout=30
+
+# Claue
+# web-element-block = type=http-response,pattern=^https?:\/\/(www\.)?(baozimh|twmanga)\.com\/.*,requires-body=1,script-path=https://raw.githubusercontent.com/LOWERTOP/Test/refs/heads/main/JS/ClaudeAD.js
+
+# Deepseek
+# ^https?://(www.)?(baozimh|twmanga).com script-path=https://raw.githubusercontent.com/LOWERTOP/Test/refs/heads/main/JS/DeepseekAD.js,requires-body=true,timeout=30
+
+# Gemini
+# block-ads=type=http-request,script-url=https://raw.githubusercontent.com/LOWERTOP/Test/refs/heads/main/JS/GeminiAD.js, timeout=10, script-update-interval=-1
 
 [MITM]
-hostname = %APPEND% www.twmanga.com, twmanga.com, cdn.twmanga.com
+hostname = %APPEND% *.baozimh.com, *.twmanga.com
