@@ -1,28 +1,53 @@
-/**
- * Shadowrocket 移除 twmanga.com & baozimh.com 相关正文插入广告
- * 作者: LOWERTOP
- */
+// 漫画网站广告屏蔽脚本
+const body = $response.body;
 
-// 确保 $response 存在
-if (!$response || !$response.body) {
+// 只有在有响应体的情况下才执行
+if (body) {
+  try {
+    // 获取当前域名
+    const url = $request.url;
+    const host = url.match(/https?:\/\/([^\/]+)/)[1];
+    
+    let html = body;
+    
+    // 针对不同网站的特定处理
+    if (host.includes('twmanga.com')) {
+      // 移除广告元素
+      html = html.replace(/<div[^>]*class="?mobadsq"?[^>]*>[\s\S]*?<\/div>/gi, '');
+      html = html.replace(/<div[^>]*class="?recommend"?[^>]*>[\s\S]*?<\/div>/gi, '');
+      html = html.replace(/<div[^>]*style="overflow:hidden; flex: 1;"[^>]*>[\s\S]*?<\/div>/gi, '');
+      
+      // 移除广告相关脚本
+      html = html.replace(/<script[^>]*src="[^"]*(?:ad|analytics|tracker)[^"]*"[^>]*>[\s\S]*?<\/script>/gi, '');
+      
+      // 移除内联广告脚本
+      html = html.replace(/<script[^>]*>[\s\S]*?(?:ad|googlead|adsense)[\s\S]*?<\/script>/gi, '');
+    }
+    else if (host.includes('baozimh.com')) {
+      // 移除广告元素
+      html = html.replace(/<div[^>]*class="?recommend"?[^>]*>[\s\S]*?<\/div>/gi, '');
+      html = html.replace(/<div[^>]*class="?footer"?[^>]*>[\s\S]*?<\/div>/gi, '');
+      
+      // 移除广告相关脚本
+      html = html.replace(/<script[^>]*src="[^"]*(?:ad|analytics|tracker)[^"]*"[^>]*>[\s\S]*?<\/script>/gi, '');
+      
+      // 移除内联广告脚本
+      html = html.replace(/<script[^>]*>[\s\S]*?(?:ad|googlead|adsense)[\s\S]*?<\/script>/gi, '');
+    }
+    
+    // 通用处理：移除所有iframe
+    html = html.replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '');
+    
+    // 移除通用广告类名和ID
+    html = html.replace(/<[^>]*(?:class|id)="[^"]*(?:ad|ads|banner|pop)[^"]*"[^>]*>[\s\S]*?<\/[^>]*>/gi, '');
+    
+    // 返回处理后的内容
+    $done({body: html});
+  } catch (err) {
+    // 如果处理过程中出现错误，返回原始内容
+    console.log('Error in comic-ads-blocker script: ' + err);
     $done({});
-    return;
+  }
+} else {
+  $done({});
 }
-
-let modifiedBody = $response.body;
-
-// **批量删除正文插入广告的 `class`**
-const adClasses = ["mobadsq", "ad-container", "video-ad", "floating-banner", "popup-ads"];
-adClasses.forEach(adClass => {
-    const regex = new RegExp(`<div[^>]*class=["']?${adClass}["']?[^>]*>.*?<\\/div>`, "gis");
-    modifiedBody = modifiedBody.replace(regex, '');
-});
-
-// **批量删除带有 `style="margin: 0px auto;"` 的广告**
-modifiedBody = modifiedBody.replace(/<div[^>]*style=["']?margin:\s?0px\s?auto;["']?[^>]*>.*?<\/div>/gis, '');
-
-// **删除 `div_adhost` 相关广告**
-modifiedBody = modifiedBody.replace(/<div[^>]*class=["']?div_adhost["']?[^>]*>.*?<\/div>/gis, '');
-
-// **返回修改后的 HTML**
-$done({ body: modifiedBody });
