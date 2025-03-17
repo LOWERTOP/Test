@@ -1,53 +1,19 @@
-// 漫画网站广告屏蔽脚本
-const body = $response.body;
+/**
+ * Shadowrocket 移除 twmanga 相关网站的广告元素
+ * 目标：删除 class="mobadsq" 及其他潜在广告
+ * 适用于 twmanga 及其子域名
+ */
 
-// 只有在有响应体的情况下才执行
-if (body) {
-  try {
-    // 获取当前域名
-    const url = $request.url;
-    const host = url.match(/https?:\/\/([^\/]+)/)[1];
-    
-    let html = body;
-    
-    // 针对不同网站的特定处理
-    if (host.includes('twmanga.com')) {
-      // 移除广告元素
-      html = html.replace(/<div[^>]*class="?mobadsq"?[^>]*>[\s\S]*?<\/div>/gi, '');
-      html = html.replace(/<div[^>]*class="?recommend"?[^>]*>[\s\S]*?<\/div>/gi, '');
-      html = html.replace(/<div[^>]*style="overflow:hidden; flex: 1;"[^>]*>[\s\S]*?<\/div>/gi, '');
-      
-      // 移除广告相关脚本
-      html = html.replace(/<script[^>]*src="[^"]*(?:ad|analytics|tracker)[^"]*"[^>]*>[\s\S]*?<\/script>/gi, '');
-      
-      // 移除内联广告脚本
-      html = html.replace(/<script[^>]*>[\s\S]*?(?:ad|googlead|adsense)[\s\S]*?<\/script>/gi, '');
-    }
-    else if (host.includes('baozimh.com')) {
-      // 移除广告元素
-      html = html.replace(/<div[^>]*class="?recommend"?[^>]*>[\s\S]*?<\/div>/gi, '');
-      html = html.replace(/<div[^>]*class="?footer"?[^>]*>[\s\S]*?<\/div>/gi, '');
-      
-      // 移除广告相关脚本
-      html = html.replace(/<script[^>]*src="[^"]*(?:ad|analytics|tracker)[^"]*"[^>]*>[\s\S]*?<\/script>/gi, '');
-      
-      // 移除内联广告脚本
-      html = html.replace(/<script[^>]*>[\s\S]*?(?:ad|googlead|adsense)[\s\S]*?<\/script>/gi, '');
-    }
-    
-    // 通用处理：移除所有iframe
-    html = html.replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '');
-    
-    // 移除通用广告类名和ID
-    html = html.replace(/<[^>]*(?:class|id)="[^"]*(?:ad|ads|banner|pop)[^"]*"[^>]*>[\s\S]*?<\/[^>]*>/gi, '');
-    
-    // 返回处理后的内容
-    $done({body: html});
-  } catch (err) {
-    // 如果处理过程中出现错误，返回原始内容
-    console.log('Error in comic-ads-blocker script: ' + err);
+if (!$response || !$response.body) {
     $done({});
-  }
-} else {
-  $done({});
+    return;
 }
+
+let modifiedBody = $response.body;
+
+// **匹配 `<div class="mobadsq">` 及其所有内容**
+const adRegex = /<div[^>]*class=["']?mobadsq["']?[^>]*>[\s\S]*?<\/div>/gi;
+modifiedBody = modifiedBody.replace(adRegex, '');
+
+// **返回修改后的 HTML**
+$done({ body: modifiedBody });
