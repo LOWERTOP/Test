@@ -1,40 +1,55 @@
-name: Sync README.md Between Branches
+name: Sync README.md
 
 on:
   push:
     branches:
       - main
-      - README  # 🔹 监听 README 分支变更
-  workflow_dispatch:  # 允许手动触发
+      - README
+    paths:
+      - README.md
 
 jobs:
   sync-readme:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout current branch
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Set up Git
+      - name: Determine source and target branches
+        id: branches
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          # 当前分支
+          CUR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "当前分支为：$CUR_BRANCH"
+          if [ "$CUR_BRANCH" = "main" ]; then
+            TARGET_BRANCH="README"
+          else
+            TARGET_BRANCH="main"
+          fi
+          echo "::set-output name=target::$TARGET_BRANCH"
 
-      - name: Sync README.md from `main` to `README`
-        if: github.ref == 'refs/heads/main'
-        run: |
-          git checkout README
-          git pull origin README
-          git checkout main -- README.md
-          git commit -am "Sync README.md from main to README" || echo "No changes to commit"
-          git push origin README
+      - name: Checkout target branch into a separate directory
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ steps.branches.outputs.target }}
+          path: target_branch
 
-      - name: Sync README.md from `README` to `main`
-        if: github.ref == 'refs/heads/README'
+      - name: Compare README.md files
         run: |
-          git checkout main
-          git pull origin main
-          git checkout README -- README.md
-          git commit -am "Sync README.md from README to main" || echo "No changes to commit"
-          git push origin main
+          # 比较两个分支中的 README.md 文件内容是否一致
+          diff -q README.md target_branch/README.md || echo "不同"
+
+      - name: Synchronize README.md
+        if: ${{ failure() }}  # 当 diff 检测到不同内容时
+        run: |
+          # 将当前分支中的 README.md 覆盖目标分支中的同名文件
+          cp README.md target_branch/README.md
+          cd target_branch
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "同步 README.md 文件：更新自 ${{ github.ref }}"
+          git push origin HEAD:${{ steps.branches.outputs.target }}
