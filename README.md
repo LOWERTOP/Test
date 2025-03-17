@@ -6,6 +6,8 @@
 > 
 > 原懒人系列配置文件及关键词列表的仓库因故失活，本仓将在其最终版本或可能的后续版本的基础上进行维护，并计划将原关键词列表逐步完善为使用手册以供参阅。本仓 [Original 分支](https://github.com/LOWERTOP/Shadowrocket/tree/Original) 存有原版文件，可进入查看。[Johnshall 仓库](https://github.com/Johnshall/Shadowrocket-ADBlock-Rules-Forever) 提供的懒人配置也将以本仓文件为基础继续更新。若有其他需求可尝试查看 **[配色与配置仓库](https://github.com/LOWERTOP/Shadowrocket-First)** <br>
 > 本仓以普通用户的身份对原作者及所有对相关项目做出贡献的人表示由衷的感谢！
+>
+> 测试
 
 ------
 
