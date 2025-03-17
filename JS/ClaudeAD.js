@@ -33,6 +33,9 @@ function generateCSS(domain) {
       
       /* 隐藏特定标题 */
       h3[style="margin: 0 0 12px; padding: 0;"] { display: none !important; }
+      
+      /* 隐藏页面底部元素 */
+      .m-page-bottom { display: none !important; }
     `;
   }
   // twmanga.com的CSS规则
@@ -59,7 +62,7 @@ function generateCSS(domain) {
 // 获取需要定期检查的选择器
 function getSelectors(domain) {
   if (domain.includes("baozimh.com")) {
-    return '.action-buttons.position-relative.chapter-goto, .recommend, .footer, h3[style="margin: 0 0 12px; padding: 0;"]';
+    return '.action-buttons.position-relative.chapter-goto, .recommend, .footer, h3[style="margin: 0 0 12px; padding: 0;"], .m-page-bottom';
   }
   else if (domain.includes("twmanga.com")) {
     return '.ucfad_async, .div_close_ads, .mobadsq, div[style="overflow:hidden; flex: 1;"], div[style=" width: 170px; margin: 0 auto; text-align: center;"], .recommend, #interstitial_fade';
