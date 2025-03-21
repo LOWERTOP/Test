@@ -47,7 +47,7 @@ jobs:
           fi
           
           # 提交更改
-          git commit -m "自动更新: 从 README 分支复制 README.md 到 main 分支"
+          git commit -m "更新 README 文档"
           
           # 推送到 main 分支
           git push origin main
