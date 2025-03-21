@@ -7,6 +7,11 @@ on:
   
   # 手动触发选项
   workflow_dispatch:
+  
+  # 添加 push 事件，使工作流在推送到任何分支时显示
+  push:
+    paths:
+      - '.github/workflows/copy-readme.yml'
 
 jobs:
   copy-readme:
