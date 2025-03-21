@@ -1,9 +1,9 @@
-name: 自动复制 README.md
+name: 定时同步 README
 
 on:
   # 定时任务，每天北京时间0点运行（UTC时间为前一天16:00）
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '40 10 * * *'
   
   # 手动触发选项
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
           fi
           
           # 提交更改
-          git commit -m "更新 README 文档"
+          git commit -m "从默认分支更新文档"
           
       # 延迟推送，确保 Pages 任务执行完毕
       - name: 延迟推送避免影响 Pages
