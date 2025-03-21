@@ -1,0 +1,48 @@
+name: 自动复制 README.md
+
+on:
+  # 定时任务，每天北京时间0点运行（UTC时间为前一天16:00）
+  schedule:
+    - cron: '0 16 * * *'
+  
+  # 手动触发选项
+  workflow_dispatch:
+
+jobs:
+  copy-readme:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 检出仓库代码，直接检出 main 分支
+      - name: 检出 main 分支
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      
+      # 配置 Git 用户信息
+      - name: 配置 Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      
+      # 从 README 分支获取 README.md 并覆盖 main 分支中的文件
+      - name: 从 README 分支获取 README.md
+        run: |
+          # 获取 README 分支最新内容
+          git fetch origin README
+          
+          # 从 README 分支复制 README.md 文件到当前工作目录
+          git checkout origin/README -- README.md
+          
+          # 检查是否有更改
+          if git diff --staged --quiet; then
+            echo "README.md 没有变化，无需更新"
+            exit 0
+          fi
+          
+          # 提交更改
+          git commit -m "自动更新: 从 README 分支复制 README.md 到 main 分支"
+          
+          # 推送到 main 分支
+          git push origin main
