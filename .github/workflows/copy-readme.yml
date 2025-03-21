@@ -1,12 +1,12 @@
 name: 自动复制 README.md
 
 on:
+  # 手动触发选项
+  workflow_dispatch:
+  
   # 定时任务，每天北京时间0点运行（UTC时间为前一天16:00）
   schedule:
     - cron: '0 16 * * *'
-  
-  # 手动触发选项
-  workflow_dispatch:
   
   # 添加 push 事件，使工作流在推送到任何分支时显示
   push:
