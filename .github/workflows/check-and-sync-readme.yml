@@ -8,23 +8,24 @@ jobs:
   - name: Check For Updates
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-        name: Checkout default branch
+      - name: Checkout default branch
+        uses: actions/checkout@v1
         branch: default
       - name: Check if README has changed
         shell: bash
         run: |
           git fetch origin default:main -c rename-sourceref=origin/main
-          if [ -z "$(git diff -- files/README.md)" ]; then
-            echo "No changes in README.md"
+          files_modified=(git ls-files --diff --cached "files/README.md")
+          if [ "$files_modified" ]; then
+            echo "Changes detected in README.md"
             exit 0
           else
-            echo "Changes detected, proceeding to sync..."
+            echo "No changes in README.md"
+            exit 1
           fi
       - name: Sync README to main branch
         shell: bash
         run: |
-          git checkout main -b temp-feature
-          git merge --no-ff origin/main:default/README.md
           git checkout main
-          rm -rf temp-feature .git_cache
+          rm -r files/README.md
+          git checkout main -- files/README.md
