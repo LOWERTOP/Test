@@ -1,61 +1,30 @@
-name: 自动复制 README.md
+name: Check And Sync README
 
 on:
-  # 定时任务，每天北京时间0点运行（UTC时间为前一天16:00）
-  schedule:
-    - cron: '55 11 * * *'
-  
-  # 手动触发选项
-  workflow_dispatch:
+  push:
+    branches: [ "default" ]
 
 jobs:
-  copy-readme:
+  - name: Check For Updates
     runs-on: ubuntu-latest
-    
     steps:
-      # 检出仓库代码，直接检出 main 分支
-      - name: 检出 main 分支
-        uses: actions/checkout@v3
-        with:
-          ref: main
-          fetch-depth: 0
-      
-      # 配置 Git 用户信息
-      - name: 配置 Git
+      - uses: actions/checkout@v1
+        name: Checkout default branch
+        branch: default
+      - name: Check if README has changed
+        shell: bash
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      
-      # 从 README 分支获取 README.md 并覆盖 main 分支中的文件
-      - name: 从 README 分支获取 README.md
-        run: |
-          # 获取 README 分支最新内容
-          git fetch origin README
-          
-          # 从 README 分支复制 README.md 文件到当前工作目录
-          git checkout origin/README -- README.md
-          
-          # 检查是否有更改
-          if git diff --staged --quiet; then
-            echo "README.md 没有变化，无需更新"
+          git fetch origin default:main -c rename-sourceref=origin/main
+          if [ -z "$(git diff -- files/README.md)" ]; then
+            echo "No changes in README.md"
             exit 0
+          else
+            echo "Changes detected, proceeding to sync..."
           fi
-          
-          # 添加到暂存区
-          git add README.md
-          
-          # 延时1分钟，避免与 Pages build and deployment 工作流冲突
-          echo "延时1分钟，避免工作流冲突..."
-          sleep 60
-          
-          # 提交更改
-          git commit -m "自动更新: 从 README 分支复制 README.md 到 main 分支"
-          
-          # 推送到 main 分支
-          git push origin main
-      
-      # 检查工作流运行状态
-      - name: 检查工作流运行状态
+      - name: Sync README to main branch
+        shell: bash
         run: |
-          echo "工作流已完成，自动更新作业已执行"
-          date
+          git checkout main -b temp-feature
+          git merge --no-ff origin/main:default/README.md
+          git checkout main
+          rm -rf temp-feature .git_cache
