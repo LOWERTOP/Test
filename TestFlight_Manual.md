@@ -131,7 +131,7 @@
 
 > 现阶段已支持的协议类型
 > 
-> > **Subscribe（订阅）、Shadowsocks、ShadowsocksR、Vmess、VLESS、Relay、Socks5、Socks5 Over TLS、HTTP、HTTPS、HTTP2、Trojan、Hysteria、Hysteria2、AnyTLS、TUIC、Juicity、WireGuard、Snell v2、Brook、Lua**
+> > **Subscribe（订阅）、Shadowsocks、ShadowsocksR、Vmess、VLESS、Relay、Socks5、Socks5 Over TLS、HTTP、HTTPS、HTTP2、Trojan、Hysteria、Hysteria2、AnyTLS、TUIC、Juicity、SSH、WireGuard、Snell v2、Brook、Lua**
 >
 > 也可以在 首页 > 右上角 `➕` > 类型 中查看
 >
