@@ -1,0 +1,14 @@
+#!name=PreviewTool
+#!desc=预览
+#!author=iab0x00
+
+[URL Rewrite]
+^https:\/\/www\.nsloon\.com\/openloon\/import\?plugin=(https:\/\/kelee\.one\/Tool\/Loon\/Plugin\/.*) $1 302
+
+[Header Rewrite]
+http-response ^https?://kelee.one header-replace Content-Type text/plain;charset=utf-8
+http-response ^https?://kelee.one header-add Content-Disposition inline
+http-request ^https?://kelee.one header-replace User-Agent Shadowrocket/2615 CFNetwork/3826.500.131 Darwin/24.5.0
+
+[MITM]
+hostname = %APPEND% kelee.one, www.nsloon.com
