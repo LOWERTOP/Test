@@ -1,4 +1,5 @@
-// Independent Spotify Feature Toggle via $argument
+// Spotify Feature Toggle Script (independent, only affects tab/useractivity)
+
 function parseArguments() {
     const defaultArgs = {
         tab: true,
@@ -45,6 +46,6 @@ try {
 
     $done({ body: JSON.stringify(body) });
 } catch (e) {
-    console.log("[SpotifyControl] Error:", e);
+    console.log("[SpotifyFeatureToggle] Error:", e);
     $done({});
 }
