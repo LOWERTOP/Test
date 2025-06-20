@@ -23,7 +23,7 @@ http-request ^https?:\/\/(?:gae2-spclient|guc3-spclient|spclient\.wg)\.spotify\.
 spotify-json = type=http-request,pattern=^https?:\/\/(?:gae2-spclient|guc3-spclient|spclient\.wg)\.spotify\.com\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/,requires-body=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js
 spotify-proto = type=http-response,pattern=^https?:\/\/(?:gae2-spclient|guc3-spclient|spclient\.wg)\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js,script-update-interval=0
 
-Spotify Feature Control = type=http-response,pattern=^https?:\/\/(?:gae2-spclient|guc3-spclient|spclient\.wg)\.spotify\.com/.*client-bootstrap,requires-body=1,max-size=0,script-path=https://example.com/spotify.features.control.js, requires-body=true, binary-body-mode=true, argument={"tab":{{{精简底栏}}},"useractivity":{{{接力功能}}}}
+Spotify Feature Control = type=http-response,pattern=^https?:\/\/(?:gae2-spclient|guc3-spclient|spclient\.wg)\.spotify\.com/.*client-bootstrap,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/LOWERTOP/Test/refs/heads/main/JS/spotify.features.control.js, requires-body=true, binary-body-mode=true, argument={"tab":{{{精简底栏}}},"useractivity":{{{接力功能}}}}
 
 # 歌词翻译脚本，填入自己的appid和密钥
 spotify歌词翻译 = type=http-response,enable={{{歌词翻译}}},pattern=^https?:\/\/(?:gae2-spclient|guc3-spclient|spclient\.wg)\.spotify\.com\/color-lyrics\/v2\/track\/,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-lyric.js,argument=appid={{{翻译账户}}}&securityKey={{{翻译密钥}}}
