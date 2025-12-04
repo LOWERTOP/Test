@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadowrocket Theme Creator - iPhone 17 Pro Max</title>
+    <style>
+        :root {
+            /* 基础变量，后续通过JS动态覆盖 */
+            --bg-body: #0a0e14;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-glow: rgba(36, 115, 189, 0.4);
+            
+            /* Shadowrocket 映射变量初始化 */
+            --sr-NavColor: rgba(255,255,255,0);
+            --sr-NavText: #ADBBC8;
+            --sr-Nav2Text: #2473BD;
+            --sr-TabColor: rgba(255,255,255,0);
+            --sr-TabSelected: #2473BD;
+            --sr-TabUnselected: #ADBBC8;
+            --sr-TableBg: #181E26;
+            --sr-CellBg: #202935;
+            --sr-CellText: #ADBBC8;
+            --sr-DetailText: #4F6077;
+            --sr-SwitchOn: #2473BD;
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            background: radial-gradient(circle at 50% 10%, #1a2533 0%, #000000 100%);
+            color: white;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- 左侧编辑器面板 --- */
+        .editor-panel {
+            width: 450px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .panel-header h1 {
+            font-size: 24px;
+            background: linear-gradient(90deg, #fff, #88aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 10px 0;
+        }
+
+        .control-group {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .group-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5d6d7e;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .color-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-label { font-size: 14px; color: #ccc; }
+        
+        input[type="color"] {
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            background: none;
+        }
+
+        input[type="text"] {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            width: 100%;
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        .action-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        .btn:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 15px var(--accent-glow); }
+        .btn-primary { background: #2473BD; border-color: #2473BD; }
+
+        /* --- 右侧预览区域 --- */
+        .preview-area {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        /* 装饰背景 */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(36, 115, 189, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            animation: pulse 8s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        /* --- iPhone 17 Pro Max 模型 --- */
+        .iphone-17 {
+            width: 390px; /* Pro Max Width approx */
+            height: 844px;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 
+                0 0 0 2px #333,
+                0 0 0 5px #111,
+                0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            border: 1px solid #444;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* 灵动岛 (更小巧) */
+        .dynamic-island {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 28px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        /* --- Shadowrocket 界面 --- */
+        .sr-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--sr-TableBg);
+            display: flex;
+            flex-direction: column;
+            font-family: -apple-system, sans-serif;
+            position: relative;
+        }
+
+        /* 导航栏 */
+        .sr-navbar {
+            height: 100px;
+            padding-top: 50px;
+            padding-left: 20px;
+            padding-right: 20px;
+            background: var(--sr-NavColor);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* 玻璃态效果 */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 50;
+            transition: background 0.3s;
+        }
+
+        .nav-title {
+            color: var(--sr-NavText);
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-icon {
+            color: var(--sr-Nav2Text);
+            font-size: 24px;
+        }
+
+        /* 内容区 */
+        .sr-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            /* iOS 26 液态滚动条隐藏 */
+            scrollbar-width: none; 
+        }
+        .sr-content::-webkit-scrollbar { display: none; }
+
+        /* 面板卡片 (Section) */
+        .sr-section {
+            background: var(--sr-CellBg);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            transition: background 0.3s;
+        }
+
+        .sr-cell {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .sr-cell:last-child { border-bottom: none; }
+
+        .cell-left { display: flex; align-items: center; gap: 12px; }
+        .cell-icon { 
+            width: 32px; height: 32px; 
+            border-radius: 8px; 
+            background: linear-gradient(135deg, #2473BD, #6a11cb);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+        }
+        .cell-title { color: var(--sr-CellText); font-size: 16px; font-weight: 500; }
+        .cell-detail { color: var(--sr-DetailText); font-size: 14px; }
+        
+        /* 模拟开关 */
+        .sr-switch {
+            width: 50px; height: 30px;
+            background: var(--sr-SwitchOn);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .sr-switch::after {
+            content: ''; position: absolute;
+            top: 2px; right: 2px;
+            width: 26px; height: 26px;
+            background: white; border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* 选中状态模拟 */
+        .sr-cell.selected {
+            background: rgba(36, 115, 189, 0.1);
+        }
+        .dot {
+            width: 8px; height: 8px; 
+            border-radius: 50%; 
+            background: #2bc253; 
+            box-shadow: 0 0 10px #2bc253;
+        }
+        .ping-text { color: var(--sr-Nav2Text); font-size: 12px; font-weight: 600; margin-right: 5px; }
+
+        /* 底部 TabBar */
+        .sr-tabbar {
+            height: 85px;
+            background: var(--sr-TabColor);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: absolute;
+            bottom: 0; width: 100%;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .tab-icon { font-size: 24px; color: var(--sr-TabUnselected); }
+        .tab-label { font-size: 10px; color: var(--sr-TabUnselected); font-weight: 500; }
+        
+        .tab-item.active .tab-icon, 
+        .tab-item.active .tab-label { color: var(--sr-TabSelected); }
+
+        /* 导入/导出模态框 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+            z-index: 200; display: none; align-items: center; justify-content: center;
+        }
+        .modal {
+            background: #1a1f26; width: 500px; padding: 25px;
+            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal h3 { margin-top: 0; color: #fff; }
+        .modal textarea { 
+            width: 100%; height: 100px; 
+            background: #0f1216; border: 1px solid #333; 
+            color: #ccc; border-radius: 10px; padding: 10px; margin: 15px 0;
+            resize: none;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="editor-panel">
+        <div class="panel-header">
+            <h1>Theme Studio</h1>
+            <p style="color: #666; font-size: 13px;">For Shadowrocket / iOS 26 Concept</p>
+        </div>
+
+        <div class="action-area">
+            <button class="btn" onclick="openImportModal()"><i class="fas fa-file-import"></i> 导入链接</button>
+            <button class="btn btn-primary" onclick="exportTheme()"><i class="fas fa-share-alt"></i> 导出链接</button>
+        </div>
+
+        <div class="control-group">
+            <div class="group-title">Navigation Bar</div>
+            <div class="color-row">
+                <span class="color-label">Background</span>
+                <input type="color" id="NavigationBarColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Title Text</span>
+                <input type="color" id="NavigationBarTextColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Action Color</span>
+                <input type="color" id="NavigationBar2TextColor" oninput="updateColor(this)">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="group-title">Table / Content</div>
+            <div class="color-row">
+                <span class="color-label">Global Background</span>
+                <input type="color" id="TableBackgroundColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Cell Background</span>
+                <input type="color" id="TableCellBackgroundColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Primary Text</span>
+                <input type="color" id="TextLabelTextColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Detail Text</span>
+                <input type="color" id="DetailLabelTextColor" oninput="updateColor(this)">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="group-title">Tab Bar</div>
+            <div class="color-row">
+                <span class="color-label">Background</span>
+                <input type="color" id="TabBarColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Selected Item</span>
+                <input type="color" id="TabBarSelectedColor" oninput="updateColor(this)">
+            </div>
+            <div class="color-row">
+                <span class="color-label">Unselected Item</span>
+                <input type="color" id="TabBarUnselectedColor" oninput="updateColor(this)">
+            </div>
+        </div>
+        
+        <div style="font-size: 10px; color: #444; margin-top: auto;">
+            * Alpha channels (transparency) are automatically handled from hex inputs for this demo.
+        </div>
+    </div>
+
+    <div class="preview-area">
+        <div class="bg-glow"></div>
+        
+        <div class="iphone-17">
+            <div class="dynamic-island"></div>
+            
+            <div class="sr-screen">
+                <div class="sr-navbar">
+                    <div class="nav-icon"><i class="fas fa-expand-alt"></i></div>
+                    <div class="nav-title">Shadowrocket</div>
+                    <div class="nav-icon"><i class="fas fa-plus"></i></div>
+                </div>
+
+                <div class="sr-content">
+                    
+                    <div class="sr-section">
+                        <div class="sr-cell">
+                            <div class="cell-left">
+                                <div class="cell-title">Not Connected</div>
+                            </div>
+                            <div class="sr-switch"></div>
+                        </div>
+                        <div class="sr-cell">
+                            <div class="cell-left">
+                                <div class="cell-title" style="font-size:14px;">Global Routing</div>
+                            </div>
+                            <div class="cell-detail">Config ></div>
+                        </div>
+                    </div>
+
+                    <div class="sr-section">
+                        <div class="sr-cell selected">
+                            <div class="cell-left">
+                                <div class="cell-icon">🇺🇸</div>
+                                <div>
+                                    <div class="cell-title">US - Los Angeles Premium</div>
+                                    <div class="cell-detail">Shadowsocks</div>
+                                </div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <span class="ping-text">124ms</span>
+                                    <div class="dot"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sr-cell">
+                            <div class="cell-left">
+                                <div class="cell-icon" style="background: linear-gradient(135deg, #ff9966, #ff5e62);">🇯🇵</div>
+                                <div>
+                                    <div class="cell-title">JP - Tokyo Direct</div>
+                                    <div class="cell-detail">Vmess</div>
+                                </div>
+                            </div>
+                            <div class="cell-detail">Timeout</div>
+                        </div>
+
+                        <div class="sr-cell">
+                            <div class="cell-left">
+                                <div class="cell-icon" style="background: linear-gradient(135deg, #43cea2, #185a9d);">🇸🇬</div>
+                                <div>
+                                    <div class="cell-title">SG - Singapore Light</div>
+                                    <div class="cell-detail">Trojan</div>
+                                </div>
+                            </div>
+                            <div class="cell-detail">340ms</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sr-tabbar">
+                    <div class="tab-item active">
+                        <i class="fas fa-rocket tab-icon"></i>
+                        <span class="tab-label">Home</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-cube tab-icon"></i>
+                        <span class="tab-label">Config</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-database tab-icon"></i>
+                        <span class="tab-label">Data</span>
+                    </div>
+                    <div class="tab-item">
+                        <i class="fas fa-cog tab-icon"></i>
+                        <span class="tab-label">Settings</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="importModal">
+        <div class="modal">
+            <h3>Paste Shadowrocket Color URL</h3>
+            <textarea id="importString" placeholder="shadowrocket://color?..."></textarea>
+            <div class="action-area">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="processImport()">Apply Theme</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal">
+            <h3>Your Theme URL</h3>
+            <textarea id="exportString"></textarea>
+            <div class="action-area">
+                <button class="btn" onclick="closeModal()">Close</button>
+                <button class="btn btn-primary" onclick="copyToClipboard()">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Shadowrocket 颜色键值映射 (部分核心配置)
+        // 键名对应 URL 参数，CSS变量对应页面样式
+        const colorMap = {
+            'NavigationBarColor': '--sr-NavColor',
+            'NavigationBarTextColor': '--sr-NavText',
+            'NavigationBar2TextColor': '--sr-Nav2Text',
+            'TableBackgroundColor': '--sr-TableBg',
+            'TableCellBackgroundColor': '--sr-CellBg',
+            'TextLabelTextColor': '--sr-CellText',
+            'DetailLabelTextColor': '--sr-DetailText',
+            'TabBarColor': '--sr-TabColor',
+            'TabBarSelectedColor': '--sr-TabSelected',
+            'TabBarUnselectedColor': '--sr-TabUnselected',
+            'ButtonIconColor': '--sr-SwitchOn' // 复用一下
+        };
+
+        // 当前所有颜色状态
+        let currentColors = {};
+
+        // 初始化默认颜色
+        const defaultLink = "shadowrocket://color?NavigationBarColor=%2300FFFFFF&NavigationBar2Color=%2300FFFFFF&NavigationBarTextColor=%23ADBBC8&NavigationBar2TextColor=%232473BD&TabBarColor=%2300FFFFFF&TabBarBorderColor=%2300000000&TabBarSelectedColor=%232473BD&TabBarUnselectedColor=%23ADBBC8&TableBackgroundColor=%23181E26&TableCellBackgroundColor=%23202935&TableCellSelectedBackgroundColor=%23181E26&TableSeparatorColor=%23181E26&TextFieldTextColor=%23ADBBC8&PlaceholderColor=%23ADBBC8&TextLabelTextColor=%23ADBBC8&DetailLabelTextColor=%234F6077&TextLabelDeleteColor=%232473BD&HeaderFooterTextColor=%234F6077&SearchFieldBackgroundColor=%23202935&IndicatorColor=%23ADBBC8&ButtonIconColor=%232473BD&ButtonNormalColor=%23ADBBC8&ButtonNormal2Color=%23ADBBC8&ButtonNormal3Color=%23ADBBC8&ButtonHighlightedColor=%23ADBBC8&ButtonHighlighted2Color=%23ADBBC8&ButtonHighlighted3Color=%23202935&ButtonDisabledColor=%23ADBBC8&ButtonDisabled2Color=%23ADBBC8&PingSuccessTextColor=%232473BD&PingTimeoutTextColor=%234F6077&DefaultDotColor=%232473BD&HUDBackgroundColor=%23202935&v=1.0";
+
+        // 页面加载时执行
+        window.onload = function() {
+            parseAndApply(defaultLink);
+        };
+
+        // 颜色输入框变动事件
+        function updateColor(input) {
+            const key = input.id;
+            const hex = input.value;
+            
+            // 更新 CSS 变量 (预览)
+            if(colorMap[key]) {
+                document.documentElement.style.setProperty(colorMap[key], hex);
+            }
+            
+            // 更新数据状态 (Shadowrocket 使用 #AARRGGBB，但 input 是 #RRGGBB)
+            // 这里为了简化，我们假设 input 没有 alpha，但在生成 URL 时，
+            // 如果原本是透明的 (Alpha=00)，我们需要保持逻辑。
+            // 这里的简单逻辑：如果是标准 input，则保存为 FF + RRGGBB 格式用于导出
+            // 除非是特定的透明项，这里做特殊处理比较复杂。
+            // 简化方案：保存 #RRGGBB，导出时前端自动补全 FF。
+            currentColors[key] = hex.replace('#', '%23'); 
+        }
+
+        // 解析 URL 并应用
+        function parseAndApply(url) {
+            try {
+                const queryString = url.split('?')[1];
+                if (!queryString) return;
+                
+                const pairs = queryString.split('&');
+                pairs.forEach(pair => {
+                    const [key, val] = pair.split('=');
+                    if (key && val) {
+                        currentColors[key] = val;
+                        
+                        // 处理 Shadowrocket 颜色格式: %23 + AARRGGBB (或 RRGGBB)
+                        // Decode URI: %23 -> #
+                        let hexColor = decodeURIComponent(val);
+                        
+                        // 转换为 CSS 可用的 RGBA
+                        let cssColor = srHexToCss(hexColor);
+                        
+                        // 1. 设置 CSS 变量
+                        if (colorMap[key]) {
+                            document.documentElement.style.setProperty(colorMap[key], cssColor);
+                            
+                            // 2. 更新 Input 控件的值 (Input只接受 #RRGGBB)
+                            const inputEl = document.getElementById(key);
+                            if (inputEl) {
+                                // 提取 RRGGBB 部分
+                                let inputHex = cssColorToInputHex(cssColor);
+                                inputEl.value = inputHex;
+                            }
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error("Parse error", e);
+                alert("链接格式错误");
+            }
+        }
+
+        // Shadowrocket Hex (#AARRGGBB) 转 CSS RGBA
+        function srHexToCss(hex) {
+            if (!hex.startsWith('#')) return hex;
+            let cleanHex = hex.substring(1);
+            
+            if (cleanHex.length === 8) {
+                // AARRGGBB
+                let a = parseInt(cleanHex.substring(0, 2), 16) / 255;
+                let r = parseInt(cleanHex.substring(2, 4), 16);
+                let g = parseInt(cleanHex.substring(4, 6), 16);
+                let b = parseInt(cleanHex.substring(6, 8), 16);
+                return `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`;
+            } else {
+                return hex;
+            }
+        }
+
+        // CSS RGBA 或 #Hex 转 Input #RRGGBB
+        function cssColorToInputHex(color) {
+            if (color.startsWith('#')) {
+                return color.substring(0, 7); // 忽略后面的 alpha
+            }
+            if (color.startsWith('rgba')) {
+                // 简单的正则提取
+                let vals = color.match(/[\d.]+/g);
+                if(vals && vals.length >= 3) {
+                    let r = parseInt(vals[0]).toString(16).padStart(2, '0');
+                    let g = parseInt(vals[1]).toString(16).padStart(2, '0');
+                    let b = parseInt(vals[2]).toString(16).padStart(2, '0');
+                    return `#${r}${g}${b}`;
+                }
+            }
+            return '#000000';
+        }
+
+        // 导出主题
+        function exportTheme() {
+            let baseUrl = "shadowrocket://color?";
+            let params = [];
+            
+            // 遍历所有可能的键，这里为了演示，我们基于 defaultLink 的键来重构
+            // 或者简单地遍历 currentColors
+            for (let key in currentColors) {
+                // 注意：在实际应用中，需要将 input 的值 (#RRGGBB) 转换回 SR 的格式
+                // 这里的 currentColors 可能存的是原始值。
+                // 若用户修改了，我们需要读取 Input 的值并补上 Alpha FF (不透明)
+                // 或者如果是透明背景，需要特殊处理。
+                
+                // 获取 Input 当前值
+                let inputEl = document.getElementById(key);
+                let valToExport = currentColors[key]; // 默认用旧值
+
+                if (inputEl) {
+                    // 如果有对应控件，用控件的值
+                    // 注意：HTML color input 无法选择透明度，这里默认设为不透明 FF
+                    // 除非原始值是完全透明 (00xxxxxx)，我们可以保留透明逻辑
+                    // 这是一个简化的处理逻辑
+                    let hex = inputEl.value.replace('#', '');
+                    valToExport = `%23FF${hex.toUpperCase()}`; // Shadowrocket AARRGGBB
+                    
+                    // 特殊 hack: 如果原来的导航栏是透明的，且用户选了白色，可能他是想改色
+                    // 这里为了演示方便，所有修改都设为不透明。
+                }
+                params.push(`${key}=${valToExport}`);
+            }
+            
+            let finalUrl = baseUrl + params.join('&') + "&v=1.0";
+            
+            document.getElementById('exportString').value = finalUrl;
+            document.getElementById('exportModal').style.display = 'flex';
+        }
+
+        function openImportModal() {
+            document.getElementById('importModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
+        }
+
+        function processImport() {
+            let val = document.getElementById('importString').value;
+            if(val) parseAndApply(val);
+            closeModal();
+        }
+
+        function copyToClipboard() {
+            let copyText = document.getElementById("exportString");
+            copyText.select();
+            document.execCommand("copy");
+            alert("已复制到剪贴板！");
+            closeModal();
+        }
+    </script>
+</body>
+</html>
