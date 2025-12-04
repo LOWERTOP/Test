@@ -8,22 +8,6 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <style>
         :root {
-            /* === 动态配色变量 (默认 Light Mode 主题，匹配截图) === */
-            --NavigationBarColor: transparent;
-            --NavigationBarTextColor: #000000;
-            --TableBackgroundColor: #F2F2F7;
-            --TableCellBackgroundColor: #FFFFFF;
-            --TableSeparatorColor: #D1D1D6;
-            --TextLabelTextColor: #000000;
-            --DetailLabelTextColor: #8E8E93; /* iOS standard gray */
-            --HeaderFooterTextColor: #6A6A6F;
-            --TabBarColor: #FFFFFF;
-            --TabBarSelectedColor: #007AFF;
-            --TabBarUnselectedColor: #8E8E93;
-            --ButtonIconColor: #007AFF;
-            --ButtonNormalColor: #E5E5EA; /* Light background for switch off */
-            --TableCellSelectedBackgroundColor: #D1D1D6;
-            
             /* === 视觉常量 (为匹配截图，调整为更传统的 iOS 样式) === */
             --glass-blur: blur(20px);
             --nav-height: 98px;
@@ -167,7 +151,7 @@
             transition: transform 0.3s ease-out; 
         }
         
-        /* ******** 手机按键细节 (新增) ******** */
+        /* ******** 手机按键细节 ******** */
         .side-button {
             position: absolute;
             width: 4px; /* Slim button width */
@@ -264,7 +248,7 @@
             z-index: 200; 
         }
 
-        /* ******** 动态反光元素 (新增) ******** */
+        /* ******** 动态反光元素 (平滑过渡修改) ******** */
         .glass-reflection {
             position: absolute;
             top: 0; left: 0;
@@ -284,7 +268,8 @@
             opacity: 0.8;
             /* 初始位置：将 300% 宽度的元素平移到屏幕中央 */
             transform: translate(-33.33%, -33.33%); 
-            transition: none; /* 确保跟随鼠标即时变化 */
+            /* 新增过渡效果，使鼠标离开时平滑归位 */
+            transition: transform 0.8s ease-out, opacity 0.5s; 
         }
         /* ******** 动态反光元素 (结束) ******** */
         
@@ -378,6 +363,29 @@
         .home-indicator {
             position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
             width: 134px; height: 5px; background: rgba(0,0,0,0.3); border-radius: 100px;
+        }
+        
+        /* Toast/HUD 样式 (新增) */
+        .toast-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .toast-message.show {
+            opacity: 1;
         }
     </style>
 </head>
@@ -688,6 +696,8 @@
     </div>
 </div>
 
+<div class="toast-message" id="toastMessage"></div>
+
 <script>
     // 定义 Shadowrocket 支持的所有颜色键值 (保留原文件逻辑)
     const colorKeys = [
@@ -714,6 +724,19 @@
         `;
         controlsContainer.appendChild(div);
     });
+
+    // === 新增 Toast 提示函数 ===
+    function showToast(message) {
+        const toastEl = document.getElementById('toastMessage');
+        toastEl.innerText = message;
+        toastEl.classList.add('show');
+        
+        // 延时 2s 消失
+        setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 2000); 
+    }
+    // ===========================
 
     // 颜色转换工具函数 (保留原文件逻辑)
     function srHexToCss(srHex) {
@@ -750,11 +773,11 @@
         currentState[key] = value + "FF"; 
     }
 
-    // 导入配置 (保留原文件逻辑)
+    // 导入配置 (替换 alert)
     function importConfig() {
         const inputStr = document.getElementById('configOutput').value;
         if (!inputStr.includes('shadowrocket://color')) {
-            alert('无效的 Shadowrocket 配色链接');
+            showToast('无效的 Shadowrocket 配色链接');
             return;
         }
 
@@ -777,10 +800,10 @@
                 }
             }
         });
-        alert("配置已加载并应用到手机模型。");
+        showToast("配置已加载并应用到手机模型。");
     }
 
-    // 导出配置 (保留原文件逻辑)
+    // 导出配置 (替换 alert)
     function exportConfig() {
         let baseUrl = "shadowrocket://color?";
         let params = [];
@@ -798,7 +821,7 @@
         document.getElementById('configOutput').value = finalUrl;
         
         navigator.clipboard.writeText(finalUrl).then(() => {
-            alert("配置链接已生成并复制到剪贴板！");
+            showToast("配置链接已生成并复制到剪贴板！");
         });
     }
 
@@ -863,10 +886,10 @@
         }
     }
     
-    // 鼠标随动效果逻辑 (包含按键和动态反光控制)
+    // 鼠标随动效果逻辑 (已优化平滑归位)
     const deviceContainer = document.querySelector('.device-container');
     const iphone17 = document.querySelector('.iphone-17');
-    const glassReflection = document.querySelector('.glass-reflection'); // 获取新增的反光元素
+    const glassReflection = document.querySelector('.glass-reflection'); 
 
     const initialRotationY = 0; 
     const initialRotationX = 0;
@@ -880,7 +903,7 @@
         const offsetX = (e.clientX - centerX) / (rect.width / 2); // -1 to 1
         const offsetY = (e.clientY - centerY) / (rect.height / 2); // -1 to 1
         
-        const maxTilt = 5; 
+        const maxTilt = 5; // <---- 倾斜幅度改为 5 度
         
         const rotateY = initialRotationY + (offsetX * maxTilt);
         const rotateX = initialRotationX - (offsetY * maxTilt); 
@@ -899,12 +922,10 @@
     });
 
     deviceContainer.addEventListener('mouseleave', () => {
-        // 1. 恢复手机旋转
+        // 1. 恢复手机旋转 (保持原有的 0.3s 过渡)
         iphone17.style.transform = `rotateY(${initialRotationY}deg) rotateX(${initialRotationX}deg) translateZ(0)`;
         
-        // 2. 恢复反光位置
-        glassReflection.style.transform = `translate(-33.33%, -33.33%)`; 
-        glassReflection.style.opacity = 0.8;
+        // 2. 依赖 CSS transition 平滑归位
     });
 
 
@@ -916,8 +937,11 @@
         document.getElementById('configOutput').value = darkThemeLink;
         importConfig();
         
-        // 确保默认选中 Home
-        switchTab('home', document.querySelector('.tab-item:nth-child(2)'));
+        // 确保默认选中 Config
+        switchTab('config', document.querySelector('.tab-item:nth-child(2)'));
+        
+        // 页面加载完成提示
+        showToast("默认主题已加载。");
     };
 </script>
 
