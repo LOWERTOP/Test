@@ -8,6 +8,22 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <style>
         :root {
+            /* === 动态配色变量 (默认 Light Mode 主题，匹配截图) === */
+            --NavigationBarColor: transparent;
+            --NavigationBarTextColor: #000000;
+            --TableBackgroundColor: #F2F2F7;
+            --TableCellBackgroundColor: #FFFFFF;
+            --TableSeparatorColor: #D1D1D6;
+            --TextLabelTextColor: #000000;
+            --DetailLabelTextColor: #8E8E93; /* iOS standard gray */
+            --HeaderFooterTextColor: #6A6A6F;
+            --TabBarColor: #FFFFFF;
+            --TabBarSelectedColor: #007AFF;
+            --TabBarUnselectedColor: #8E8E93;
+            --ButtonIconColor: #007AFF;
+            --ButtonNormalColor: #E5E5EA; /* Light background for switch off */
+            --TableCellSelectedBackgroundColor: #D1D1D6;
+            
             /* === 视觉常量 (为匹配截图，调整为更传统的 iOS 样式) === */
             --glass-blur: blur(20px);
             --nav-height: 98px;
@@ -98,9 +114,10 @@
             background: none;
         }
         
+        /* === 调整输入框高度以容纳更长的配色地址 === */
         textarea {
             width: 100%;
-            height: 190px;
+            height: 200px; 
             background: rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.1);
             color: #fff;
@@ -109,6 +126,7 @@
             font-size: 11px;
             resize: none;
         }
+        /* ======================================= */
 
         .actions { margin-top: 20px; display: flex; gap: 10px; flex-direction: column; }
         .btn-row { display: flex; gap: 10px; }
@@ -200,25 +218,31 @@
 
 
         .dynamic-island {
+            /* 保持原有的 z-index 100，确保它在玻璃层 (200/201) 下方 */
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-            width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 100;
+            width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 100; 
         }
 
         /* 听筒/前摄槽 */
         .dynamic-island::before {
             content: '';
             position: absolute;
-            top: 5px; /* Position it above the island */
+            top: 5px; 
             left: 50%;
             transform: translateX(-50%);
             width: 20px;
             height: 2px;
-            background: rgba(255, 255, 255, 0.1); /* Dark grey speaker */
+            background: rgba(255, 255, 255, 0.1); 
             border-radius: 1px;
         }
 
         .screen {
-            width: 100%; height: 100%;
+            /* === 颜色溢出修复：将内屏幕稍微拉进 0.5px 以确保裁剪干净 === */
+            width: calc(100% - 1px); 
+            height: calc(100% - 1px); 
+            margin: 0.5px; 
+            /* ======================================================= */
+
             background-color: var(--TableBackgroundColor);
             display: flex; flex-direction: column; overflow: hidden; position: relative;
             /* 关键修正：内屏幕圆角恢复与外壳一致，依赖 GPU 加速进行完美裁剪 */
@@ -228,7 +252,7 @@
             will-change: transform;
         }
 
-        /* 屏幕玻璃基础高光效果 (略微降低透明度，作为环境光) */
+        /* 屏幕玻璃基础高光效果 (z-index: 200) */
         .screen::before {
             content: '';
             position: absolute;
@@ -245,30 +269,28 @@
                 rgba(255, 255, 255, 0.02) 100%
             );
             pointer-events: none; 
-            z-index: 200; 
+            z-index: 200; /* 高于灵动岛 100 */
         }
 
-        /* ******** 动态反光元素 (平滑过渡修改) ******** */
+        /* ******** 动态反光元素 (z-index: 201) ******** */
         .glass-reflection {
             position: absolute;
             top: 0; left: 0;
-            width: 300%; /* 3倍宽度，用于移动 */
+            width: 300%; 
             height: 300%;
             border-radius: 55px; 
             pointer-events: none; 
-            z-index: 201; 
+            z-index: 201; /* 最高层级 */
             background: linear-gradient(
                 45deg,
                 transparent 30%,
-                rgba(255, 255, 255, 0.2) 48%, /* 核心高光 */
+                rgba(255, 255, 255, 0.2) 48%, 
                 rgba(255, 255, 255, 0.3) 50%, 
                 rgba(255, 255, 255, 0.2) 52%,
                 transparent 70%
             );
             opacity: 0.8;
-            /* 初始位置：将 300% 宽度的元素平移到屏幕中央 */
             transform: translate(-33.33%, -33.33%); 
-            /* 新增过渡效果，使鼠标离开时平滑归位 */
             transition: transform 0.8s ease-out, opacity 0.5s; 
         }
         /* ******** 动态反光元素 (结束) ******** */
@@ -303,10 +325,10 @@
             padding: 24px 16px 8px; font-size: 13px; color: var(--HeaderFooterTextColor); text-transform: uppercase; letter-spacing: -0.2px;
         }
         .table-group {
-            margin: 0 16px 20px 16px; /* 底部间距 */
+            margin: 0 16px 20px 16px; 
             border-radius: 10px; 
             overflow: hidden;
-            box-shadow: 0 0 0 0.5px var(--TableSeparatorColor); /* 模拟 iOS Group 边框 */
+            box-shadow: 0 0 0 0.5px var(--TableSeparatorColor); 
         }
         .cell {
             display: flex; align-items: center; padding: 12px 16px; min-height: 48px;
@@ -395,7 +417,7 @@
     <div class="editor-panel">
         <div class="editor-header">
             <h1>Shadowrocket 配色主题创作平台</h1>
-            <p>Shadowrocket Theme Creation Platform</p>
+            <p>Target: iPhone 17 Pro Max | OS: iOS 26 (Liquid Glass)</p>
         </div>
         
         <div class="controls" id="controlsContainer">
@@ -417,8 +439,8 @@
             <div class="volume-down-button side-button"></div>
             <div class="mute-switch side-button"></div>
             
-            <div class="dynamic-island"></div>
             <div class="screen">
+                <div class="dynamic-island"></div>
                 <div class="glass-reflection"></div>
                 
                 <div class="nav-bar">
@@ -435,7 +457,7 @@
                         <div class="table-group">
                             <div class="cell" style="justify-content: space-between;">
                                 <div class="cell-body" style="font-weight: 600;">
-                                    <div class="cell-title">US-Reality</div>
+                                    <div class="cell-title">US-DMIT-Reality</div>
                                 </div>
                                 <div class="switch checked"></div>
                             </div>
@@ -447,7 +469,7 @@
                             
                             <div class="cell">
                                 <div class="cell-body"><div class="cell-title">连通性测试</div></div>
-                                <div class="cell-accessory"><span class="accessory-text" style="color: var(--ButtonIconColor);">©</span><ion-icon name="chevron-forward" style="color: transparent;"></ion-icon></div>
+                                <div class="cell-accessory"><span class="accessory-text" style="color: var(--ButtonIconColor);">C</span><ion-icon name="chevron-forward" style="color: transparent;"></ion-icon></div>
                             </div>
                         </div>
 
@@ -903,7 +925,7 @@
         const offsetX = (e.clientX - centerX) / (rect.width / 2); // -1 to 1
         const offsetY = (e.clientY - centerY) / (rect.height / 2); // -1 to 1
         
-        const maxTilt = 5; // <---- 倾斜幅度改为 5 度
+        const maxTilt = 5; 
         
         const rotateY = initialRotationY + (offsetX * maxTilt);
         const rotateX = initialRotationX - (offsetY * maxTilt); 
