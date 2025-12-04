@@ -3,361 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadowrocket Theme Designer - iOS 26</title>
+    <title>Shadowrocket 配色主题创作平台</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <style>
         :root {
-            /* 默认值，会被JS覆盖 */
+            /* === 动态配色变量 (初始值仅为占位，会被JS覆盖) === */
             --NavigationBarColor: transparent;
             --NavigationBarTextColor: #000;
-            --TableBackgroundColor: #f2f2f7;
-            --TableCellBackgroundColor: #fff;
+            --TableBackgroundColor: #F2F2F7;
+            --TableCellBackgroundColor: #FFF;
+            --TableSeparatorColor: #C6C6C8;
             --TextLabelTextColor: #000;
-            --DetailLabelTextColor: #888;
-            --TabBarColor: #fff;
-            --TabBarSelectedColor: #007aff;
-            --TabBarUnselectedColor: #888;
-            --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            --DetailLabelTextColor: #8E8E93;
+            --HeaderFooterTextColor: #6D6D72;
+            --TabBarColor: transparent;
+            --TabBarSelectedColor: #007AFF;
+            --TabBarUnselectedColor: #8E8E93;
+            --ButtonIconColor: #007AFF;
+            --ButtonNormalColor: #E9E9EA; /* 开关底色 */
+            --PlaceholderColor: #C7C7CC;
+            
+            /* === iOS 26 概念设计变量 === */
+            --glass-blur: blur(25px);
+            --nav-height: 98px;
+            --tab-height: 85px;
+            --safe-area-top: 47px;
         }
 
-        * { box-sizing: border-box; outline: none; }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
+        
         body {
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(circle at 50% 10%, #2b32b2, #1488cc);
+            margin: 0; padding: 0;
+            /* 更加深邃通透的背景，突显玻璃质感 */
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-main);
+            display: flex; align-items: center; justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
             overflow: hidden;
-            color: white;
         }
 
-        /* 布局容器 */
         .workspace {
-            display: flex;
+            display: grid;
+            grid-template-columns: 340px 1fr; /* 左侧更窄，突出右侧 */
             gap: 50px;
-            width: 90%;
-            max-width: 1400px;
+            width: 95%; max-width: 1500px;
             height: 90vh;
         }
 
-        /* 左侧：编辑器 */
+        /* === 左侧：配色控制器 === */
         .editor-panel {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            padding: 20px;
+            color: #fff;
         }
 
-        .editor-header {
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
+        .editor-header h2 {
+            margin: 0 0 15px 0; font-size: 20px; font-weight: 500; text-align: center; letter-spacing: 1px;
         }
-
-        .editor-header h1 { font-size: 24px; margin: 0; font-weight: 200; letter-spacing: 1px; }
-        .editor-header p { opacity: 0.6; font-size: 12px; margin-top: 5px; }
 
         .controls {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 10px;
+            flex: 1; overflow-y: auto; padding-right: 5px;
+            scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.4) transparent;
         }
+        .controls::-webkit-scrollbar { width: 4px; }
+        .controls::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 2px; }
 
         .control-group {
-            display: grid;
-            grid-template-columns: 1fr 50px;
-            gap: 10px;
-            margin-bottom: 12px;
-            align-items: center;
-            background: rgba(0,0,0,0.2);
-            padding: 8px 12px;
-            border-radius: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        .control-label { font-size: 12px; color: #ddd; font-family: monospace; }
+        .control-label { font-size: 13px; opacity: 0.9; }
         
         input[type="color"] {
-            -webkit-appearance: none;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            overflow: hidden;
-            cursor: pointer;
-            padding: 0;
+            -webkit-appearance: none; border: 2px solid rgba(255,255,255,0.8);
+            width: 24px; height: 24px; border-radius: 50%; padding: 0; cursor: pointer;
             background: none;
         }
+
+        .actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn {
+            width: 100%; padding: 12px; border-radius: 12px; border: none; cursor: pointer;
+            font-size: 14px; font-weight: 600; transition: 0.2s;
+        }
+        .btn-read { background: rgba(255,255,255,0.25); color: white; }
+        .btn-gen { background: #007AFF; color: white; box-shadow: 0 4px 12px rgba(0,122,255,0.4); }
+        .btn:hover { transform: scale(1.02); }
+        .btn:active { transform: scale(0.98); }
+
+        /* === 右侧：iPhone 17 Pro Max 模型 === */
+        .device-container { display: flex; justify-content: center; align-items: center; perspective: 1000px; }
         
-        input[type="range"] { width: 100%; }
-
-        .actions {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            flex-direction: column;
-        }
-
-        textarea {
-            width: 100%;
-            height: 80px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            border-radius: 12px;
-            padding: 10px;
-            font-size: 11px;
-            resize: none;
-        }
-
-        .btn-row { display: flex; gap: 10px; }
-        
-        button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .btn-primary { background: #007aff; color: white; }
-        .btn-secondary { background: rgba(255,255,255,0.1); color: white; }
-        .btn-primary:hover { background: #0063d1; }
-        .btn-secondary:hover { background: rgba(255,255,255,0.2); }
-
-        /* 右侧：iPhone 17 Pro Max 模拟器 */
-        .device-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1000px;
-        }
-
-        .iphone-17 {
-            width: 400px;
-            height: 850px;
+        .iphone-frame {
+            width: 430px; height: 882px;
             background: #000;
-            border-radius: 55px;
-            position: relative;
+            border-radius: 58px;
             box-shadow: 
-                0 0 0 2px #333,
-                0 0 0 6px #1a1a1a,
-                0 50px 100px rgba(0,0,0,0.5);
-            overflow: hidden;
-            border: 4px solid #444; /* Titanium Frame */
-            transition: transform 0.3s;
+                0 0 0 4px #4a4a4a, /* 钛金属外框 */
+                0 0 0 8px #222,    /* 内黑边 */
+                0 40px 100px rgba(0,0,0,0.5); /* 阴影 */
+            position: relative; overflow: hidden;
+            border: 3px solid #333;
         }
 
-        .iphone-17:hover { transform: rotateY(-5deg) rotateX(5deg); }
-
-        /* Dynamic Island */
         .dynamic-island {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 35px;
-            background: #000;
-            border-radius: 20px;
-            z-index: 100;
+            position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+            width: 126px; height: 37px; background: #000; border-radius: 20px; z-index: 999;
         }
 
-        /* 屏幕内容区域 */
         .screen {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background-color: var(--TableBackgroundColor);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
+            display: flex; flex-direction: column;
+            overflow: hidden; position: relative;
         }
 
-        /* iOS 26 Glass UI Components */
-        
-        /* Navigation Bar */
+        /* 导航栏 (液态玻璃) */
         .nav-bar {
-            padding-top: 55px; /* Status bar area */
-            padding-bottom: 10px;
-            padding-left: 20px;
-            padding-right: 20px;
+            height: var(--nav-height);
+            padding-top: var(--safe-area-top);
             background-color: var(--NavigationBarColor);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
+            backdrop-filter: var(--glass-blur) saturate(180%);
+            -webkit-backdrop-filter: var(--glass-blur) saturate(180%);
+            /* 只有稍微有点透明度时才显示边框 */
+            border-bottom: 0.5px solid rgba(var(--TableSeparatorColor), 0.1); 
+            display: flex; align-items: center; justify-content: center;
+            position: relative; z-index: 10;
         }
+        .nav-title { color: var(--NavigationBarTextColor); font-size: 17px; font-weight: 600; }
+        .nav-btn {
+            position: absolute; bottom: 10px; font-size: 26px; color: var(--ButtonIconColor);
+            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .nav-btn.left { left: 10px; }
+        .nav-btn.right { right: 10px; }
 
-        .nav-title {
-            color: var(--NavigationBarTextColor);
-            font-weight: 700;
-            font-size: 28px;
-        }
-
-        .nav-icon {
-            color: var(--ButtonIconColor);
-            font-size: 24px;
-        }
-
-        /* Content List */
-        .content-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .status-card {
-            background: linear-gradient(135deg, var(--ButtonIconColor), #8e2de2);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            color: white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
+        /* 内容区域 */
+        .content-area { flex: 1; overflow-y: auto; scroll-behavior: smooth; position: relative; }
+        /* 隐藏滚动条但保留功能 */
+        .content-area::-webkit-scrollbar { display: none; }
         
-        .status-card::after {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
-            pointer-events: none;
-        }
+        .tab-page { display: none; padding-bottom: 20px; animation: fadeEffect 0.2s ease-in-out; }
+        .tab-page.active { display: block; }
+        @keyframes fadeEffect { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* UI 组件 */
         .section-header {
-            color: var(--HeaderFooterTextColor);
-            font-size: 13px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            margin-left: 10px;
-            letter-spacing: 0.5px;
+            padding: 24px 16px 8px; font-size: 13px; color: var(--HeaderFooterTextColor); text-transform: uppercase; letter-spacing: -0.2px;
         }
-
         .table-group {
-            background-color: var(--TableCellBackgroundColor);
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            margin: 0 16px; background-color: var(--TableCellBackgroundColor); border-radius: 10px; overflow: hidden;
         }
-
-        .table-cell {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            border-bottom: 1px solid var(--TableSeparatorColor);
-            cursor: pointer;
-            transition: background 0.2s;
+        .cell {
+            display: flex; align-items: center; padding: 12px 16px; min-height: 48px;
+            border-bottom: 0.5px solid var(--TableSeparatorColor); position: relative;
+            background: var(--TableCellBackgroundColor);
         }
+        .cell:last-child { border-bottom: none; }
+        .cell:active { background-color: rgba(0,0,0,0.05); }
 
-        .table-cell:last-child { border-bottom: none; }
-        .table-cell:active { background-color: var(--TableCellSelectedBackgroundColor); }
-
-        .cell-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            background: var(--ButtonIconColor);
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-        }
-
-        .cell-content { flex: 1; }
-        
-        .cell-title {
-            color: var(--TextLabelTextColor);
-            font-size: 16px;
-            font-weight: 500;
+        .cell-icon-wrapper {
+            width: 29px; height: 29px; border-radius: 7px; display: flex; align-items: center; justify-content: center;
+            margin-right: 12px; font-size: 18px; color: white; flex-shrink: 0;
         }
         
-        .cell-detail {
-            color: var(--DetailLabelTextColor);
-            font-size: 12px;
-            margin-top: 2px;
-        }
-
-        .ping-text {
-            color: var(--PingSuccessTextColor);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .toggle-switch {
-            width: 50px;
-            height: 30px;
-            background: var(--ButtonNormalColor);
-            border-radius: 15px;
-            position: relative;
-            transition: 0.3s;
-        }
+        .cell-body { flex: 1; min-width: 0; }
+        .cell-title { font-size: 17px; color: var(--TextLabelTextColor); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .cell-subtitle { font-size: 12px; color: var(--DetailLabelTextColor); margin-top: 3px; }
         
-        .toggle-switch.active { background: var(--ButtonIconColor); }
-        
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px; left: 2px;
-            width: 26px; height: 26px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        .cell-accessory {
+            display: flex; align-items: center; color: var(--DetailLabelTextColor); font-size: 16px; margin-left: 8px;
         }
-        
-        .toggle-switch.active::after { transform: translateX(20px); }
+        .accessory-text { font-size: 17px; margin-right: 4px; color: var(--DetailLabelTextColor); }
+        .info-btn { font-size: 22px; color: var(--ButtonIconColor); margin-left: 10px; }
 
-        /* Tab Bar */
+        /* iOS 开关 */
+        .switch {
+            width: 51px; height: 31px; background: var(--ButtonNormalColor); border-radius: 16px; position: relative; transition: 0.3s;
+        }
+        .switch::after {
+            content: ''; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; background: white; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .switch.checked { background: #34C759; } /* Shadowrocket 开关通常是绿色，不受主题色影响，除非配置 */
+        .switch.checked::after { transform: translateX(20px); }
+
+        /* === 底部 Tab 栏 (交互式液态玻璃) === */
         .tab-bar {
-            height: 85px;
+            height: var(--tab-height);
             background-color: var(--TabBarColor);
-            border-top: 1px solid var(--TabBarBorderColor);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding-top: 15px;
-            padding-bottom: 35px; /* Home indicator space */
+            backdrop-filter: var(--glass-blur) saturate(180%);
+            -webkit-backdrop-filter: var(--glass-blur) saturate(180%);
+            border-top: 0.5px solid rgba(var(--TableSeparatorColor), 0.3);
+            display: flex; justify-content: space-around; padding-top: 10px;
+            position: relative; z-index: 100;
         }
-
         .tab-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--TabBarUnselectedColor);
-            font-size: 10px;
-            gap: 5px;
+            flex: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;
         }
+        .tab-icon { font-size: 28px; margin-bottom: 2px; color: var(--TabBarUnselectedColor); transition: 0.3s; z-index: 2; }
+        .tab-label { font-size: 10px; font-weight: 500; color: var(--TabBarUnselectedColor); transition: 0.3s; z-index: 2; }
+        
+        /* 选中态：液态背景 + 颜色高亮 */
+        .tab-item.selected .tab-icon, .tab-item.selected .tab-label { color: var(--TabBarSelectedColor); }
+        .tab-bg {
+            position: absolute; width: 50px; height: 40px; top: -5px; border-radius: 20px;
+            background: var(--TabBarSelectedColor); opacity: 0; transform: scale(0.5); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: blur(10px); z-index: 1;
+        }
+        .tab-item.selected .tab-bg { opacity: 0.2; transform: scale(1); }
 
-        .tab-item.selected { color: var(--TabBarSelectedColor); }
-        .tab-icon { font-size: 24px; }
-
-        /* Home Indicator */
         .home-indicator {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 130px;
-            height: 5px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 3px;
+            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+            width: 134px; height: 5px; background: rgba(0,0,0,0.3); border-radius: 100px;
         }
+        /* 暗黑模式适配 Indicator */
+        @media (prefers-color-scheme: dark) { .home-indicator { background: rgba(255,255,255,0.3); } }
 
     </style>
 </head>
@@ -366,108 +233,298 @@
 <div class="workspace">
     <div class="editor-panel">
         <div class="editor-header">
-            <h1>Shadowrocket Studio</h1>
-            <p>Target: iPhone 17 Pro Max | OS: iOS 26 (Liquid Glass)</p>
+            <h2>Shadowrocket 配色主题创作平台</h2>
         </div>
-        
         <div class="controls" id="controlsContainer">
             </div>
-
         <div class="actions">
-            <textarea id="configOutput" placeholder="Paste Shadowrocket Color URL here or copy from here..."></textarea>
-            <div class="btn-row">
-                <button class="btn-secondary" onclick="importConfig()">Load Config</button>
-                <button class="btn-primary" onclick="exportConfig()">Generate URL</button>
-            </div>
+            <button class="btn btn-read" onclick="readConfig()">📂 读取配置 (粘贴链接)</button>
+            <button class="btn btn-gen" onclick="exportConfig()">🔗 生成并复制链接</button>
         </div>
     </div>
 
     <div class="device-container">
-        <div class="iphone-17">
+        <div class="iphone-frame">
             <div class="dynamic-island"></div>
             <div class="screen">
+                
                 <div class="nav-bar">
-                    <div class="nav-title">Shadowrocket</div>
-                    <div class="nav-icon">＋</div>
+                    <div class="nav-btn left" id="navLeft"><ion-icon name="scan-outline"></ion-icon></div>
+                    <div class="nav-title" id="navTitle">Shadowrocket</div>
+                    <div class="nav-btn right" id="navRight"><ion-icon name="add-outline"></ion-icon></div>
                 </div>
 
                 <div class="content-area">
                     
-                    <div class="status-card">
-                        <div style="font-size: 14px; opacity: 0.8">Not Connected</div>
-                        <div style="font-size: 24px; font-weight: 700; margin-top: 5px;">Click to Connect</div>
-                        <div class="toggle-switch" style="position: absolute; right: 20px; top: 25px; background: rgba(255,255,255,0.3);"></div>
+                    <div id="page-home" class="tab-page active">
+                        <br>
+                        <div class="table-group" style="padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 17px; font-weight: 600; color: var(--TextLabelTextColor);">US-DMIT-Reality</div>
+                            <div class="switch checked"></div>
+                        </div>
+
+                        <div class="section-header"></div> <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: #007AFF;"><ion-icon name="globe-outline"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">全局路由</div></div>
+                                <div class="cell-accessory"><span class="accessory-text">配置</span><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: #34C759;"><ion-icon name="speedometer-outline"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">连通性测试</div></div>
+                                <div class="info-btn"><ion-icon name="refresh-circle"></ion-icon></div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; padding: 10px 20px; color: var(--DetailLabelTextColor); gap: 15px; font-size: 22px;">
+                            <ion-icon name="filter-circle-outline"></ion-icon>
+                            <ion-icon name="swap-vertical-outline"></ion-icon>
+                            <ion-icon name="ellipsis-horizontal-circle-outline"></ion-icon>
+                        </div>
+
+                        <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-body"><div class="cell-title">本地节点</div></div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-body"><div class="cell-title">ORC SS</div></div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-body"><div class="cell-title">ORC US</div></div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-body"><div class="cell-title">ORC SG</div></div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
+                            </div>
+                        </div>
+                         
+                        <div class="table-group" style="margin-top: 20px;">
+                            <div class="cell">
+                                <div class="cell-body">
+                                    <div class="cell-title">Yukihasu</div>
+                                    <div class="cell-subtitle" style="font-size: 10px;">🚀↑:0.1GB, ↓:3.12GB, TOT:100GB 💡EXPIRES:2026-02-12</div>
+                                </div>
+                                <div class="info-btn" style="color:var(--DetailLabelTextColor); font-size: 18px; margin-right: 5px;"><ion-icon name="refresh-outline"></ion-icon></div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="section-header">Global Routing</div>
-                    <div class="table-group">
-                        <div class="table-cell">
-                            <div class="cell-content">
-                                <div class="cell-title">Config</div>
-                                <div class="cell-detail">default.conf</div>
+                    <div id="page-config" class="tab-page">
+                         <div class="section-header"></div>
+                         <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: var(--ButtonIconColor);"><ion-icon name="arrow-undo-outline" style="font-size:22px"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title" style="color: var(--ButtonIconColor)">恢复默认配置</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
                             </div>
-                            <div class="cell-detail" style="font-size: 16px;">›</div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: var(--ButtonIconColor);"><ion-icon name="cloud-download-outline" style="font-size:22px"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title" style="color: var(--ButtonIconColor)">导入...</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: var(--ButtonIconColor);"><ion-icon name="wifi-outline" style="font-size:22px"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">Wi-Fi 上传</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: var(--ButtonIconColor);"><ion-icon name="code-slash-outline" style="font-size:22px"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">模块</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: var(--ButtonIconColor);"><ion-icon name="flask-outline" style="font-size:22px"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">测试规则</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
                         </div>
-                        <div class="table-cell">
-                            <div class="cell-content">
-                                <div class="cell-title">Proxy</div>
-                                <div class="cell-detail">Direct Connect</div>
+
+                        <div class="section-header">本地文件</div>
+                        <div class="table-group">
+                            <div class="cell">
+                                <div style="width: 10px; height: 10px; background: orange; border-radius: 50%; margin-right: 12px;"></div>
+                                <div class="cell-body">
+                                    <div class="cell-title">LOWERTOP.conf</div>
+                                    <div class="cell-subtitle">2025-12-02 12:18:35 - 69.6K</div>
+                                </div>
+                                <div class="info-btn" style="color: var(--ButtonIconColor); font-size: 20px; margin-right: 5px;"><ion-icon name="checkmark-outline"></ion-icon></div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
                             </div>
-                            <div class="cell-detail" style="font-size: 16px;">›</div>
+                            <div class="cell">
+                                <div style="width: 10px; height: 10px; margin-right: 12px;"></div>
+                                <div class="cell-body">
+                                    <div class="cell-title">default.conf</div>
+                                    <div class="cell-subtitle">2025-11-25 08:15:41 - 106.5K</div>
+                                </div>
+                                <div class="info-btn"><ion-icon name="information-circle-outline"></ion-icon></div>
+                            </div>
+                        </div>
+                        <div style="padding: 8px 16px; font-size: 11px; color: var(--HeaderFooterTextColor);">
+                            圆点代表默认配置，复选标记代表正在使用的配置。
                         </div>
                     </div>
 
-                    <div class="section-header">Servers</div>
-                    <div class="table-group">
-                        <div class="table-cell">
-                            <div class="cell-icon">🇺🇸</div>
-                            <div class="cell-content">
-                                <div class="cell-title">US - Los Angeles 01</div>
-                                <div class="cell-detail">vmess • 23ms</div>
+                    <div id="page-data" class="tab-page">
+                         <div class="section-header"></div>
+                         <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="cloud-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">iCloud</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
                             </div>
-                            <div class="ping-text">23 ms</div>
-                            <div style="margin-left: 10px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--ButtonIconColor);"></div>
                         </div>
-                        <div class="table-cell" style="background-color: var(--TableCellSelectedBackgroundColor)">
-                            <div class="cell-icon">🇯🇵</div>
-                            <div class="cell-content">
-                                <div class="cell-title">JP - Tokyo Premium</div>
-                                <div class="cell-detail">trojan • 45ms</div>
+                        <div style="padding: 0 16px; font-size: 11px; color: var(--HeaderFooterTextColor); margin-bottom: 20px;">使用 iCloud 的备份配置和配置文件。</div>
+
+                         <div class="section-header">Apple TV</div>
+                         <div class="table-group">
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="tv-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">Apple TV</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                             </div>
+                         </div>
+                         <div style="padding: 0 16px; font-size: 11px; color: var(--HeaderFooterTextColor);">用于 iOS 设备向同局域网内的 Apple TV 设备发送 Shadowrocket 配置文件。</div>
+
+                        <div class="section-header">日志</div>
+                        <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="time-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">自动删除</div></div>
+                                <div class="cell-accessory"><span class="accessory-text">开启</span><ion-icon name="chevron-forward"></ion-icon></div>
                             </div>
-                            <div class="ping-text">45 ms</div>
-                            <div style="margin-left: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--ButtonIconColor);"></div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="layers-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">代理</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="flag-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">DNS</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
                         </div>
-                         <div class="table-cell">
-                            <div class="cell-icon">🇸🇬</div>
-                            <div class="cell-content">
-                                <div class="cell-title">SG - Singapore Direct</div>
-                                <div class="cell-detail">ss • Timeout</div>
+
+                        <div class="section-header">服务器节点</div>
+                        <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="copy-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">覆盖节点</div></div>
+                                <div class="cell-accessory"><span class="accessory-text">开启</span><ion-icon name="chevron-forward"></ion-icon></div>
                             </div>
-                            <div class="ping-text" style="color: var(--PingTimeoutTextColor)">Timeout</div>
-                            <div style="margin-left: 10px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--DetailLabelTextColor);"></div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="arrow-down-circle-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">导入节点...</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="arrow-up-circle-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">导出节点</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="trash-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">删除所有节点</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="page-settings" class="tab-page">
+                         <div class="section-header"></div>
+                         <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="globe-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">语言</div></div>
+                                <div class="cell-accessory"><span class="accessory-text">中文简体</span><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                        </div>
+
+                        <div class="section-header">高级</div>
+                        <div class="table-group">
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="hammer-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">延迟测试方法</div></div>
+                                <div class="cell-accessory"><span class="accessory-text">CONNECT</span><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="grid-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">小组件</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="flash-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">捷径</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="bug-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">诊断</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="apps-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">外观</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                        </div>
+
+                        <div class="section-header">隧道</div>
+                        <div class="table-group">
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="radio-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">按需求连接</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="toggle-outline" style="font-size: 24px; transform: rotate(90deg)"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">隧道</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                            <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="layers-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">代理</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="git-network-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">TCP</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
+                             <div class="cell">
+                                <div class="cell-icon-wrapper" style="background: transparent; color: #007AFF;"><ion-icon name="git-compare-outline" style="font-size: 24px;"></ion-icon></div>
+                                <div class="cell-body"><div class="cell-title">UDP</div></div>
+                                <div class="cell-accessory"><ion-icon name="chevron-forward"></ion-icon></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="tab-bar">
-                    <div class="tab-item selected">
-                        <div class="tab-icon">🏠</div>
-                        <div>Home</div>
+                    <div class="tab-item selected" onclick="switchTab('home', this)">
+                        <div class="tab-bg"></div>
+                        <ion-icon class="tab-icon" name="home"></ion-icon>
+                        <span class="tab-label">首页</span>
                     </div>
-                    <div class="tab-item">
-                        <div class="tab-icon">⚙️</div>
-                        <div>Config</div>
+                    <div class="tab-item" onclick="switchTab('config', this)">
+                        <div class="tab-bg"></div>
+                        <ion-icon class="tab-icon" name="folder-open"></ion-icon>
+                        <span class="tab-label">配置</span>
                     </div>
-                    <div class="tab-item">
-                        <div class="tab-icon">📊</div>
-                        <div>Data</div>
+                    <div class="tab-item" onclick="switchTab('data', this)">
+                        <div class="tab-bg"></div>
+                        <ion-icon class="tab-icon" name="pulse"></ion-icon>
+                        <span class="tab-label">数据</span>
                     </div>
-                    <div class="tab-item">
-                        <div class="tab-icon">🛠</div>
-                        <div>Settings</div>
+                    <div class="tab-item" onclick="switchTab('settings', this)">
+                        <div class="tab-bg"></div>
+                        <ion-icon class="tab-icon" name="settings-sharp"></ion-icon>
+                        <span class="tab-label">设置</span>
                     </div>
                 </div>
-                
                 <div class="home-indicator"></div>
             </div>
         </div>
@@ -475,165 +532,202 @@
 </div>
 
 <script>
-    // 定义 Shadowrocket 支持的所有颜色键值 (基于提供的 URL)
+    // === 核心逻辑配置 ===
+
+    // Shadowrocket 支持的所有标准 Key (确保逻辑稳健)
     const colorKeys = [
-        "NavigationBarColor",
-        "NavigationBar2Color",
-        "NavigationBarTextColor",
-        "NavigationBar2TextColor",
-        "TabBarColor",
-        "TabBarBorderColor",
-        "TabBarSelectedColor",
-        "TabBarUnselectedColor",
-        "TableBackgroundColor",
-        "TableCellBackgroundColor",
-        "TableCellSelectedBackgroundColor",
-        "TableSeparatorColor",
-        "TextFieldTextColor",
-        "PlaceholderColor",
-        "TextLabelTextColor",
-        "DetailLabelTextColor",
-        "TextLabelDeleteColor",
-        "HeaderFooterTextColor",
-        "SearchFieldBackgroundColor",
-        "IndicatorColor",
-        "ButtonIconColor",
-        "ButtonNormalColor",
-        "ButtonHighlightedColor",
-        "ButtonDisabledColor",
-        "PingSuccessTextColor",
-        "PingTimeoutTextColor",
-        "DefaultDotColor",
-        "HUDBackgroundColor"
+        "NavigationBarColor", "NavigationBarTextColor", "NavigationBar2Color", "NavigationBar2TextColor",
+        "TabBarColor", "TabBarSelectedColor", "TabBarUnselectedColor", "TabBarBorderColor",
+        "TableBackgroundColor", "TableCellBackgroundColor", "TableCellSelectedBackgroundColor", "TableSeparatorColor",
+        "TextLabelTextColor", "DetailLabelTextColor", "TextLabelDeleteColor", "HeaderFooterTextColor",
+        "SearchFieldBackgroundColor", "TextFieldTextColor", "PlaceholderColor",
+        "IndicatorColor", "ButtonIconColor", "ButtonNormalColor", "ButtonNormal2Color", "ButtonNormal3Color",
+        "ButtonHighlightedColor", "ButtonHighlighted2Color", "ButtonHighlighted3Color",
+        "ButtonDisabledColor", "ButtonDisabled2Color",
+        "PingSuccessTextColor", "PingTimeoutTextColor", "DefaultDotColor", "HUDBackgroundColor"
     ];
 
-    // 当前颜色状态
-    let currentState = {};
+    // 中文显示映射 (仅用于 UI 显示，不影响逻辑)
+    const keyLabels = {
+        "NavigationBarColor": "导航栏背景色",
+        "NavigationBarTextColor": "导航栏标题色",
+        "TabBarColor": "底部栏背景色",
+        "TabBarSelectedColor": "底部栏选中色",
+        "TabBarUnselectedColor": "底部栏未选色",
+        "TableBackgroundColor": "页面大背景色",
+        "TableCellBackgroundColor": "列表单元格背景",
+        "TableSeparatorColor": "列表分割线",
+        "TextLabelTextColor": "主标题文字色",
+        "DetailLabelTextColor": "副标题/详情色",
+        "HeaderFooterTextColor": "分组头部文字色",
+        "ButtonIconColor": "图标/按钮主题色",
+        "ButtonNormalColor": "开关/按钮底色",
+        "IndicatorColor": "加载指示器色"
+    };
 
-    // 1. 初始化 - 创建输入控件
-    const controlsContainer = document.getElementById('controlsContainer');
+    // 存储当前所有颜色的状态 (Key: SR Hex #AARRGGBB)
+    let state = {};
+
+    // 1. 初始化 DOM
+    const container = document.getElementById('controlsContainer');
     
-    colorKeys.forEach(key => {
+    // 生成控制项 (只生成有中文翻译的重要项，防止列表过长，但逻辑上支持所有)
+    const displayList = Object.keys(keyLabels);
+    
+    displayList.forEach(key => {
         const div = document.createElement('div');
         div.className = 'control-group';
         div.innerHTML = `
-            <span class="control-label">${key}</span>
-            <input type="color" id="input-${key}" oninput="updateColor('${key}', this.value)">
+            <span class="control-label">${keyLabels[key]}</span>
+            <input type="color" id="picker-${key}">
         `;
-        controlsContainer.appendChild(div);
+        container.appendChild(div);
+
+        // 绑定输入事件
+        document.getElementById(`picker-${key}`).addEventListener('input', (e) => {
+            const cssHex = e.target.value; // #RRGGBB
+            // 更新 CSS 变量 (直接用，不透明)
+            updateCSS(key, cssHex);
+            // 更新内部状态 (默认保存为不透明 #FFRRGGBB)
+            state[key] = `%23FF${cssHex.substring(1).toUpperCase()}`;
+        });
     });
 
-    // 2. 颜色转换工具函数
+    // 2. 颜色转换工具 (核心修复)
     
-    // Shadowrocket Hex (#AARRGGBB) 转 Web CSS (#RRGGBBAA)
-    function srHexToCss(srHex) {
-        if (!srHex || !srHex.startsWith('#')) return '#000000';
-        const hex = srHex.replace('#', '');
+    // SR Hex (#AARRGGBB 或 %23AARRGGBB) -> CSS (#RRGGBBAA)
+    function srToCss(srColor) {
+        if (!srColor) return 'transparent';
+        let hex = decodeURIComponent(srColor).replace('#', '');
         if (hex.length === 8) {
             const alpha = hex.substring(0, 2);
             const rgb = hex.substring(2);
-            return `#${rgb}${alpha}`;
+            return `#${rgb}${alpha}`; // 转换为 CSS 可读的 Alpha 在后
         }
-        return srHex;
+        return `#${hex}`;
     }
 
-    // Web CSS (#RRGGBB) 转 Shadowrocket Hex (#FFRRGGBB) - 默认全不透明
-    // 如果是 #RRGGBBAA 则转为 #AARRGGBB
-    function cssToSrHex(cssHex) {
-        let hex = cssHex.replace('#', '');
-        if (hex.length === 6) {
-            return `%23FF${hex}`.toUpperCase(); // 默认不透明
-        } else if (hex.length === 8) {
-            const rgb = hex.substring(0, 6);
-            const alpha = hex.substring(6, 8);
-            return `%23${alpha}${rgb}`.toUpperCase();
-        }
-        return `%23FF000000`;
+    // CSS (#RRGGBBAA) -> Picker (#RRGGBB)
+    function cssToPicker(cssColor) {
+        if (!cssColor || !cssColor.startsWith('#')) return '#000000';
+        return cssColor.substring(0, 7);
     }
 
-    // Web CSS (#RRGGBBAA) 转 Input Value (#RRGGBB) (HTML Color Input 不支持 Alpha)
-    function cssToInput(cssHex) {
-        if (!cssHex) return '#000000';
-        return cssHex.substring(0, 7);
+    // 更新 CSS 变量
+    function updateCSS(key, cssValue) {
+        document.documentElement.style.setProperty(`--${key}`, cssValue);
     }
 
-    // 3. 核心逻辑
+    // 3. 业务逻辑
 
-    function updateColor(key, value) {
-        // 更新 CSS 变量
-        document.documentElement.style.setProperty(`--${key}`, value);
-        
-        // 更新状态 (保存为 Web 格式以便于处理，导出时再转换)
-        // 注意：HTML color input 只能选 RGB，没有 Alpha。为了简化，这里默认 Alpha 为 FF。
-        // 实际 Shadowrocket 允许透明度，但在简单的 Web Picker 中很难做。
-        // 我们假设用户在网页选择的颜色都是不透明的，除非导入带透明度的。
-        currentState[key] = value + "FF"; 
-    }
+    // 读取配置
+    function readConfig() {
+        const input = prompt("请粘贴 Shadowrocket 配色链接 (shadowrocket://color?...)");
+        if (!input) return;
 
-    // 导入配置
-    function importConfig() {
-        const inputStr = document.getElementById('configOutput').value;
-        if (!inputStr.includes('shadowrocket://color')) {
-            alert('无效的 Shadowrocket 配色链接');
-            return;
-        }
-
-        // 简单的解析逻辑
-        const queryString = inputStr.split('?')[1];
-        if (!queryString) return;
-
-        const params = new URLSearchParams(queryString);
-        
-        params.forEach((value, key) => {
-            if (colorKeys.includes(key)) {
-                // value 格式通常是 %23AARRGGBB (URL encoded #)
-                let decodedValue = decodeURIComponent(value); // #AARRGGBB
-                let cssColor = srHexToCss(decodedValue); // #RRGGBBAA
-
-                // 更新 CSS 变量
-                document.documentElement.style.setProperty(`--${key}`, cssColor);
-                currentState[key] = cssColor;
-
-                // 更新 Input 显示 (去掉 Alpha)
-                const inputEl = document.getElementById(`input-${key}`);
-                if (inputEl) {
-                    inputEl.value = cssToInput(cssColor);
+        try {
+            // 简单解析 URL 参数
+            const queryString = input.split('?')[1];
+            if (!queryString) throw new Error("无参数");
+            
+            const params = new URLSearchParams(queryString);
+            
+            // 遍历所有可能的 Key，如果在 URL 里就更新
+            colorKeys.forEach(key => {
+                if (params.has(key)) {
+                    const val = params.get(key); // %23AARRGGBB
+                    state[key] = val; // 保存原始值
+                    
+                    const cssColor = srToCss(val); // 转为 CSS 颜色
+                    updateCSS(key, cssColor);      // 更新页面显示
+                    
+                    // 如果有对应的选择器，更新选择器显示 (忽略透明度)
+                    const picker = document.getElementById(`picker-${key}`);
+                    if (picker) {
+                        picker.value = cssToPicker(cssColor);
+                    }
                 }
-            }
-        });
+            });
+            alert("✅ 配置已加载");
+        } catch (e) {
+            alert("❌ 链接格式无效");
+        }
     }
 
     // 导出配置
     function exportConfig() {
-        let baseUrl = "shadowrocket://color?";
         let params = [];
-        
+        // 遍历所有已知的 Key，如果在 state 中存在则导出
         colorKeys.forEach(key => {
-            let val = currentState[key];
-            if (val) {
-                // 将当前 Web 颜色转回 Shadowrocket 格式
-                let srVal = cssToSrHex(val);
-                params.push(`${key}=${srVal}`);
+            if (state[key]) {
+                params.push(`${key}=${state[key]}`);
             }
         });
         
-        params.push("v=1.0");
-        const finalUrl = baseUrl + params.join('&');
-        document.getElementById('configOutput').value = finalUrl;
+        if (params.length === 0) {
+            alert("没有配置数据");
+            return;
+        }
         
-        // 复制到剪贴板提示
+        const finalUrl = "shadowrocket://color?" + params.join('&');
+        
         navigator.clipboard.writeText(finalUrl).then(() => {
-            alert("配置链接已生成并复制到剪贴板！");
+            alert("✅ 链接已复制到剪贴板！");
         });
     }
 
-    // 4. 加载默认示例
-    window.onload = function() {
-        const demoLink = "shadowrocket://color?NavigationBarColor=%2300FFFFFF&NavigationBar2Color=%2300FFFFFF&NavigationBarTextColor=%23ADBBC8&NavigationBar2TextColor=%232473BD&TabBarColor=%2300FFFFFF&TabBarBorderColor=%2300000000&TabBarSelectedColor=%232473BD&TabBarUnselectedColor=%23ADBBC8&TableBackgroundColor=%23181E26&TableCellBackgroundColor=%23202935&TableCellSelectedBackgroundColor=%23181E26&TableSeparatorColor=%23181E26&TextFieldTextColor=%23ADBBC8&PlaceholderColor=%23ADBBC8&TextLabelTextColor=%23ADBBC8&DetailLabelTextColor=%234F6077&TextLabelDeleteColor=%232473BD&HeaderFooterTextColor=%234F6077&SearchFieldBackgroundColor=%23202935&IndicatorColor=%23ADBBC8&ButtonIconColor=%232473BD&ButtonNormalColor=%23ADBBC8&ButtonNormal2Color=%23ADBBC8&ButtonNormal3Color=%23ADBBC8&ButtonHighlightedColor=%23ADBBC8&ButtonHighlighted2Color=%23ADBBC8&ButtonHighlighted3Color=%23202935&ButtonDisabledColor=%23ADBBC8&ButtonDisabled2Color=%23ADBBC8&PingSuccessTextColor=%232473BD&PingTimeoutTextColor=%234F6077&DefaultDotColor=%232473BD&HUDBackgroundColor=%23202935&v=1.0";
-        document.getElementById('configOutput').value = demoLink;
-        importConfig();
-    };
+    // 4. 界面交互逻辑
 
+    function switchTab(pageId, element) {
+        // 移除所有选中态
+        document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('selected'));
+        document.querySelectorAll('.tab-page').forEach(el => el.classList.remove('active'));
+        
+        // 添加选中态
+        element.classList.add('selected');
+        document.getElementById(`page-${pageId}`).classList.add('active');
+
+        // 更新导航栏状态
+        const navTitle = document.getElementById('navTitle');
+        const leftBtn = document.getElementById('navLeft');
+        const rightBtn = document.getElementById('navRight');
+
+        if (pageId === 'home') {
+            navTitle.innerText = "Shadowrocket";
+            leftBtn.style.display = 'flex';
+            rightBtn.style.display = 'flex';
+        } else if (pageId === 'config') {
+            navTitle.innerText = "配置";
+            leftBtn.style.display = 'flex'; // 截图 Config 左上角有扫码
+            rightBtn.style.display = 'flex'; // 截图 Config 右上角有加号
+        } else if (pageId === 'data') {
+            navTitle.innerText = "数据";
+            leftBtn.style.display = 'none';
+            rightBtn.style.display = 'none';
+        } else if (pageId === 'settings') {
+            navTitle.innerText = "设置";
+            leftBtn.style.display = 'none';
+            rightBtn.style.display = 'none';
+        }
+    }
+
+    // 5. 页面加载默认主题
+    window.onload = function() {
+        const defaultTheme = "shadowrocket://color?NavigationBarColor=%2300FFFFFF&NavigationBarTextColor=%23FFFFFF&TabBarColor=%2300FFFFFF&TabBarSelectedColor=%23007AFF&TabBarUnselectedColor=%238E8E93&TableBackgroundColor=%23F2F2F7&TableCellBackgroundColor=%23FFFFFF&TextLabelTextColor=%23000000&DetailLabelTextColor=%238E8E93&ButtonIconColor=%23007AFF&HeaderFooterTextColor=%236D6D72&ButtonNormalColor=%23E9E9EA";
+        
+        // 模拟导入
+        const params = new URLSearchParams(defaultTheme.split('?')[1]);
+        colorKeys.forEach(key => {
+            if (params.has(key)) {
+                const val = params.get(key);
+                state[key] = val;
+                const cssColor = srToCss(val);
+                updateCSS(key, cssColor);
+                const picker = document.getElementById(`picker-${key}`);
+                if (picker) picker.value = cssToPicker(cssColor);
+            }
+        });
+    };
 </script>
 
 </body>
