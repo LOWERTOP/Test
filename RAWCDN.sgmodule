@@ -1,0 +1,9 @@
+#!name=GitHub 自动加速
+#!desc=自动将 raw 替换为 jsDelivr CDN
+# 测试
+
+[URL Rewrite]
+^https:\/\/raw\.githubusercontent\.com\/([^\/]+)\/([^\/]+)\/([^\/]+)\/(.+) https://cdn.jsdelivr.net/gh/$1/$2@$3/$4 302
+
+[MITM]
+hostname = %APPEND% raw.githubusercontent.com
