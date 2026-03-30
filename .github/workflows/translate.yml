@@ -1,0 +1,33 @@
+name: Auto Translate README
+
+on:
+  push:
+    paths:
+      - README.md
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run translation
+        run: |
+          node scripts/translate.js
+        env:
+          LANGBLY_KEY: ${{ secrets.LANGBLY_KEY }}
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "auto-bot"
+          git config --global user.email "bot@example.com"
+          git add README.en.md
+          git commit -m "Auto update README.en.md" || echo "No changes"
+          git push
