@@ -596,8 +596,8 @@
             README_URL: "https://raw.githubusercontent.com/fmz200/wool_scripts/main/README-RULE.md",
             REDIRECT_URL: "https://lowertop.github.io/Shadowrocket-First/redirect.html",
             CONCURRENCY: 10,
-            CACHE_KEY: "sr_modules_data_v3",
-            CACHE_TIME_KEY: "sr_modules_time_v3",
+            CACHE_KEY: "sr_modules_data_v4",
+            CACHE_TIME_KEY: "sr_modules_time_v4",
             CACHE_EXPIRE: 3600 * 6 * 1000 // 缓存有效时间：6小时
         };
 
@@ -843,7 +843,6 @@
                 description: metadata.desc || "",
                 author: parseAuthor(metadata.author),
                 icon: metadata.icon || "",
-                date: metadata.date || "",
                 tags
             };
         }
@@ -925,18 +924,6 @@
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
-        function formatDate(value) {
-            if (!value) return "已同步";
-            let normalized = String(value).trim().replace(/^(\d{4}-\d{2}-\d{2})\s+/, "$1T");
-            const date = new Date(normalized);
-            if (Number.isNaN(date.getTime())) return value;
-
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, "0");
-            const day = String(date.getDate()).padStart(2, "0");
-            return `${year}-${month}-${day}`;
-        }
-
         function createInstallURL(rawURL) {
             const shadowrocketURL = "shadowrocket://install?module=" + rawURL;
             return CONFIG.REDIRECT_URL + "?url=" + encodeURIComponent(shadowrocketURL);
@@ -948,7 +935,7 @@
         }
 
         /* =========================================================
-           Fetch Single Module (已精简高延迟 GitHub API 请求)
+           Fetch Single Module
         ========================================================= */
         async function fetchModule(item) {
             try {
@@ -969,7 +956,6 @@
                     authorAvatar,
                     icon,
                     tags: metadata.tags,
-                    updateDate: metadata.date || "",
                     installURL: createInstallURL(item.rawURL)
                 };
             } catch (error) {
@@ -982,7 +968,6 @@
                     authorAvatar: getRepositoryAvatar(item.rawURL),
                     icon: "",
                     tags: [],
-                    updateDate: "",
                     installURL: createInstallURL(item.rawURL)
                 };
             }
@@ -1032,7 +1017,6 @@
             const authorHTML = renderAuthor(module);
             const tags = Array.isArray(module.tags) ? module.tags : [];
             const tagsHTML = tags.slice(0, 6).map(tag => `<span class="tag">${escapeHTML(tag)}</span>`).join("");
-            const updateDate = formatDate(module.updateDate);
 
             card.innerHTML = `
                 <div class="card-header">
@@ -1044,7 +1028,7 @@
                         <div class="module-meta">
                             ${authorHTML}
                             <span class="meta-separator">·</span>
-                            <span>${escapeHTML(updateDate)}</span>
+                            <span>已同步至最新版本</span>
                         </div>
                         ${tagsHTML ? `<div class="tags">${tagsHTML}</div>` : ""}
                     </div>
@@ -1146,7 +1130,7 @@
         });
 
         /* =========================================================
-           Main Loader (支持 LocalStorage 极速缓存 + 后台同步)
+           Main Loader
         ========================================================= */
         async function loadModules() {
             const cachedData = localStorage.getItem(CONFIG.CACHE_KEY);
@@ -1154,7 +1138,6 @@
             const now = Date.now();
             let hasCache = false;
 
-            // 1. 本地缓存读取（二次打开实现秒开）
             if (cachedData) {
                 try {
                     allModules = JSON.parse(cachedData);
@@ -1165,7 +1148,7 @@
                     if (!isExpired) {
                         statusText.textContent = "已同步";
                         statusDot.className = "status-dot";
-                        return; // 缓存有效时立即返回
+                        return;
                     }
 
                     statusText.textContent = "正在同步模块...";
@@ -1177,7 +1160,6 @@
                 }
             }
 
-            // 2. 远端数据抓取
             try {
                 if (!hasCache) {
                     statusText.textContent = "正在读取模块列表...";
@@ -1196,7 +1178,6 @@
 
                 allModules = await processModules(sourceModules);
 
-                // 渲染并保存缓存
                 renderModules(allModules);
                 try {
                     localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(allModules));
