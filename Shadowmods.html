@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>奶思模块中心</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>奶思的 Shadowrocket 模块中心</title>
+
 
 <style>
 
+/* =========================================================
+   基础
+========================================================= */
+
 :root {
-    --bg: #000000;
+
+    --bg: #000;
+
     --card: #1c1c1e;
     --card-hover: #232326;
 
@@ -25,24 +37,31 @@
     --orange: #ff9f0a;
     --red: #ff453a;
 
-    --radius: 24px;
+    --radius: 23px;
 
     --page-width: 900px;
+
 }
 
 
 * {
+
     box-sizing: border-box;
+
     -webkit-tap-highlight-color: transparent;
+
 }
 
 
 html {
+
     background: var(--bg);
+
 }
 
 
 body {
+
     margin: 0;
 
     padding:
@@ -64,20 +83,25 @@ body {
         sans-serif;
 
     -webkit-font-smoothing: antialiased;
+
 }
 
 
-button,
-input {
-    font-family: inherit;
+a {
+
+    -webkit-tap-highlight-color: transparent;
+
 }
 
 
 .container {
+
     width: 100%;
+
     max-width: var(--page-width);
 
     margin: 0 auto;
+
 }
 
 
@@ -86,29 +110,37 @@ input {
 ========================================================= */
 
 .header {
+
     padding: 28px 0 18px;
+
 }
 
 
 .title {
+
     margin: 0;
 
     font-size: 34px;
+
     line-height: 1.15;
 
     font-weight: 700;
 
     letter-spacing: -1px;
+
 }
 
 
 .subtitle {
+
     margin-top: 8px;
 
     color: var(--secondary);
 
     font-size: 15px;
+
     line-height: 1.5;
+
 }
 
 
@@ -117,14 +149,16 @@ input {
 ========================================================= */
 
 .notice {
+
     display: flex;
+
     align-items: center;
 
     gap: 12px;
 
-    min-height: 64px;
+    min-height: 62px;
 
-    padding: 15px 18px;
+    padding: 14px 18px;
 
     margin-bottom: 14px;
 
@@ -135,14 +169,18 @@ input {
     color: #d1d1d6;
 
     font-size: 15px;
+
     line-height: 1.5;
+
 }
 
 
 .notice-icon {
+
     flex: 0 0 auto;
 
-    font-size: 25px;
+    font-size: 24px;
+
 }
 
 
@@ -151,16 +189,20 @@ input {
 ========================================================= */
 
 .search-wrapper {
+
     position: relative;
 
     margin-bottom: 18px;
+
 }
 
 
 .search-icon {
+
     position: absolute;
 
     left: 18px;
+
     top: 50%;
 
     transform: translateY(-50%);
@@ -170,17 +212,20 @@ input {
     font-size: 23px;
 
     pointer-events: none;
+
 }
 
 
 .search {
-    width: 100%;
-    height: 62px;
 
-    padding:
-        0 50px;
+    width: 100%;
+
+    height: 60px;
+
+    padding: 0 50px;
 
     border: 0;
+
     outline: none;
 
     border-radius: 20px;
@@ -189,20 +234,28 @@ input {
 
     color: var(--text);
 
+    font-family: inherit;
+
     font-size: 18px;
 
     appearance: none;
+
     -webkit-appearance: none;
+
 }
 
 
 .search::placeholder {
+
     color: var(--secondary);
+
 }
 
 
 .search:focus {
+
     background: #202023;
+
 }
 
 
@@ -211,47 +264,59 @@ input {
 ========================================================= */
 
 .status {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    margin:
-        0 4px
-        14px;
+    margin: 0 4px 14px;
 
     color: var(--secondary);
 
     font-size: 13px;
+
 }
 
 
 .status-left {
+
     display: flex;
+
     align-items: center;
 
     gap: 7px;
+
 }
 
 
 .status-dot {
+
     width: 7px;
+
     height: 7px;
 
     border-radius: 50%;
 
     background: var(--green);
+
 }
 
 
 .status-dot.loading {
+
     background: var(--orange);
 
     animation: pulse 1.2s infinite;
+
 }
 
 
 .status-dot.error {
+
     background: var(--red);
+
 }
 
 
@@ -259,11 +324,15 @@ input {
 
     0%,
     100% {
+
         opacity: .35;
+
     }
 
     50% {
+
         opacity: 1;
+
     }
 
 }
@@ -274,25 +343,28 @@ input {
 ========================================================= */
 
 .modules {
+
     display: flex;
 
     flex-direction: column;
 
     gap: 14px;
+
 }
 
 
 /* =========================================================
-   Module Card
+   Card
 ========================================================= */
 
 .module-card {
+
     position: relative;
 
     padding:
-        26px
-        26px
-        22px;
+        22px
+        24px
+        20px;
 
     background: var(--card);
 
@@ -303,29 +375,36 @@ input {
     transition:
         background .18s ease,
         transform .18s ease;
+
 }
 
 
 .module-card:hover {
+
     background: var(--card-hover);
+
 }
 
 
 .module-card:active {
+
     transform: scale(.985);
+
 }
 
 
 /* =========================================================
-   Header
+   Card Header
 ========================================================= */
 
 .card-header {
+
     display: flex;
 
-    align-items: flex-start;
+    align-items: center;
 
-    gap: 18px;
+    gap: 17px;
+
 }
 
 
@@ -334,12 +413,14 @@ input {
 ========================================================= */
 
 .module-icon {
-    width: 112px;
-    height: 112px;
 
-    flex: 0 0 112px;
+    width: 76px;
 
-    border-radius: 25px;
+    height: 76px;
+
+    flex: 0 0 76px;
+
+    border-radius: 20px;
 
     overflow: hidden;
 
@@ -348,31 +429,20 @@ input {
     box-shadow:
         inset 0 0 0 1px
         rgba(255,255,255,.06);
+
 }
 
 
 .module-icon img {
+
     display: block;
 
     width: 100%;
+
     height: 100%;
 
     object-fit: cover;
-}
 
-
-.module-icon.generated {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    color: white;
-
-    font-size: 42px;
-    font-weight: 700;
-
-    letter-spacing: -2px;
 }
 
 
@@ -381,30 +451,33 @@ input {
 ========================================================= */
 
 .card-main {
+
     min-width: 0;
 
     flex: 1;
+
 }
 
 
 .module-name {
-    margin:
-        1px
-        0
-        5px;
 
-    font-size: 25px;
-    line-height: 1.2;
+    margin: 0;
+
+    font-size: 24px;
+
+    line-height: 1.25;
 
     font-weight: 650;
 
-    letter-spacing: -.4px;
+    letter-spacing: -.35px;
 
     word-break: break-word;
+
 }
 
 
 .module-meta {
+
     display: flex;
 
     align-items: center;
@@ -413,20 +486,26 @@ input {
 
     gap: 6px;
 
+    margin-top: 6px;
+
     color: var(--tertiary);
 
-    font-size: 14px;
+    font-size: 13px;
 
     line-height: 1.5;
+
 }
 
 
 .meta-separator {
-    opacity: .5;
+
+    opacity: .45;
+
 }
 
 
 .author {
+
     display: inline-flex;
 
     align-items: center;
@@ -436,21 +515,27 @@ input {
     color: var(--tertiary);
 
     text-decoration: none;
+
 }
 
 
 .author:hover {
-    color: #8e8e93;
+
+    color: #a1a1a6;
+
 }
 
 
 .author-avatar {
+
     width: 18px;
+
     height: 18px;
 
     border-radius: 50%;
 
     object-fit: cover;
+
 }
 
 
@@ -459,35 +544,38 @@ input {
 ========================================================= */
 
 .tags {
+
     display: flex;
 
     flex-wrap: wrap;
 
     gap: 6px;
 
-    margin-top: 10px;
+    margin-top: 8px;
+
 }
 
 
 .tag {
+
     display: inline-flex;
 
     align-items: center;
 
-    height: 24px;
+    height: 22px;
 
-    padding:
-        0 9px;
+    padding: 0 8px;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
-    background: rgba(255,255,255,.06);
+    background: rgba(255,255,255,.055);
 
     color: #8e8e93;
 
     font-size: 11px;
 
     white-space: nowrap;
+
 }
 
 
@@ -496,15 +584,17 @@ input {
 ========================================================= */
 
 .module-description {
-    margin-top: 20px;
+
+    margin-top: 17px;
 
     color: #a1a1a6;
 
-    font-size: 17px;
+    font-size: 16px;
 
-    line-height: 1.65;
+    line-height: 1.6;
 
-    letter-spacing: .1px;
+    letter-spacing: .05px;
+
 }
 
 
@@ -513,19 +603,22 @@ input {
 ========================================================= */
 
 .card-bottom {
+
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 18px;
 
-    margin-top: 22px;
+    margin-top: 18px;
+
 }
 
 
 .source {
+
     display: flex;
 
     align-items: center;
@@ -537,36 +630,45 @@ input {
     color: var(--tertiary);
 
     font-size: 13px;
+
 }
 
 
 .source-icon {
-    width: 28px;
-    height: 28px;
+
+    width: 27px;
+
+    height: 27px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    flex: 0 0 28px;
+    flex: 0 0 27px;
 
     border-radius: 50%;
 
     background: #2c2c2e;
 
-    font-size: 13px;
+    color: #d1d1d6;
+
+    font-size: 12px;
 
     font-weight: 600;
+
 }
 
 
 .source-text {
+
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
+
 }
 
 
@@ -575,20 +677,22 @@ input {
 ========================================================= */
 
 .install-button {
+
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
-    min-width: 116px;
-    height: 54px;
+    min-width: 108px;
 
-    padding:
-        0 25px;
+    height: 50px;
+
+    padding: 0 23px;
 
     border: 0;
 
-    border-radius: 28px;
+    border-radius: 27px;
 
     background: var(--blue);
 
@@ -596,7 +700,7 @@ input {
 
     text-decoration: none;
 
-    font-size: 19px;
+    font-size: 18px;
 
     font-weight: 600;
 
@@ -607,16 +711,21 @@ input {
     transition:
         background .15s ease,
         transform .15s ease;
+
 }
 
 
 .install-button:hover {
+
     background: var(--blue-hover);
+
 }
 
 
 .install-button:active {
+
     transform: scale(.95);
+
 }
 
 
@@ -625,6 +734,7 @@ input {
 ========================================================= */
 
 .empty {
+
     padding: 60px 20px;
 
     text-align: center;
@@ -632,13 +742,16 @@ input {
     color: var(--secondary);
 
     font-size: 16px;
+
 }
 
 
 .empty-icon {
+
     margin-bottom: 12px;
 
-    font-size: 36px;
+    font-size: 34px;
+
 }
 
 
@@ -647,7 +760,8 @@ input {
 ========================================================= */
 
 .loading-card {
-    height: 250px;
+
+    height: 220px;
 
     border-radius: var(--radius);
 
@@ -663,17 +777,22 @@ input {
 
     animation:
         loading 1.3s infinite;
+
 }
 
 
 @keyframes loading {
 
     0% {
+
         background-position: 200% 0;
+
     }
 
     100% {
+
         background-position: -200% 0;
+
     }
 
 }
@@ -684,10 +803,8 @@ input {
 ========================================================= */
 
 .footer {
-    padding:
-        30px
-        0
-        10px;
+
+    padding: 30px 0 10px;
 
     text-align: center;
 
@@ -696,13 +813,16 @@ input {
     font-size: 12px;
 
     line-height: 1.6;
+
 }
 
 
 .footer a {
+
     color: #636366;
 
     text-decoration: none;
+
 }
 
 
@@ -713,83 +833,84 @@ input {
 @media (max-width: 600px) {
 
     body {
+
         padding-left: 15px;
+
         padding-right: 15px;
+
     }
 
 
     .header {
+
         padding-top: 20px;
+
     }
 
 
     .title {
+
         font-size: 30px;
+
     }
 
 
     .notice {
-        min-height: 62px;
-
-        padding:
-            14px 16px;
-
-        border-radius: 18px;
 
         font-size: 14px;
-    }
 
-
-    .search {
-        height: 60px;
     }
 
 
     .module-card {
-        padding:
-            24px
-            22px
-            21px;
 
-        border-radius: 22px;
+        padding:
+            20px
+            20px
+            18px;
+
+        border-radius: 21px;
+
     }
 
 
     .module-icon {
-        width: 92px;
-        height: 92px;
 
-        flex-basis: 92px;
+        width: 70px;
 
-        border-radius: 22px;
-    }
+        height: 70px;
 
+        flex-basis: 70px;
 
-    .module-icon.generated {
-        font-size: 34px;
+        border-radius: 18px;
+
     }
 
 
     .module-name {
-        font-size: 23px;
+
+        font-size: 22px;
+
     }
 
 
     .module-description {
-        margin-top: 18px;
 
-        font-size: 16px;
+        margin-top: 15px;
 
-        line-height: 1.6;
+        font-size: 15.5px;
+
     }
 
 
     .install-button {
-        min-width: 108px;
 
-        height: 50px;
+        min-width: 102px;
 
-        font-size: 18px;
+        height: 48px;
+
+        font-size: 17px;
+
     }
 
 }
@@ -798,170 +919,154 @@ input {
 @media (max-width: 420px) {
 
     .card-header {
-        gap: 14px;
+
+        gap: 13px;
+
     }
 
 
     .module-icon {
-        width: 78px;
-        height: 78px;
 
-        flex-basis: 78px;
+        width: 64px;
 
-        border-radius: 19px;
-    }
+        height: 64px;
 
+        flex-basis: 64px;
 
-    .module-icon.generated {
-        font-size: 29px;
+        border-radius: 17px;
+
     }
 
 
     .module-name {
-        font-size: 21px;
+
+        font-size: 20px;
+
     }
 
 
     .module-meta {
+
         font-size: 12px;
+
     }
 
 
     .card-bottom {
+
         align-items: flex-end;
+
     }
 
 }
 
 </style>
+
 </head>
 
 
 <body>
 
+
 <div class="container">
 
 
-    <!-- =====================================================
-         Header
-    ====================================================== -->
+<header class="header">
 
-    <header class="header">
+    <h1 class="title">
+        Shadowrocket 模块
+    </h1>
 
-        <h1 class="title">
-            奶思模块中心
-        </h1>
-
-        <div class="subtitle">
-            模块数据来源自：奶思
-        </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         Notice
-    ====================================================== -->
-
-    <div class="notice">
-
-        <div class="notice-icon">
-            📢
-        </div>
-
-        <div>
-            模块信息自动同步自
-            <strong>fmz200/wool_scripts</strong>，
-            无需手动维护。
-        </div>
-
+    <div class="subtitle">
+        模块中心 · 自动同步 · 一键安装
     </div>
 
+</header>
 
-    <!-- =====================================================
-         Search
-    ====================================================== -->
 
-    <div class="search-wrapper">
+<div class="notice">
 
-        <div class="search-icon">
-            ⌕
-        </div>
-
-        <input
-            id="search"
-            class="search"
-            type="search"
-            placeholder="搜索模块..."
-            autocomplete="off"
-            spellcheck="false"
-        >
-
+    <div class="notice-icon">
+        📢
     </div>
 
-
-    <!-- =====================================================
-         Status
-    ====================================================== -->
-
-    <div class="status">
-
-        <div class="status-left">
-
-            <span
-                id="statusDot"
-                class="status-dot loading"
-            ></span>
-
-            <span id="statusText">
-                正在同步模块...
-            </span>
-
-        </div>
-
-
-        <div id="countText"></div>
-
+    <div>
+        模块信息自动同步自
+        <strong>fmz200/wool_scripts</strong>
+        ，无需手动维护。
     </div>
 
+</div>
 
-    <!-- =====================================================
-         Module List
-    ====================================================== -->
 
-    <main
-        id="modules"
-        class="modules"
+<div class="search-wrapper">
+
+    <div class="search-icon">
+        ⌕
+    </div>
+
+    <input
+        id="search"
+        class="search"
+        type="search"
+        placeholder="搜索模块..."
+        autocomplete="off"
+        spellcheck="false"
     >
 
-        <div class="loading-card"></div>
-
-        <div class="loading-card"></div>
-
-    </main>
+</div>
 
 
-    <!-- =====================================================
-         Footer
-    ====================================================== -->
+<div class="status">
 
-    <footer class="footer">
+    <div class="status-left">
 
-        数据来源：
+        <span
+            id="statusDot"
+            class="status-dot loading"
+        ></span>
 
-        <a
-            href="https://github.com/fmz200/wool_scripts"
-            target="_blank"
-            rel="noopener"
-        >
-            fmz200/wool_scripts
-        </a>
+        <span id="statusText">
+            正在同步模块...
+        </span>
 
-        <br>
+    </div>
 
-        模块信息自动同步
 
-    </footer>
+    <div id="countText"></div>
+
+</div>
+
+
+<main
+    id="modules"
+    class="modules"
+>
+
+    <div class="loading-card"></div>
+
+    <div class="loading-card"></div>
+
+</main>
+
+
+<footer class="footer">
+
+    数据来源：
+
+    <a
+        href="https://github.com/fmz200/wool_scripts"
+        target="_blank"
+        rel="noopener"
+    >
+        fmz200/wool_scripts
+    </a>
+
+    <br>
+
+    Shadowrocket 模块自动同步
+
+</footer>
 
 
 </div>
@@ -976,37 +1081,33 @@ input {
 const CONFIG = {
 
     /*
-     * README 数据源
+     * README
      */
     README_URL:
         "https://raw.githubusercontent.com/fmz200/wool_scripts/main/README-RULE.md",
 
 
     /*
-     * Shadowrocket 跳转页
+     * Shadowrocket 安装跳转页
      */
     REDIRECT_URL:
         "https://lowertop.github.io/Shadowrocket-First/redirect.html",
 
 
     /*
-     * 每次最多同时请求多少个 Module
-     *
-     * 防止模块很多时瞬间建立大量连接。
+     * 并发读取模块数量
      */
     CONCURRENCY:
-        6
+        6,
+
+
+    /*
+     * GitHub API
+     */
+    GITHUB_API:
+        "https://api.github.com"
 
 };
-
-
-/* =========================================================
-   State
-========================================================= */
-
-let modules = [];
-
-let allModules = [];
 
 
 /* =========================================================
@@ -1029,8 +1130,11 @@ const countText =
     document.getElementById("countText");
 
 
+let allModules = [];
+
+
 /* =========================================================
-   Utility
+   HTML Escape
 ========================================================= */
 
 function escapeHTML(value) {
@@ -1046,49 +1150,72 @@ function escapeHTML(value) {
 
 
 /* =========================================================
+   Decode escaped metadata
+========================================================= */
+
+function decodeMetadata(value) {
+
+    return String(value ?? "")
+        .replace(/\\n/g, " ")
+        .replace(/\\r/g, "")
+        .replace(/\\t/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+
+/* =========================================================
    Parse author
 ========================================================= */
 
-/*
- * 示例：
- *
- * #!author=奶思[https://github.com/fmz200]
- *
- * 解析成：
- *
- * name = 奶思
- * url  = https://github.com/fmz200
- */
 function parseAuthor(value) {
+
+    value =
+        decodeMetadata(value);
+
 
     if (!value) {
 
         return {
+
             name: "未知作者",
+
             url: "",
+
             username: ""
+
         };
 
     }
 
 
+    /*
+     * 支持：
+     *
+     * fmz200
+     *
+     * fmz200[https://github.com/fmz200]
+     *
+     * 奶思 [https://github.com/fmz200]
+     */
+
     const match =
         value.match(
-            /^(.*?)\[(https?:\/\/[^\]]+)\]$/
+            /^(.*?)\s*\[\s*(https?:\/\/[^\]]+)\s*\]\s*$/
         );
 
 
     if (!match) {
 
         return {
-            name:
-                value.trim(),
 
-            url:
-                "",
+            name: value,
 
-            username:
-                ""
+            url: "",
+
+            username: ""
+
         };
 
     }
@@ -1104,66 +1231,111 @@ function parseAuthor(value) {
     let username = "";
 
 
-    const githubMatch =
+    const github =
         url.match(
-            /github\.com\/([^\/?#]+)/i
+            /github\.com\/([^/?#]+)/i
         );
 
 
-    if (githubMatch) {
+    if (github) {
+
         username =
-            githubMatch[1];
+            github[1];
+
     }
 
 
     return {
+
         name,
+
         url,
+
         username
+
     };
 
 }
 
 
 /* =========================================================
-   Parse metadata
+   Parse Module Metadata
 ========================================================= */
 
-function parseModuleMetadata(text, fallbackName) {
+function parseModuleMetadata(
+    text,
+    fallbackName
+) {
 
     const metadata = {};
 
 
     /*
-     * 只解析开头的 #!xxx=xxx
+     * 只解析 #! 开头的元数据。
+     *
+     * 同时兼容：
+     *
+     * #!name=xxx
+     *
+     * #!name = xxx
      */
+
     const lines =
         text.split(/\r?\n/);
 
 
-    for (const line of lines) {
+    for (const rawLine of lines) {
+
+        const line =
+            rawLine.trim();
+
 
         if (!line.startsWith("#!")) {
+
+            /*
+             * 元数据一般在文件最前面。
+             *
+             * 遇到真正的配置内容后，
+             * 后面不再继续寻找。
+             */
+
+            if (
+                line &&
+                !line.startsWith("#")
+            ) {
+
+                break;
+
+            }
+
             continue;
+
         }
 
 
         const match =
             line.match(
-                /^#!([a-zA-Z0-9_-]+)=(.*)$/
+                /^#!([a-zA-Z0-9_-]+)\s*=\s*(.*)$/
             );
 
 
         if (!match) {
+
             continue;
+
         }
 
 
         const key =
-            match[1].trim();
+            match[1]
+                .trim()
+                .toLowerCase();
+
 
         const value =
-            match[2].trim();
+            decodeMetadata(
+                match[2]
+            );
 
 
         metadata[key] =
@@ -1191,13 +1363,13 @@ function parseModuleMetadata(text, fallbackName) {
             ),
 
 
-        category:
-            metadata.category ||
+        icon:
+            metadata.icon ||
             "",
 
 
-        icon:
-            metadata.icon ||
+        category:
+            metadata.category ||
             "",
 
 
@@ -1214,15 +1386,13 @@ function parseModuleMetadata(text, fallbackName) {
         tags:
             metadata.tag
                 ? metadata.tag
-                    .split(",")
-                    .map(tag => tag.trim())
+                    .split(/[,\，]/)
+                    .map(
+                        item =>
+                            item.trim()
+                    )
                     .filter(Boolean)
-                : [],
-
-
-        rawURL:
-            metadata["raw-url"] ||
-            "",
+                : []
 
     };
 
@@ -1230,61 +1400,304 @@ function parseModuleMetadata(text, fallbackName) {
 
 
 /* =========================================================
-   Filename → Name fallback
+   Parse README Table
 ========================================================= */
 
-function getNameFromURL(url) {
+function parseMarkdown(markdown) {
 
-    try {
-
-        const pathname =
-            new URL(url).pathname;
+    const lines =
+        markdown.split(/\r?\n/);
 
 
-        let filename =
-            pathname.split("/").pop();
+    let header = null;
+
+    let surgeIndex = -1;
 
 
-        filename =
-            decodeURIComponent(
-                filename
-            );
+    const result = [];
 
 
-        filename =
-            filename
-                .replace(
-                    /\.(sgmodule|module)$/i,
-                    ""
+    for (
+        let i = 0;
+        i < lines.length;
+        i++
+    ) {
+
+        const line =
+            lines[i].trim();
+
+
+        if (
+            !line.startsWith("|")
+        ) {
+
+            continue;
+
+        }
+
+
+        const columns =
+            line
+                .split("|")
+                .slice(1, -1)
+                .map(
+                    item =>
+                        item.trim()
                 );
 
 
-        return filename;
+        if (!columns.length) {
 
-    } catch {
+            continue;
 
-        return "未命名模块";
+        }
+
+
+        /*
+         * 找真正的表头。
+         *
+         * 不再假定 Surge 永远是第 5 列。
+         */
+
+        if (
+            columns.some(
+                column =>
+                    /surge/i.test(
+                        column
+                    )
+            )
+        ) {
+
+            header =
+                columns;
+
+
+            surgeIndex =
+                columns.findIndex(
+                    column =>
+                        /surge/i.test(
+                            column
+                        )
+                );
+
+
+            /*
+             * 下一行通常是：
+             *
+             * --- | --- | ---
+             *
+             */
+
+            continue;
+
+        }
+
+
+        /*
+         * 还没找到 Surge 列
+         */
+
+        if (
+            !header ||
+            surgeIndex < 0
+        ) {
+
+            continue;
+
+        }
+
+
+        /*
+         * 跳过 Markdown 分隔线
+         */
+
+        if (
+            columns.every(
+                column =>
+                    /^:?-+:?$/.test(
+                        column
+                    )
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
+            columns.length <=
+            surgeIndex
+        ) {
+
+            continue;
+
+        }
+
+
+        const surge =
+            columns[surgeIndex];
+
+
+        /*
+         * 找 Raw URL
+         *
+         * 支持：
+         *
+         * [Raw链接](...)
+         *
+         * [Raw](...)
+         *
+         * [raw](...)
+         */
+
+        const matches =
+            [
+                ...surge.matchAll(
+                    /\[[^\]]*raw[^\]]*\]\(\s*(https?:\/\/[^)\s]+)\s*\)/ig
+                )
+            ];
+
+
+        if (!matches.length) {
+
+            continue;
+
+        }
+
+
+        const rawURL =
+            matches[0][1];
+
+
+        /*
+         * 模块名称。
+         *
+         * 这里也不再假定名称一定是第 2 列。
+         */
+
+        let nameIndex =
+            header.findIndex(
+                column =>
+                    /规则名称|配置名称|模块名称|名称/i.test(
+                        column
+                    )
+            );
+
+
+        /*
+         * 如果找不到名称列，
+         * 默认使用 Surge 前面的第一列非序号列。
+         */
+
+        if (nameIndex < 0) {
+
+            nameIndex =
+                Math.min(
+                    1,
+                    columns.length - 1
+                );
+
+        }
+
+
+        let name =
+            columns[nameIndex] ||
+            "";
+
+
+        name =
+            name
+                .replace(
+                    /`/g,
+                    ""
+                )
+                .replace(
+                    /<br\s*\/?>/gi,
+                    " "
+                )
+                .replace(
+                    /\s+/g,
+                    " "
+                )
+                .trim();
+
+
+        /*
+         * 去除 Markdown 链接
+         */
+
+        name =
+            name.replace(
+                /\[([^\]]+)\]\([^)]+\)/g,
+                "$1"
+            );
+
+
+        /*
+         * 去重
+         */
+
+        if (
+            result.some(
+                item =>
+                    item.rawURL === rawURL
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        result.push({
+
+            name,
+
+            rawURL
+
+        });
 
     }
+
+
+    return result;
 
 }
 
 
 /* =========================================================
-   Generate description
+   Install URL
 ========================================================= */
 
-/*
- * 第一优先级：
- *
- * #!desc
- *
- *
- * 如果作者没有提供 desc，
- * 再根据模块自身的信息自动生成。
- */
+function createInstallURL(rawURL) {
+
+    const shadowrocketURL =
+        "shadowrocket://install?module=" +
+        rawURL;
+
+
+    return (
+        CONFIG.REDIRECT_URL +
+        "?url=" +
+        encodeURIComponent(
+            shadowrocketURL
+        )
+    );
+
+}
+
+
+/* =========================================================
+   Generate Description
+========================================================= */
 
 function generateDescription(module) {
+
+    /*
+     * 第一优先：
+     * Raw 中真实的 #!desc
+     */
 
     if (
         module.description &&
@@ -1296,36 +1709,61 @@ function generateDescription(module) {
     }
 
 
-    const name =
-        module.name;
+    /*
+     * 第二优先：
+     * 标签
+     */
 
+    if (
+        module.tags &&
+        module.tags.length
+    ) {
 
-    if (module.tags.length) {
-
-        return `${name}，用于处理「${module.tags.join("、")}」相关请求。`;
+        return (
+            `${module.name}，用于处理` +
+            `「${module.tags.join("、")}」相关请求。`
+        );
 
     }
 
 
-    if (module.category) {
+    /*
+     * 第三优先：
+     * 分类
+     */
 
-        return `${name}，属于「${module.category}」模块，用于对相关网络请求进行处理。`;
+    if (
+        module.category
+    ) {
+
+        return (
+            `${module.name}，属于「` +
+            `${module.category}` +
+            `」模块。`
+        );
 
     }
 
 
-    return `${name}，适用于 Shadowrocket 的模块。`;
+    /*
+     * 最终 fallback
+     */
+
+    return (
+        `${module.name}，` +
+        `适用于 Shadowrocket 的网络模块。`
+    );
 
 }
 
 
 /* =========================================================
-   Format date
+   Format Date
 ========================================================= */
 
-function formatDate(dateString) {
+function formatDate(value) {
 
-    if (!dateString) {
+    if (!value) {
 
         return "更新时间未知";
 
@@ -1334,7 +1772,10 @@ function formatDate(dateString) {
 
     const date =
         new Date(
-            dateString.replace(" ", "T")
+            value.replace(
+                " ",
+                "T"
+            )
         );
 
 
@@ -1344,7 +1785,7 @@ function formatDate(dateString) {
         )
     ) {
 
-        return dateString;
+        return value;
 
     }
 
@@ -1352,24 +1793,202 @@ function formatDate(dateString) {
     const year =
         date.getFullYear();
 
+
     const month =
         String(
             date.getMonth() + 1
-        ).padStart(2, "0");
+        )
+        .padStart(2, "0");
+
 
     const day =
         String(
             date.getDate()
-        ).padStart(2, "0");
+        )
+        .padStart(2, "0");
 
 
-    return `${year}-${month}-${day}`;
+    return (
+        `${year}-${month}-${day}`
+    );
 
 }
 
 
 /* =========================================================
-   Generate color
+   GitHub Raw URL → Repository Information
+========================================================= */
+
+function parseGitHubRawURL(rawURL) {
+
+    try {
+
+        const url =
+            new URL(rawURL);
+
+
+        /*
+         * raw.githubusercontent.com
+         *
+         * /owner/repo/branch/path
+         */
+
+        if (
+            url.hostname !==
+            "raw.githubusercontent.com"
+        ) {
+
+            return null;
+
+        }
+
+
+        const parts =
+            url.pathname
+                .split("/")
+                .filter(Boolean);
+
+
+        if (
+            parts.length < 4
+        ) {
+
+            return null;
+
+        }
+
+
+        const owner =
+            parts[0];
+
+        const repo =
+            parts[1];
+
+        const branch =
+            parts[2];
+
+
+        const path =
+            parts
+                .slice(3)
+                .join("/");
+
+
+        return {
+
+            owner,
+
+            repo,
+
+            branch,
+
+            path
+
+        };
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================================================
+   Get GitHub Commit Date
+========================================================= */
+
+async function getGitHubCommitDate(
+    rawURL
+) {
+
+    const info =
+        parseGitHubRawURL(
+            rawURL
+        );
+
+
+    if (!info) {
+
+        return "";
+
+    }
+
+
+    try {
+
+        const apiURL =
+            `${CONFIG.GITHUB_API}` +
+            `/repos/${encodeURIComponent(info.owner)}` +
+            `/${encodeURIComponent(info.repo)}` +
+            `/commits?path=${encodeURIComponent(info.path)}` +
+            `&sha=${encodeURIComponent(info.branch)}` +
+            `&per_page=1`;
+
+
+        const response =
+            await fetch(
+                apiURL,
+                {
+                    headers: {
+                        "Accept":
+                            "application/vnd.github+json"
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            return "";
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !Array.isArray(data) ||
+            !data.length
+        ) {
+
+            return "";
+
+        }
+
+
+        return (
+            data[0]
+                ?.commit
+                ?.committer
+                ?.date ||
+            data[0]
+                ?.commit
+                ?.author
+                ?.date ||
+            ""
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "GitHub 更新时间读取失败:",
+            rawURL,
+            error
+        );
+
+        return "";
+
+    }
+
+}
+
+
+/* =========================================================
+   Hash
 ========================================================= */
 
 function hashString(value) {
@@ -1400,7 +2019,7 @@ function hashString(value) {
 
 
 /* =========================================================
-   Generate SVG icon
+   Generate Icon
 ========================================================= */
 
 function generateIcon(name) {
@@ -1412,8 +2031,13 @@ function generateIcon(name) {
     const hue1 =
         hash % 360;
 
+
     const hue2 =
-        (hue1 + 45 + (hash % 60)) % 360;
+        (
+            hue1 +
+            45 +
+            hash % 60
+        ) % 360;
 
 
     const first =
@@ -1433,7 +2057,7 @@ function generateIcon(name) {
 <defs>
 
     <linearGradient
-        id="gradient"
+        id="g"
         x1="0"
         y1="0"
         x2="1"
@@ -1459,29 +2083,21 @@ function generateIcon(name) {
     width="256"
     height="256"
     rx="58"
-    fill="url(#gradient)"
-/>
-
-
-<circle
-    cx="195"
-    cy="60"
-    r="48"
-    fill="rgba(255,255,255,.12)"
+    fill="url(#g)"
 />
 
 
 <text
     x="128"
-    y="158"
+    y="137"
     text-anchor="middle"
     dominant-baseline="middle"
     fill="white"
-    font-family="-apple-system, BlinkMacSystemFont, sans-serif"
-    font-size="108"
+    font-family="-apple-system,BlinkMacSystemFont,sans-serif"
+    font-size="105"
     font-weight="700"
 >
-    ${escapeHTML(first)}
+${escapeHTML(first)}
 </text>
 
 
@@ -1499,228 +2115,10 @@ function generateIcon(name) {
 
 
 /* =========================================================
-   Install URL
+   Fetch One Module
 ========================================================= */
 
-function createInstallURL(rawURL) {
-
-    const shadowrocketURL =
-        "shadowrocket://install?module=" +
-        rawURL;
-
-
-    return (
-        CONFIG.REDIRECT_URL +
-        "?url=" +
-        encodeURIComponent(
-            shadowrocketURL
-        )
-    );
-
-}
-
-
-/* =========================================================
-   Parse README
-========================================================= */
-
-function parseMarkdown(markdown) {
-
-    const lines =
-        markdown.split(/\r?\n/);
-
-
-    const result = [];
-
-
-    for (const line of lines) {
-
-        const trimmed =
-            line.trim();
-
-
-        if (
-            !trimmed.startsWith("|")
-        ) {
-            continue;
-        }
-
-
-        /*
-         * 跳过表头
-         */
-
-        if (
-            trimmed.includes("规则名称") ||
-            trimmed.includes("Surge")
-        ) {
-
-            /*
-             * 注意：
-             *
-             * 这里只跳过真正的表头。
-             * 如果普通数据中出现 Surge，
-             * 不应该被跳过。
-             */
-
-            if (
-                trimmed.includes("规则名称")
-            ) {
-
-                continue;
-
-            }
-
-        }
-
-
-        /*
-         * Markdown 分割线
-         */
-
-        if (
-            /^\|[\s|:\-]+\|$/.test(
-                trimmed
-            )
-        ) {
-
-            continue;
-
-        }
-
-
-        const columns =
-            trimmed
-                .split("|")
-                .slice(1, -1)
-                .map(
-                    item =>
-                        item.trim()
-                );
-
-
-        /*
-         * 当前 README：
-         *
-         * 0 序号
-         * 1 名称
-         * 2 Loon
-         * 3 Quantumult X
-         * 4 Surge
-         */
-
-        if (
-            columns.length < 5
-        ) {
-
-            continue;
-
-        }
-
-
-        const index =
-            Number(
-                columns[0]
-            ) ||
-            result.length + 1;
-
-
-        const name =
-            cleanName(
-                columns[1]
-            );
-
-
-        const surgeColumn =
-            columns[4];
-
-
-        /*
-         * 提取 Surge Raw
-         */
-
-        const rawMatch =
-            surgeColumn.match(
-                /\[Raw链接\]\((https?:\/\/[^)]+)\)/
-            );
-
-
-        if (!rawMatch) {
-
-            continue;
-
-        }
-
-
-        const rawURL =
-            rawMatch[1];
-
-
-        /*
-         * 去重
-         */
-
-        if (
-            result.some(
-                item =>
-                    item.rawURL === rawURL
-            )
-        ) {
-
-            continue;
-
-        }
-
-
-        result.push({
-
-            index,
-
-            readmeName:
-                name,
-
-            rawURL,
-
-            installURL:
-                createInstallURL(
-                    rawURL
-                )
-
-        });
-
-    }
-
-
-    return result;
-
-}
-
-
-/* =========================================================
-   Clean name
-========================================================= */
-
-function cleanName(name) {
-
-    return String(name)
-        .replace(
-            /<br\s*\/?>/gi,
-            " "
-        )
-        .replace(
-            /\s+/g,
-            " "
-        )
-        .trim();
-
-}
-
-
-/* =========================================================
-   Fetch module metadata
-========================================================= */
-
-async function fetchModuleMetadata(item) {
+async function fetchModule(item) {
 
     try {
 
@@ -1747,23 +2145,36 @@ async function fetchModuleMetadata(item) {
             await response.text();
 
 
+        /*
+         * 从 Raw 本身读取真实元数据
+         */
+
         const metadata =
             parseModuleMetadata(
                 text,
-                item.readmeName
+                item.name
             );
 
 
         /*
-         * 如果 module 内有 raw-url，
-         * 使用 module 自己声明的 URL。
+         * 更新时间：
          *
-         * 否则使用 README 的 URL。
+         * 1. #!date
+         * 2. GitHub commit
          */
 
-        const rawURL =
-            metadata.rawURL ||
-            item.rawURL;
+        let updateDate =
+            metadata.date;
+
+
+        if (!updateDate) {
+
+            updateDate =
+                await getGitHubCommitDate(
+                    item.rawURL
+                );
+
+        }
 
 
         return {
@@ -1772,55 +2183,57 @@ async function fetchModuleMetadata(item) {
 
             ...metadata,
 
-            rawURL,
-
-            installURL:
-                createInstallURL(
-                    rawURL
-                ),
+            updateDate,
 
             description:
                 generateDescription(
                     metadata
+                ),
+
+            installURL:
+                createInstallURL(
+                    item.rawURL
                 )
 
         };
 
-
     } catch (error) {
 
         console.warn(
-            "读取模块失败：",
+            "模块读取失败:",
             item.rawURL,
             error
         );
 
 
         /*
-         * 即使某个模块读取失败，
-         * 也不要让整个页面失败。
+         * 即使单个模块失败，
+         * 页面仍然继续工作。
          */
 
         const fallback = {
 
             name:
-                item.readmeName ||
-                getNameFromURL(
-                    item.rawURL
-                ),
+                item.name ||
+                "未命名模块",
 
             description:
                 "",
 
             author: {
-                name: "未知作者",
+
+                name:
+                    "未知作者",
+
                 url: "",
+
                 username: ""
+
             },
 
-            category: "",
-
             icon: "",
+
+            category: "",
 
             date: "",
 
@@ -1828,8 +2241,7 @@ async function fetchModuleMetadata(item) {
 
             tags: [],
 
-            rawURL:
-                item.rawURL
+            updateDate: ""
 
         };
 
@@ -1858,12 +2270,11 @@ async function fetchModuleMetadata(item) {
 
 
 /* =========================================================
-   Concurrency
+   Concurrent Fetch
 ========================================================= */
 
-async function processWithConcurrency(
-    items,
-    concurrency
+async function processModules(
+    items
 ) {
 
     const results =
@@ -1872,19 +2283,19 @@ async function processWithConcurrency(
         );
 
 
-    let nextIndex = 0;
+    let index = 0;
 
 
     async function worker() {
 
         while (true) {
 
-            const index =
-                nextIndex++;
+            const current =
+                index++;
 
 
             if (
-                index >=
+                current >=
                 items.length
             ) {
 
@@ -1893,9 +2304,9 @@ async function processWithConcurrency(
             }
 
 
-            results[index] =
-                await fetchModuleMetadata(
-                    items[index]
+            results[current] =
+                await fetchModule(
+                    items[current]
                 );
 
         }
@@ -1908,7 +2319,7 @@ async function processWithConcurrency(
             {
                 length:
                     Math.min(
-                        concurrency,
+                        CONFIG.CONCURRENCY,
                         items.length
                     )
             },
@@ -1931,7 +2342,9 @@ async function processWithConcurrency(
    Render
 ========================================================= */
 
-function renderModules(list) {
+function renderModules(
+    list
+) {
 
     modulesContainer.innerHTML = "";
 
@@ -1966,252 +2379,287 @@ function renderModules(list) {
         document.createDocumentFragment();
 
 
-    list.forEach(module => {
+    list.forEach(
+        (module) => {
 
-        const card =
-            document.createElement(
-                "article"
-            );
-
-
-        card.className =
-            "module-card";
+            const card =
+                document.createElement(
+                    "article"
+                );
 
 
-        /*
-         * 图标
-         */
-
-        const icon =
-            module.icon ||
-            generateIcon(
-                module.name
-            );
+            card.className =
+                "module-card";
 
 
-        /*
-         * 作者
-         */
+            /*
+             * 图标
+             */
 
-        let authorHTML =
-            `<span class="author">
-                ${escapeHTML(
-                    module.author.name
-                )}
-            </span>`;
+            const fallbackIcon =
+                generateIcon(
+                    module.name
+                );
 
 
-        if (
-            module.author.url
-        ) {
-
-            const avatar =
-                module.author.username
-                    ? `https://github.com/${encodeURIComponent(module.author.username)}.png?size=36`
-                    : "";
+            const icon =
+                module.icon ||
+                fallbackIcon;
 
 
-            authorHTML = `
+            /*
+             * 作者
+             */
 
-                <a
-                    class="author"
-                    href="${escapeHTML(
-                        module.author.url
-                    )}"
-                    target="_blank"
-                    rel="noopener"
-                >
-
-                    ${
-                        avatar
-                            ? `
-                                <img
-                                    class="author-avatar"
-                                    src="${escapeHTML(
-                                        avatar
-                                    )}"
-                                    loading="lazy"
-                                    alt=""
-                                >
-                              `
-                            : ""
-                    }
-
+            let authorHTML =
+                `<span class="author">
                     ${escapeHTML(
                         module.author.name
                     )}
-
-                </a>
-
-            `;
-
-        }
+                </span>`;
 
 
-        /*
-         * Tags
-         */
+            if (
+                module.author.url
+            ) {
 
-        const tagsHTML =
-            module.tags
-                .slice(0, 5)
-                .map(
-                    tag =>
-                        `
-                        <span class="tag">
-                            ${escapeHTML(tag)}
-                        </span>
-                        `
-                )
-                .join("");
+                let avatar = "";
 
 
-        /*
-         * Icon HTML
-         */
+                if (
+                    module.author.username
+                ) {
 
-        const iconHTML =
-            module.icon
-                ? `
-                    <img
-                        src="${escapeHTML(
-                            module.icon
+                    avatar =
+                        `https://github.com/` +
+                        `${encodeURIComponent(
+                            module.author.username
+                        )}.png?size=36`;
+
+                }
+
+
+                authorHTML = `
+
+                    <a
+                        class="author"
+                        href="${escapeHTML(
+                            module.author.url
                         )}"
-                        alt=""
-                        loading="lazy"
-                        onerror="
-                            this.onerror=null;
-                            this.src='${generateIcon(module.name)}';
-                        "
+                        target="_blank"
+                        rel="noopener"
                     >
-                  `
-                : `
-                    <img
-                        src="${generateIcon(
-                            module.name
-                        )}"
-                        alt=""
-                    >
-                  `;
-
-
-        card.innerHTML = `
-
-            <div class="card-header">
-
-                <div class="module-icon">
-
-                    ${iconHTML}
-
-                </div>
-
-
-                <div class="card-main">
-
-                    <h2 class="module-name">
-                        ${escapeHTML(
-                            module.name
-                        )}
-                    </h2>
-
-
-                    <div class="module-meta">
-
-                        ${authorHTML}
-
-
-                        <span class="meta-separator">
-                            ·
-                        </span>
-
-
-                        <span>
-                            ${escapeHTML(
-                                formatDate(
-                                    module.date
-                                )
-                            )}
-                        </span>
-
 
                         ${
-                            module.category
+                            avatar
                                 ? `
-                                    <span class="meta-separator">
-                                        ·
-                                    </span>
-
-                                    <span>
-                                        ${escapeHTML(
-                                            module.category
-                                        )}
-                                    </span>
+                                    <img
+                                        class="author-avatar"
+                                        src="${escapeHTML(
+                                            avatar
+                                        )}"
+                                        loading="lazy"
+                                        alt=""
+                                    >
                                   `
                                 : ""
                         }
 
+                        ${escapeHTML(
+                            module.author.name
+                        )}
+
+                    </a>
+
+                `;
+
+            }
+
+
+            /*
+             * Tags
+             */
+
+            const tagsHTML =
+                module.tags
+                    .slice(0, 5)
+                    .map(
+                        tag =>
+                            `
+                            <span class="tag">
+                                ${escapeHTML(
+                                    tag
+                                )}
+                            </span>
+                            `
+                    )
+                    .join("");
+
+
+            /*
+             * 图标
+             */
+
+            const iconHTML =
+                module.icon
+                    ? `
+                        <img
+                            src="${escapeHTML(
+                                module.icon
+                            )}"
+                            alt=""
+                            loading="lazy"
+                            onerror="
+                                this.onerror=null;
+                                this.src='${fallbackIcon}';
+                            "
+                        >
+                      `
+                    : `
+                        <img
+                            src="${fallbackIcon}"
+                            alt=""
+                        >
+                      `;
+
+
+            /*
+             * 更新时间
+             */
+
+            const dateText =
+                formatDate(
+                    module.updateDate
+                );
+
+
+            card.innerHTML = `
+
+                <div class="card-header">
+
+
+                    <div class="module-icon">
+
+                        ${iconHTML}
+
                     </div>
 
 
-                    ${
-                        tagsHTML
-                            ? `
-                                <div class="tags">
-                                    ${tagsHTML}
-                                </div>
-                              `
-                            : ""
-                    }
+                    <div class="card-main">
+
+
+                        <h2 class="module-name">
+
+                            ${escapeHTML(
+                                module.name
+                            )}
+
+                        </h2>
+
+
+                        <div class="module-meta">
+
+                            ${authorHTML}
+
+
+                            <span
+                                class="meta-separator"
+                            >
+                                ·
+                            </span>
+
+
+                            <span>
+                                ${escapeHTML(
+                                    dateText
+                                )}
+                            </span>
+
+
+                            ${
+                                module.category
+                                    ? `
+                                        <span
+                                            class="meta-separator"
+                                        >
+                                            ·
+                                        </span>
+
+                                        <span>
+                                            ${escapeHTML(
+                                                module.category
+                                            )}
+                                        </span>
+                                      `
+                                    : ""
+                            }
+
+                        </div>
+
+
+                        ${
+                            tagsHTML
+                                ? `
+                                    <div class="tags">
+                                        ${tagsHTML}
+                                    </div>
+                                  `
+                                : ""
+                        }
+
+
+                    </div>
+
 
                 </div>
 
-            </div>
 
+                <div class="module-description">
 
-            <div class="module-description">
-
-                ${escapeHTML(
-                    module.description
-                )}
-
-            </div>
-
-
-            <div class="card-bottom">
-
-                <div class="source">
-
-                    <div class="source-icon">
-                        S
-                    </div>
-
-
-                    <div class="source-text">
-                        Surge Module
-                    </div>
+                    ${escapeHTML(
+                        module.description
+                    )}
 
                 </div>
 
 
-                <a
-                    class="install-button"
-                    href="${escapeHTML(
-                        module.installURL
-                    )}"
-                >
-                    安装
-                </a>
-
-            </div>
-
-        `;
+                <div class="card-bottom">
 
 
-        fragment.appendChild(
-            card
-        );
+                    <div class="source">
 
-    });
+                        <div class="source-icon">
+                            S
+                        </div>
+
+                        <div class="source-text">
+                            Shadowrocket 模块
+                        </div>
+
+                    </div>
+
+
+                    <a
+                        class="install-button"
+                        href="${escapeHTML(
+                            module.installURL
+                        )}"
+                    >
+                        安装
+                    </a>
+
+
+                </div>
+
+            `;
+
+
+            fragment.appendChild(
+                card
+            );
+
+        }
+    );
 
 
     modulesContainer.appendChild(
@@ -2258,11 +2706,11 @@ function filterModules() {
 
                     module.description,
 
-                    module.author.name,
+                    module.author?.name,
 
                     module.category,
 
-                    ...module.tags
+                    ...(module.tags || [])
 
                 ]
                     .join(" ")
@@ -2270,7 +2718,9 @@ function filterModules() {
 
 
                 return searchable
-                    .includes(keyword);
+                    .includes(
+                        keyword
+                    );
 
             }
         );
@@ -2299,6 +2749,7 @@ async function loadModules() {
 
         statusText.textContent =
             "正在读取模块列表...";
+
 
         statusDot.className =
             "status-dot loading";
@@ -2332,46 +2783,43 @@ async function loadModules() {
 
 
         /*
-         * 从 README 获取 Surge Raw 地址
+         * 找到所有 Surge Raw
          */
 
-        const baseModules =
+        const sourceModules =
             parseMarkdown(
                 markdown
             );
 
 
-        if (!baseModules.length) {
+        if (
+            !sourceModules.length
+        ) {
 
             throw new Error(
-                "没有解析到模块"
+                "README 中没有找到 Surge 模块"
             );
 
         }
 
 
         statusText.textContent =
-            `正在读取 ${baseModules.length} 个模块...`;
+            `正在读取 ${sourceModules.length} 个模块...`;
 
 
         /*
-         * 并发读取每一个 .module
+         * 读取每个 Raw
          */
 
         allModules =
-            await processWithConcurrency(
-                baseModules,
-                CONFIG.CONCURRENCY
+            await processModules(
+                sourceModules
             );
 
 
         /*
-         * 默认按照 README 顺序。
+         * 默认按照 README 顺序
          */
-
-        modules =
-            allModules;
-
 
         renderModules(
             allModules
@@ -2381,6 +2829,7 @@ async function loadModules() {
         statusText.textContent =
             "已同步";
 
+
         statusDot.className =
             "status-dot";
 
@@ -2388,7 +2837,6 @@ async function loadModules() {
     } catch (error) {
 
         console.error(
-            "加载模块失败：",
             error
         );
 
@@ -2420,7 +2868,10 @@ async function loadModules() {
                     color:#636366;
                     font-size:13px;
                 ">
-                    请检查网络连接或数据源是否可访问
+                    ${escapeHTML(
+                        error.message ||
+                        "请检查网络连接"
+                    )}
                 </div>
 
             </div>
@@ -2441,4 +2892,5 @@ loadModules();
 </script>
 
 </body>
+
 </html>
