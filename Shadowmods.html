@@ -1042,10 +1042,6 @@ a {
 <div class="container">
 
 
-<!-- =======================================================
-     Header
-======================================================== -->
-
 <header class="header">
 
     <h1 class="title">
@@ -1053,22 +1049,18 @@ a {
     </h1>
 
     <div class="subtitle">
-        模块来源自奶思的 Github 仓库
+       本页面相关资源来自奶思的 Github 仓库
         <strong>fmz200/wool_scripts</strong>
-        ，本页面仅提供索引与检索功能，并直接引用源文件地址，未添加或变更源文件的任何信息
+        ，仅提供索引与检索功能，未添加或变更源文件的任何信息
     </div>
 
 </header>
 
 
-<!-- =======================================================
-     Notice
-======================================================== -->
-
 <div class="notice">
 
     <div class="notice-icon">
-        🚀
+        📢
     </div>
 
     <div>
@@ -1079,10 +1071,6 @@ a {
 
 </div>
 
-
-<!-- =======================================================
-     Search
-======================================================== -->
 
 <div class="search-wrapper">
 
@@ -1101,10 +1089,6 @@ a {
 
 </div>
 
-
-<!-- =======================================================
-     Status
-======================================================== -->
 
 <div class="status">
 
@@ -1126,10 +1110,6 @@ a {
 </div>
 
 
-<!-- =======================================================
-     Module List
-======================================================== -->
-
 <main
     id="modules"
     class="modules"
@@ -1141,10 +1121,6 @@ a {
 
 </main>
 
-
-<!-- =======================================================
-     Footer
-======================================================== -->
 
 <footer class="footer">
 
@@ -1176,30 +1152,15 @@ a {
 
 const CONFIG = {
 
-    /*
-     * README 数据源
-     */
     README_URL:
         "https://raw.githubusercontent.com/fmz200/wool_scripts/main/README-RULE.md",
 
-
-    /*
-     * Shadowrocket 安装跳转页
-     */
     REDIRECT_URL:
         "https://lowertop.github.io/Shadowrocket-First/redirect.html",
 
-
-    /*
-     * GitHub API
-     */
     GITHUB_API:
         "https://api.github.com",
 
-
-    /*
-     * 同时读取多少个模块
-     */
     CONCURRENCY:
         5
 
@@ -1262,7 +1223,7 @@ function cleanText(value) {
 
 
 /* =========================================================
-   Normalize GitHub Raw URL
+   Normalize Raw URL
 ========================================================= */
 
 function normalizeRawURL(url) {
@@ -1277,15 +1238,7 @@ function normalizeRawURL(url) {
     let value =
         url
             .trim()
-            .replace(/^<|>$/g, "");
-
-
-    /*
-     * 去掉 Markdown URL 中可能出现的 HTML 编码
-     */
-
-    value =
-        value
+            .replace(/^<|>$/g, "")
             .replace(/&amp;/g, "&");
 
 
@@ -1294,13 +1247,6 @@ function normalizeRawURL(url) {
         const parsed =
             new URL(value);
 
-
-        /*
-         * GitHub 标准 Raw：
-         *
-         * https://raw.githubusercontent.com/
-         * owner/repo/main/path
-         */
 
         if (
             parsed.hostname ===
@@ -1311,13 +1257,6 @@ function normalizeRawURL(url) {
 
         }
 
-
-        /*
-         * GitHub Raw：
-         *
-         * https://github.com/
-         * owner/repo/raw/main/path
-         */
 
         if (
             parsed.hostname ===
@@ -1416,7 +1355,7 @@ function extractMarkdownLinks(text) {
 
 
 /* =========================================================
-   Find Module Raw URL
+   Find Raw URL
 ========================================================= */
 
 function findModuleRawURL(cell) {
@@ -1428,17 +1367,15 @@ function findModuleRawURL(cell) {
     }
 
 
-    /*
-     * 优先寻找 Markdown Raw 链接
-     */
-
     const links =
         extractMarkdownLinks(
             cell
         );
 
 
-    for (const link of links) {
+    for (
+        const link of links
+    ) {
 
         if (
             /raw/i.test(link.label) ||
@@ -1452,11 +1389,6 @@ function findModuleRawURL(cell) {
 
     }
 
-
-    /*
-     * 如果 README 没有使用 Markdown 链接，
-     * 再直接寻找 URL。
-     */
 
     const urlMatch =
         cell.match(
@@ -1479,7 +1411,7 @@ function findModuleRawURL(cell) {
 
 
 /* =========================================================
-   Parse README Table
+   Parse README
 ========================================================= */
 
 function parseMarkdown(markdown) {
@@ -1498,20 +1430,10 @@ function parseMarkdown(markdown) {
 
 
     /*
-     * =====================================================
-     * 只寻找真正的表头
+     * 只识别真正的表头。
      *
-     * 这里非常重要：
-     *
-     * 不能使用：
-     *
-     * columns.some(column => /surge/i.test(column))
-     *
-     * 因为下面的 Raw URL 中本身就存在：
-     *
-     * /Surge/module/...
-     *
-     * =====================================================
+     * 不能简单搜索 /surge/i，
+     * 因为 Raw URL 自己就包含 /Surge/
      */
 
     for (
@@ -1556,9 +1478,7 @@ function parseMarkdown(markdown) {
             columns.findIndex(
                 column =>
                     /^(Surge|Surge\s*链接|Surge\s*模块|Surge\s*配置)$/i
-                        .test(
-                            column
-                        )
+                        .test(column)
             );
 
 
@@ -1566,20 +1486,9 @@ function parseMarkdown(markdown) {
             columns.findIndex(
                 column =>
                     /^(规则名称|模块名称|配置名称|名称)$/i
-                        .test(
-                            column
-                        )
+                        .test(column)
             );
 
-
-        /*
-         * 必须同时找到：
-         *
-         * 名称列
-         * Surge 列
-         *
-         * 才认为这是表头
-         */
 
         if (
             foundSurgeIndex >= 0 &&
@@ -1637,12 +1546,6 @@ function parseMarkdown(markdown) {
     const result = [];
 
 
-    /*
-     * =====================================================
-     * 从表头下一行开始读取
-     * =====================================================
-     */
-
     for (
         let i = headerIndex + 1;
         i < lines.length;
@@ -1681,10 +1584,6 @@ function parseMarkdown(markdown) {
         }
 
 
-        /*
-         * 跳过 Markdown 分隔线
-         */
-
         if (
             columns.every(
                 column =>
@@ -1699,10 +1598,6 @@ function parseMarkdown(markdown) {
         }
 
 
-        /*
-         * 列数不够
-         */
-
         if (
             columns.length <=
             Math.max(
@@ -1715,10 +1610,6 @@ function parseMarkdown(markdown) {
 
         }
 
-
-        /*
-         * 获取名称
-         */
 
         let name =
             columns[nameIndex] || "";
@@ -1745,17 +1636,9 @@ function parseMarkdown(markdown) {
                 .trim();
 
 
-        /*
-         * 获取 Surge 单元格
-         */
-
         const surgeCell =
             columns[surgeIndex];
 
-
-        /*
-         * 获取 Raw 地址
-         */
 
         const rawURL =
             findModuleRawURL(
@@ -1775,10 +1658,6 @@ function parseMarkdown(markdown) {
 
         }
 
-
-        /*
-         * 去重
-         */
 
         if (
             result.some(
@@ -1842,16 +1721,6 @@ function parseAuthor(value) {
     }
 
 
-    /*
-     * 例如：
-     *
-     * 奶思
-     *
-     * 或：
-     *
-     * 奶思[https://github.com/xxx]
-     */
-
     const match =
         value.match(
             /^(.*?)\s*\[\s*(https?:\/\/[^\]]+)\s*\]\s*$/
@@ -1859,10 +1728,6 @@ function parseAuthor(value) {
 
 
     if (!match) {
-
-        /*
-         * 如果作者本身就是 URL
-         */
 
         const github =
             value.match(
@@ -1944,7 +1809,7 @@ function parseAuthor(value) {
 
 
 /* =========================================================
-   Parse Metadata
+   Parse Module Metadata
 ========================================================= */
 
 function parseModuleMetadata(
@@ -1959,27 +1824,15 @@ function parseModuleMetadata(
         text.split(/\r?\n/);
 
 
-    /*
-     * 只解析模块文件顶部的 #! 元数据。
-     */
-
     for (
         let i = 0;
         i < lines.length;
         i++
     ) {
 
-        const rawLine =
-            lines[i];
-
-
         const line =
-            rawLine.trim();
+            lines[i].trim();
 
-
-        /*
-         * 空行允许继续
-         */
 
         if (!line) {
 
@@ -1987,10 +1840,6 @@ function parseModuleMetadata(
 
         }
 
-
-        /*
-         * 元数据
-         */
 
         if (
             line.startsWith("#!")
@@ -2030,10 +1879,6 @@ function parseModuleMetadata(
         }
 
 
-        /*
-         * 普通注释允许继续。
-         */
-
         if (
             line.startsWith("#")
         ) {
@@ -2042,11 +1887,6 @@ function parseModuleMetadata(
 
         }
 
-
-        /*
-         * 第一条真正配置出现后，
-         * 停止解析头部。
-         */
 
         break;
 
@@ -2074,37 +1914,18 @@ function parseModuleMetadata(
             fallbackName ||
             "未命名模块",
 
-
         description:
             metadata.desc ||
             "",
-
 
         author:
             parseAuthor(
                 metadata.author
             ),
 
-
         icon:
             metadata.icon ||
             "",
-
-
-        category:
-            metadata.category ||
-            "",
-
-
-        date:
-            metadata.date ||
-            "",
-
-
-        homepage:
-            metadata.homepage ||
-            "",
-
 
         tags
 
@@ -2114,7 +1935,7 @@ function parseModuleMetadata(
 
 
 /* =========================================================
-   Generate Description From Raw
+   Generate Description
 ========================================================= */
 
 function generateDescription(
@@ -2123,9 +1944,7 @@ function generateDescription(
 ) {
 
     /*
-     * 第一优先：
-     *
-     * #!desc
+     * 第一优先：#!desc
      */
 
     if (
@@ -2138,15 +1957,7 @@ function generateDescription(
 
 
     /*
-     * 第二优先：
-     *
-     * 查找头部普通注释。
-     *
-     * 例如：
-     *
-     * # 这个模块用于……
-     *
-     * # 用于……
+     * 第二优先：模块顶部普通注释
      */
 
     const lines =
@@ -2228,47 +2039,9 @@ function generateDescription(
 
 
     /*
-     * 第三优先：
+     * 第三优先：根据模块内容生成通用简介
      *
-     * category
-     */
-
-    if (
-        metadata.category
-    ) {
-
-        return (
-            `${metadata.name}，属于「` +
-            `${metadata.category}` +
-            `」模块。`
-        );
-
-    }
-
-
-    /*
-     * 第四优先：
-     *
-     * tag
-     */
-
-    if (
-        metadata.tags &&
-        metadata.tags.length
-    ) {
-
-        return (
-            `${metadata.name}，` +
-            `用于处理「` +
-            `${metadata.tags.join("、")}` +
-            `」相关请求。`
-        );
-
-    }
-
-
-    /*
-     * 最终 fallback
+     * 不使用 #!category。
      */
 
     return (
@@ -2280,7 +2053,7 @@ function generateDescription(
 
 
 /* =========================================================
-   Parse GitHub Raw Information
+   Parse GitHub Raw URL
 ========================================================= */
 
 function parseGitHubRawURL(
@@ -2318,33 +2091,21 @@ function parseGitHubRawURL(
         }
 
 
-        const owner =
-            parts[0];
-
-
-        const repo =
-            parts[1];
-
-
-        const branch =
-            parts[2];
-
-
-        const path =
-            parts
-                .slice(3)
-                .join("/");
-
-
         return {
 
-            owner,
+            owner:
+                parts[0],
 
-            repo,
+            repo:
+                parts[1],
 
-            branch,
+            branch:
+                parts[2],
 
-            path
+            path:
+                parts
+                    .slice(3)
+                    .join("/")
 
         };
 
@@ -2358,7 +2119,7 @@ function parseGitHubRawURL(
 
 
 /* =========================================================
-   Get GitHub Commit Date
+   Get Raw File Last Update
 ========================================================= */
 
 async function getGitHubCommitDate(
@@ -2379,6 +2140,14 @@ async function getGitHubCommitDate(
 
 
     try {
+
+        /*
+         * GitHub API 查询指定文件的 commits。
+         *
+         * per_page=1：
+         * 返回的第一条就是这个 Raw 文件
+         * 最近一次提交。
+         */
 
         const apiURL =
             CONFIG.GITHUB_API +
@@ -2411,6 +2180,12 @@ async function getGitHubCommitDate(
             !response.ok
         ) {
 
+            console.warn(
+                "GitHub API:",
+                response.status,
+                rawURL
+            );
+
             return "";
 
         }
@@ -2430,6 +2205,15 @@ async function getGitHubCommitDate(
         }
 
 
+        /*
+         * 注意：
+         *
+         * 这里绝对不读取 #!date。
+         *
+         * 只读取 GitHub 对这个 Raw 文件
+         * 对应路径的最后一次提交时间。
+         */
+
         return (
             data[0]
                 ?.commit
@@ -2447,7 +2231,7 @@ async function getGitHubCommitDate(
     } catch (error) {
 
         console.warn(
-            "GitHub 更新时间获取失败：",
+            "GitHub Raw 更新时间获取失败：",
             rawURL,
             error
         );
@@ -2460,7 +2244,7 @@ async function getGitHubCommitDate(
 
 
 /* =========================================================
-   Resolve Icon URL
+   Resolve Icon
 ========================================================= */
 
 function resolveIconURL(
@@ -2479,24 +2263,14 @@ function resolveIconURL(
         icon.trim();
 
 
-    /*
-     * data URI
-     */
-
     if (
-        icon.startsWith(
-            "data:"
-        )
+        icon.startsWith("data:")
     ) {
 
         return icon;
 
     }
 
-
-    /*
-     * 完整 URL
-     */
 
     if (
         /^https?:\/\//i.test(
@@ -2508,10 +2282,6 @@ function resolveIconURL(
 
     }
 
-
-    /*
-     * 相对路径
-     */
 
     try {
 
@@ -2530,7 +2300,7 @@ function resolveIconURL(
 
 
 /* =========================================================
-   Generate Fallback Icon
+   Hash
 ========================================================= */
 
 function hashString(
@@ -2561,6 +2331,10 @@ function hashString(
 
 }
 
+
+/* =========================================================
+   Generate Icon
+========================================================= */
 
 function generateIcon(
     name
@@ -2673,14 +2447,6 @@ function formatDate(
     }
 
 
-    /*
-     * 兼容：
-     *
-     * 2026-07-04
-     * 2026-07-04 20:05:14
-     * 2026-07-04T20:05:14Z
-     */
-
     let normalized =
         String(value)
             .trim();
@@ -2704,11 +2470,6 @@ function formatDate(
             date.getTime()
         )
     ) {
-
-        /*
-         * 如果不是标准日期，
-         * 直接显示原始值
-         */
 
         return value;
 
@@ -2749,9 +2510,9 @@ function createInstallURL(
 ) {
 
     /*
-     * 最终：
+     * Shadowrocket 原始安装协议：
      *
-     * shadowrocket://install?module=RAW_URL
+     * shadowrocket://install?module=Raw地址
      */
 
     const shadowrocketURL =
@@ -2760,11 +2521,7 @@ function createInstallURL(
 
 
     /*
-     * 再交给 redirect.html
-     *
-     * 使用 encodeURIComponent
-     * 避免 Raw URL 中的 ? & # 等
-     * 破坏 redirect.html 的 url 参数。
+     * 通过 redirect.html 中转。
      */
 
     return (
@@ -2779,7 +2536,7 @@ function createInstallURL(
 
 
 /* =========================================================
-   Get Repository Owner Avatar
+   Repository Avatar
 ========================================================= */
 
 function getRepositoryAvatar(
@@ -2819,7 +2576,7 @@ async function fetchModule(
     try {
 
         /*
-         * 读取 Raw
+         * 读取 Raw 文件
          */
 
         const response =
@@ -2848,7 +2605,7 @@ async function fetchModule(
 
 
         /*
-         * 解析模块头部
+         * 模块元数据
          */
 
         const metadata =
@@ -2859,7 +2616,7 @@ async function fetchModule(
 
 
         /*
-         * 解析图标
+         * 图标
          */
 
         const icon =
@@ -2870,24 +2627,18 @@ async function fetchModule(
 
 
         /*
-         * 更新时间：
+         * 重要：
          *
-         * 1. #!date
-         * 2. GitHub Commit
+         * 更新时间永远来自 Raw 文件
+         * 在 GitHub 上最后一次 commit。
+         *
+         * 不读取 #!date。
          */
 
-        let updateDate =
-            metadata.date;
-
-
-        if (!updateDate) {
-
-            updateDate =
-                await getGitHubCommitDate(
-                    item.rawURL
-                );
-
-        }
+        const updateDate =
+            await getGitHubCommitDate(
+                item.rawURL
+            );
 
 
         /*
@@ -2905,8 +2656,7 @@ async function fetchModule(
          * 作者头像
          */
 
-        let authorAvatar =
-            "";
+        let authorAvatar = "";
 
 
         if (
@@ -2924,8 +2674,8 @@ async function fetchModule(
 
 
         /*
-         * 如果作者没有 GitHub 地址，
-         * 使用仓库作者作为 fallback。
+         * 如果作者不是 GitHub 用户，
+         * 使用仓库 owner 头像。
          */
 
         if (
@@ -2957,14 +2707,8 @@ async function fetchModule(
 
             icon,
 
-            category:
-                metadata.category,
-
             tags:
                 metadata.tags,
-
-            homepage:
-                metadata.homepage,
 
             updateDate,
 
@@ -2984,15 +2728,14 @@ async function fetchModule(
         );
 
 
-        /*
-         * 单个模块失败不影响其他模块。
-         */
-
-        const fallback = {
+        return {
 
             name:
                 item.name ||
                 "未命名模块",
+
+            rawURL:
+                item.rawURL,
 
             description:
                 `${item.name || "该模块"}，` +
@@ -3019,14 +2762,8 @@ async function fetchModule(
             icon:
                 "",
 
-            category:
-                "",
-
             tags:
                 [],
-
-            homepage:
-                "",
 
             updateDate:
                 "",
@@ -3035,16 +2772,6 @@ async function fetchModule(
                 createInstallURL(
                     item.rawURL
                 )
-
-        };
-
-
-        return {
-
-            ...fallback,
-
-            rawURL:
-                item.rawURL
 
         };
 
@@ -3141,10 +2868,6 @@ function renderAuthor(
         module.authorAvatar;
 
 
-    /*
-     * 有作者 GitHub 链接
-     */
-
     if (
         author.url
     ) {
@@ -3189,10 +2912,6 @@ function renderAuthor(
     }
 
 
-    /*
-     * 没有作者 URL
-     */
-
     return `
 
         <span class="author">
@@ -3227,7 +2946,7 @@ function renderAuthor(
 
 
 /* =========================================================
-   Render Module
+   Create Module Card
 ========================================================= */
 
 function createModuleCard(
@@ -3244,10 +2963,6 @@ function createModuleCard(
         "module-card";
 
 
-    /*
-     * 图标
-     */
-
     const fallbackIcon =
         generateIcon(
             module.name
@@ -3259,19 +2974,11 @@ function createModuleCard(
         fallbackIcon;
 
 
-    /*
-     * 作者
-     */
-
     const authorHTML =
         renderAuthor(
             module
         );
 
-
-    /*
-     * Tags
-     */
 
     const tags =
         Array.isArray(
@@ -3297,38 +3004,10 @@ function createModuleCard(
             .join("");
 
 
-    /*
-     * 更新时间
-     */
-
     const updateDate =
         formatDate(
             module.updateDate
         );
-
-
-    /*
-     * 分类
-     */
-
-    const categoryHTML =
-        module.category
-            ? `
-
-                <span
-                    class="meta-separator"
-                >
-                    ·
-                </span>
-
-                <span>
-                    ${escapeHTML(
-                        module.category
-                    )}
-                </span>
-
-              `
-            : "";
 
 
     card.innerHTML = `
@@ -3365,22 +3044,17 @@ function createModuleCard(
 
                     ${authorHTML}
 
-
                     <span
                         class="meta-separator"
                     >
                         ·
                     </span>
 
-
                     <span>
                         ${escapeHTML(
                             updateDate
                         )}
                     </span>
-
-
-                    ${categoryHTML}
 
                 </div>
 
@@ -3441,11 +3115,6 @@ function createModuleCard(
 
     `;
 
-
-    /*
-     * 图标加载失败时，
-     * 自动切换到生成图标。
-     */
 
     const image =
         card.querySelector(
@@ -3580,8 +3249,6 @@ function filterModules() {
 
                     module.author?.name,
 
-                    module.category,
-
                     ...(module.tags || [])
 
                 ]
@@ -3619,12 +3286,6 @@ async function loadModules() {
 
     try {
 
-        /*
-         * =================================================
-         * 1. 获取 README
-         * =================================================
-         */
-
         statusText.textContent =
             "正在读取模块列表...";
 
@@ -3632,6 +3293,10 @@ async function loadModules() {
         statusDot.className =
             "status-dot loading";
 
+
+        /*
+         * README
+         */
 
         const response =
             await fetch(
@@ -3659,9 +3324,7 @@ async function loadModules() {
 
 
         /*
-         * =================================================
-         * 2. 解析 README
-         * =================================================
+         * README → Raw URL
          */
 
         const sourceModules =
@@ -3682,13 +3345,11 @@ async function loadModules() {
 
 
         /*
-         * =================================================
-         * 3. 读取每一个 Raw 模块
-         * =================================================
+         * Raw → 模块详细信息
          */
 
         statusText.textContent =
-            `正在读取 ${sourceModules.length} 个模块，请耐心等待...`;
+            `正在读取 ${sourceModules.length} 个模块...`;
 
 
         allModules =
@@ -3698,9 +3359,7 @@ async function loadModules() {
 
 
         /*
-         * =================================================
-         * 4. 显示
-         * =================================================
+         * 页面
          */
 
         renderModules(
