@@ -143,13 +143,15 @@
             opacity: 0.8;
         }
 
-        /* 主题切换按钮 */
+        /* 主题切换按钮（已修复像素级绝对居中） */
         .theme-toggle {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 42px;
             height: 42px;
+            padding: 0;
+            line-height: 1;
             border: 0;
             border-radius: 50%;
             background: var(--card);
@@ -237,7 +239,6 @@
             -webkit-appearance: none;
         }
 
-        /* 隐藏 WebKit 浏览器原生的搜索框清除按钮（消除重复图标） */
         .search::-webkit-search-decoration,
         .search::-webkit-search-cancel-button,
         .search::-webkit-search-results-button,
@@ -254,7 +255,6 @@
             box-shadow: inset 0 0 0 1.5px var(--blue);
         }
 
-        /* 自定义一键清除按钮 */
         .search-clear {
             position: absolute;
             right: 14px;
@@ -800,7 +800,7 @@
         }
 
         /* =========================================================
-           原生直接网络请求
+           网络请求
         ========================================================= */
         async function fetchRawText(url, isPartial = true) {
             const headers = isPartial ? { 'Range': 'bytes=0-2047' } : {};
@@ -1000,10 +1000,9 @@
         }
 
         /* =========================================================
-           iOS App 风格专属图标匹配库 (高精准度匹配算法)
+           iOS App 风格图标匹配库
         ========================================================= */
         const IOS_APP_ICONS = [
-            // 热门社交与通信
             { keywords: ["wechat", "微信"], bg: "#07C160", symbol: "💬" },
             { keywords: ["qq", "腾讯qq"], bg: "#12B7F5", symbol: "🐧" },
             { keywords: ["telegram", "电报", "tg"], bg: "#24A1DE", symbol: "✈️" },
@@ -1015,8 +1014,6 @@
             { keywords: ["reddit"], bg: "#FF4500", symbol: "🤖" },
             { keywords: ["微博", "weibo"], bg: "#E6162D", symbol: "👁️" },
             { keywords: ["贴吧", "百度贴吧"], bg: "#3385FF", symbol: "吧" },
-
-            // 音视频与娱乐
             { keywords: ["bilibili", "哔哩哔哩", "b站"], bg: "#FB7299", symbol: "📺" },
             { keywords: ["youtube", "油管"], bg: "#FF0000", symbol: "▶" },
             { keywords: ["抖音", "douyin", "tiktok"], bg: "#161823", symbol: "🎵" },
@@ -1035,8 +1032,6 @@
             { keywords: ["喜马拉雅"], bg: "#F86442", symbol: "📻" },
             { keywords: ["巴哈姆特", "动画疯"], bg: "#00B4D8", symbol: "🎮" },
             { keywords: ["twitch"], bg: "#9146FF", symbol: "👾" },
-
-            // 电商与生活服务
             { keywords: ["淘宝", "taobao"], bg: "#FF5500", symbol: "淘" },
             { keywords: ["京东", "jd"], bg: "#E1251B", symbol: "京" },
             { keywords: ["拼多多", "pdd"], bg: "#E02E24", symbol: "拼" },
@@ -1048,16 +1043,12 @@
             { keywords: ["12306", "铁路"], bg: "#0066CC", symbol: "🚄" },
             { keywords: ["滴滴"], bg: "#FF7D00", symbol: "🚖" },
             { keywords: ["高德", "地图"], bg: "#007AFF", symbol: "🗺️" },
-
-            // 金融与支付
             { keywords: ["支付宝", "alipay"], bg: "#1677FF", symbol: "支" },
             { keywords: ["招商银行", "招行"], bg: "#C8102E", symbol: "招" },
             { keywords: ["工商银行", "工行"], bg: "#C8102E", symbol: "工" },
             { keywords: ["建设银行", "建行"], bg: "#003B8E", symbol: "建" },
             { keywords: ["中国银行"], bg: "#B11E23", symbol: "中" },
             { keywords: ["云闪付"], bg: "#E60012", symbol: "💳" },
-
-            // 资讯、工具与 AI
             { keywords: ["知乎"], bg: "#0066FF", symbol: "知" },
             { keywords: ["百度"], bg: "#2932E1", symbol: "度" },
             { keywords: ["夸克"], bg: "#21B187", symbol: "Q" },
@@ -1067,8 +1058,6 @@
             { keywords: ["google", "谷歌"], bg: "linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853)", symbol: "G" },
             { keywords: ["chatgpt", "openai"], bg: "#10A37F", symbol: "🤖" },
             { keywords: ["claude"], bg: "#D97757", symbol: "✻" },
-
-            // 代理、自动化与脚本模块
             { keywords: ["boxjs", "box"], bg: "#FF9500", symbol: "📦" },
             { keywords: ["sub-store", "substore"], bg: "#5856D6", symbol: "🛒" },
             { keywords: ["去广告", "adblock", "block", "ad", "净化", "拦截"], bg: "#FF3B30", symbol: "🛡️" },
@@ -1087,7 +1076,6 @@
             return Math.abs(hash);
         }
 
-        /* 生成 iOS App 风格的 Squircle 图标 */
         function createIOSAppIcon(name, tags = []) {
             const searchText = (name + " " + tags.join(" ")).toLowerCase();
             const matchedBrand = IOS_APP_ICONS.find(rule => rule.keywords.some(kw => searchText.includes(kw)));
@@ -1122,7 +1110,6 @@
                 </defs>`;
             }
 
-            // Apple 官方 Squircle 标准圆角比例
             const svg = `
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                 ${gradientDef}
@@ -1144,7 +1131,6 @@
             }
         }
 
-        /* 1. 核心改进：修改为直接打开 Shadowrocket，无需跳转链接 */
         function createInstallURL(rawURL) {
             return "shadowrocket://install?module=" + encodeURIComponent(rawURL);
         }
@@ -1239,7 +1225,6 @@
             const card = document.createElement("article");
             card.className = "module-card";
 
-            // 2. 核心改进：计算 iOS App 风格高精度图标
             const iosAppIcon = createIOSAppIcon(module.name, module.tags);
             const icon = module.icon || iosAppIcon;
 
@@ -1317,7 +1302,7 @@
         }
 
         /* =========================================================
-           Search & Filter (3. 修复清除按钮交互)
+           Search & Filter
         ========================================================= */
         function filterModules() {
             const keyword = searchInput.value.trim().toLowerCase();
