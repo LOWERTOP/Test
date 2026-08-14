@@ -19,9 +19,10 @@
 
     <style>
         /* =========================================================
-           Design Tokens
+           Design Tokens (深色/浅色 双主题)
         ========================================================= */
         :root {
+            /* 默认深色主题 (Dark Mode) */
             --background: #000000;
             --card: #1c1c1e;
             --card-hover: #232326;
@@ -40,6 +41,33 @@
 
             --radius-large: 22px;
             --content-width: 900px;
+            
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --toast-bg: rgba(255, 255, 255, 0.9);
+            --toast-text: #000000;
+        }
+
+        [data-theme="light"] {
+            /* 浅色主题 (Light Mode) */
+            --background: #f2f2f7;
+            --card: #ffffff;
+            --card-hover: #f9f9fb;
+            --card-secondary: #e5e5ea;
+
+            --text-primary: #1c1c1e;
+            --text-secondary: #8e8e93;
+            --text-tertiary: #aeaeb2;
+
+            --blue: #007aff;
+            --blue-hover: #0056b3;
+
+            --green: #34c759;
+            --orange: #ff9500;
+            --red: #ff3b30;
+
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --toast-bg: rgba(0, 0, 0, 0.85);
+            --toast-text: #ffffff;
         }
 
         /* =========================================================
@@ -54,6 +82,7 @@
             margin: 0;
             padding: 0;
             background: var(--background);
+            transition: background-color 0.25s ease;
         }
 
         body {
@@ -64,6 +93,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         button, input {
@@ -88,6 +118,13 @@
             padding: 24px 0 16px;
         }
 
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
         .title {
             margin: 0;
             font-size: 34px;
@@ -104,6 +141,28 @@
 
         .title a:hover {
             opacity: 0.8;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: 0;
+            border-radius: 50%;
+            background: var(--card);
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: inset 0 0 0 1px var(--border-subtle);
+            transition: background 0.2s ease, transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.92);
         }
 
         .subtitle {
@@ -132,9 +191,10 @@
             padding: 12px 18px;
             background: var(--card);
             border-radius: 16px;
-            color: #d1d1d6;
+            color: var(--text-primary);
             font-size: 14.5px;
             line-height: 1.4;
+            box-shadow: inset 0 0 0 1px var(--border-subtle);
         }
 
         .notice-icon {
@@ -164,16 +224,26 @@
             display: block;
             width: 100%;
             height: 54px;
-            padding: 0 44px 0 50px;
+            padding: 0 48px 0 50px;
             border: 0;
             outline: none;
             border-radius: 18px;
             background: var(--card);
             color: var(--text-primary);
             font-size: 17px;
-            transition: background 0.2s ease;
+            box-shadow: inset 0 0 0 1px var(--border-subtle);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
             appearance: none;
             -webkit-appearance: none;
+        }
+
+        /* 隐藏 WebKit 浏览器原生的搜索框清除按钮（消除重复图标） */
+        .search::-webkit-search-decoration,
+        .search::-webkit-search-cancel-button,
+        .search::-webkit-search-results-button,
+        .search::-webkit-search-results-decoration {
+            -webkit-appearance: none;
+            display: none;
         }
 
         .search::placeholder {
@@ -181,9 +251,10 @@
         }
 
         .search:focus {
-            background: #242428;
+            box-shadow: inset 0 0 0 1.5px var(--blue);
         }
 
+        /* 自定义一键清除按钮 */
         .search-clear {
             position: absolute;
             right: 14px;
@@ -198,10 +269,12 @@
             border-radius: 50%;
             background: var(--text-tertiary);
             color: var(--background);
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: bold;
             cursor: pointer;
             padding: 0;
             line-height: 1;
+            transition: opacity 0.15s ease;
         }
 
         .search-clear.visible {
@@ -260,8 +333,9 @@
             padding: 20px 22px;
             border-radius: var(--radius-large);
             background: var(--card);
+            box-shadow: inset 0 0 0 1px var(--border-subtle);
             overflow: hidden;
-            transition: background .2s ease, transform .2s ease;
+            transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
 
             content-visibility: auto;
             contain-intrinsic-size: 0 180px;
@@ -285,7 +359,7 @@
             border-radius: 18px;
             background: var(--card-secondary);
             overflow: hidden;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
         }
 
         .module-icon img {
@@ -356,8 +430,8 @@
             height: 22px;
             padding: 0 8px;
             border-radius: 11px;
-            background: rgba(255,255,255,.06);
-            color: #8e8e93;
+            background: var(--card-secondary);
+            color: var(--text-secondary);
             font-size: 11px;
             white-space: nowrap;
         }
@@ -398,7 +472,7 @@
             flex: 0 0 26px;
             border-radius: 50%;
             background: var(--card-secondary);
-            color: #d1d1d6;
+            color: var(--text-primary);
             font-size: 12px;
         }
 
@@ -442,7 +516,7 @@
         }
 
         .button-secondary:hover {
-            background: #3a3a3c;
+            opacity: 0.85;
         }
 
         .button-primary {
@@ -476,14 +550,14 @@
         .loading-card {
             height: 190px;
             border-radius: var(--radius-large);
-            background: linear-gradient(90deg, #1c1c1e 0%, #28282b 50%, #1c1c1e 100%);
-            background-size: 200% 100%;
-            animation: skeletonLoading 1.4s infinite;
+            background: var(--card);
+            box-shadow: inset 0 0 0 1px var(--border-subtle);
+            animation: skeletonPulse 1.4s infinite;
         }
 
-        @keyframes skeletonLoading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        @keyframes skeletonPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
         }
 
         /* Footer */
@@ -513,11 +587,11 @@
             z-index: 999;
             padding: 10px 20px;
             border-radius: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #000000;
+            background: var(--toast-bg);
+            color: var(--toast-text);
             font-size: 14px;
             font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
             opacity: 0;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
             pointer-events: none;
@@ -563,9 +637,12 @@
     <div class="container">
 
         <header class="header">
-            <h1 class="title">
-                <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">Shadowrocket 模块中心</a>
-            </h1>
+            <div class="header-top">
+                <h1 class="title">
+                    <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">Shadowrocket 模块中心</a>
+                </h1>
+                <button id="themeToggle" class="theme-toggle" title="切换深/浅色模式">🌙</button>
+            </div>
             <div class="subtitle">
                 资源来自于
                 <a href="https://github.com/fmz200/wool_scripts" target="_blank" rel="noopener">
@@ -615,14 +692,13 @@
 
     <script>
         /* =========================================================
-           Configuration & Cache (完全不依赖 CDN)
+           Configuration & Cache
         ========================================================= */
         const CONFIG = {
             README_URL: "https://raw.githubusercontent.com/fmz200/wool_scripts/main/README-RULE.md",
-            REDIRECT_URL: "https://lowertop.github.io/Shadowrocket-First/redirect.html",
             CONCURRENCY: 12,
-            CACHE_KEY: "sr_modules_data_v5",
-            CACHE_TIME_KEY: "sr_modules_time_v5",
+            CACHE_KEY: "sr_modules_data_v6",
+            CACHE_TIME_KEY: "sr_modules_time_v6",
             CACHE_EXPIRE: 3600 * 6 * 1000
         };
 
@@ -636,9 +712,40 @@
         const statusDot = document.getElementById("statusDot");
         const countText = document.getElementById("countText");
         const toast = document.getElementById("toast");
+        const themeToggle = document.getElementById("themeToggle");
 
         let allModules = [];
         let searchTimer = null;
+
+        /* =========================================================
+           Theme Switcher (深/浅色模式)
+        ========================================================= */
+        function initTheme() {
+            const savedTheme = localStorage.getItem("sr_theme");
+            const systemPrefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+            
+            const initialTheme = savedTheme || (systemPrefersLight ? "light" : "dark");
+            applyTheme(initialTheme);
+        }
+
+        function applyTheme(theme) {
+            if (theme === "light") {
+                document.documentElement.setAttribute("data-theme", "light");
+                themeToggle.textContent = "☀️";
+            } else {
+                document.documentElement.removeAttribute("data-theme");
+                themeToggle.textContent = "🌙";
+            }
+            localStorage.setItem("sr_theme", theme);
+        }
+
+        themeToggle.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+            const newTheme = currentTheme === "light" ? "dark" : "light";
+            applyTheme(newTheme);
+        });
+
+        initTheme();
 
         /* =========================================================
            Utilities
@@ -693,7 +800,7 @@
         }
 
         /* =========================================================
-           原生直接网络请求 (不经任何 CDN)
+           原生直接网络请求
         ========================================================= */
         async function fetchRawText(url, isPartial = true) {
             const headers = isPartial ? { 'Range': 'bytes=0-2047' } : {};
@@ -893,25 +1000,83 @@
         }
 
         /* =========================================================
-           100% 本地原生 SVG 图标生成器 (不依赖任何外部 CDN)
+           iOS App 风格专属图标匹配库 (高精准度匹配算法)
         ========================================================= */
-        const BRAND_RULES = [
-            { keywords: ["bilibili", "哔哩哔哩", "b站"], bg: "#FB7299", symbol: "📺" },
+        const IOS_APP_ICONS = [
+            // 热门社交与通信
             { keywords: ["wechat", "微信"], bg: "#07C160", symbol: "💬" },
-            { keywords: ["zhihu", "知乎"], bg: "#0066FF", symbol: "知" },
-            { keywords: ["youtube", "油管"], bg: "#FF0000", symbol: "▶" },
+            { keywords: ["qq", "腾讯qq"], bg: "#12B7F5", symbol: "🐧" },
             { keywords: ["telegram", "电报", "tg"], bg: "#24A1DE", symbol: "✈️" },
-            { keywords: ["twitter", "x"], bg: "#1DA1F2", symbol: "🐦" },
-            { keywords: ["github"], bg: "#24292E", symbol: "🐙" },
-            { keywords: ["spotify"], bg: "#1DB954", symbol: "🎵" },
+            { keywords: ["twitter", " x ", "x.com", "推特"], bg: "#000000", symbol: "𝕏" },
+            { keywords: ["instagram", "ig"], bg: "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)", symbol: "📸" },
+            { keywords: ["facebook", "脸书"], bg: "#1877F2", symbol: "f" },
+            { keywords: ["whatsapp"], bg: "#25D366", symbol: "📞" },
+            { keywords: ["discord"], bg: "#5865F2", symbol: "🎮" },
+            { keywords: ["reddit"], bg: "#FF4500", symbol: "🤖" },
+            { keywords: ["微博", "weibo"], bg: "#E6162D", symbol: "👁️" },
+            { keywords: ["贴吧", "百度贴吧"], bg: "#3385FF", symbol: "吧" },
+
+            // 音视频与娱乐
+            { keywords: ["bilibili", "哔哩哔哩", "b站"], bg: "#FB7299", symbol: "📺" },
+            { keywords: ["youtube", "油管"], bg: "#FF0000", symbol: "▶" },
+            { keywords: ["抖音", "douyin", "tiktok"], bg: "#161823", symbol: "🎵" },
+            { keywords: ["快手", "kuaishou"], bg: "#FF4500", symbol: "📹" },
+            { keywords: ["爱奇艺", "iqiyi"], bg: "#00CC36", symbol: "▶" },
+            { keywords: ["腾讯视频"], bg: "#FF6C00", symbol: "▶" },
+            { keywords: ["优酷", "youku"], bg: "#00A0E9", symbol: "▶" },
+            { keywords: ["芒果", "mgtv"], bg: "#FF6600", symbol: "🥭" },
             { keywords: ["netflix", "网飞"], bg: "#E50914", symbol: "N" },
+            { keywords: ["disney", "迪士尼"], bg: "#113CCF", symbol: "🏰" },
+            { keywords: ["hbo"], bg: "#000000", symbol: "HBO" },
+            { keywords: ["网易云", "网易云音乐"], bg: "#E60026", symbol: "🎵" },
+            { keywords: ["qq音乐"], bg: "#31C27C", symbol: "🎵" },
+            { keywords: ["spotify"], bg: "#1DB954", symbol: "🎧" },
+            { keywords: ["apple music"], bg: "#FA243C", symbol: "♫" },
+            { keywords: ["喜马拉雅"], bg: "#F86442", symbol: "📻" },
+            { keywords: ["巴哈姆特", "动画疯"], bg: "#00B4D8", symbol: "🎮" },
+            { keywords: ["twitch"], bg: "#9146FF", symbol: "👾" },
+
+            // 电商与生活服务
             { keywords: ["淘宝", "taobao"], bg: "#FF5500", symbol: "淘" },
             { keywords: ["京东", "jd"], bg: "#E1251B", symbol: "京" },
-            { keywords: ["小红书"], bg: "#FE2C55", symbol: "📕" },
-            { keywords: ["网易云"], bg: "#E60026", symbol: "🎵" },
-            { keywords: ["抖音", "douyin", "tiktok"], bg: "#161823", symbol: "🎵" },
-            { keywords: ["去广告", "adblock", "block"], bg: "#FF3B30", symbol: "🛡️" },
-            { keywords: ["优化", "加速", "增强"], bg: "#30D158", symbol: "⚡" }
+            { keywords: ["拼多多", "pdd"], bg: "#E02E24", symbol: "拼" },
+            { keywords: ["闲鱼", "xianyu"], bg: "#FFDA00", symbol: "🐟" },
+            { keywords: ["小红书", "redbook"], bg: "#FE2C55", symbol: "📕" },
+            { keywords: ["美团"], bg: "#FFC000", symbol: "美" },
+            { keywords: ["饿了么"], bg: "#008BFF", symbol: "🍴" },
+            { keywords: ["盒马"], bg: "#00A2E8", symbol: "🦛" },
+            { keywords: ["12306", "铁路"], bg: "#0066CC", symbol: "🚄" },
+            { keywords: ["滴滴"], bg: "#FF7D00", symbol: "🚖" },
+            { keywords: ["高德", "地图"], bg: "#007AFF", symbol: "🗺️" },
+
+            // 金融与支付
+            { keywords: ["支付宝", "alipay"], bg: "#1677FF", symbol: "支" },
+            { keywords: ["招商银行", "招行"], bg: "#C8102E", symbol: "招" },
+            { keywords: ["工商银行", "工行"], bg: "#C8102E", symbol: "工" },
+            { keywords: ["建设银行", "建行"], bg: "#003B8E", symbol: "建" },
+            { keywords: ["中国银行"], bg: "#B11E23", symbol: "中" },
+            { keywords: ["云闪付"], bg: "#E60012", symbol: "💳" },
+
+            // 资讯、工具与 AI
+            { keywords: ["知乎"], bg: "#0066FF", symbol: "知" },
+            { keywords: ["百度"], bg: "#2932E1", symbol: "度" },
+            { keywords: ["夸克"], bg: "#21B187", symbol: "Q" },
+            { keywords: ["头条", "今日头条"], bg: "#F85959", symbol: "头" },
+            { keywords: ["v2ex"], bg: "#333333", symbol: "V" },
+            { keywords: ["github"], bg: "#24292E", symbol: "🐙" },
+            { keywords: ["google", "谷歌"], bg: "linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853)", symbol: "G" },
+            { keywords: ["chatgpt", "openai"], bg: "#10A37F", symbol: "🤖" },
+            { keywords: ["claude"], bg: "#D97757", symbol: "✻" },
+
+            // 代理、自动化与脚本模块
+            { keywords: ["boxjs", "box"], bg: "#FF9500", symbol: "📦" },
+            { keywords: ["sub-store", "substore"], bg: "#5856D6", symbol: "🛒" },
+            { keywords: ["去广告", "adblock", "block", "ad", "净化", "拦截"], bg: "#FF3B30", symbol: "🛡️" },
+            { keywords: ["解锁", "vip", "会员", "破解"], bg: "#FFD700", symbol: "👑" },
+            { keywords: ["签到", "Task", "任务"], bg: "#30D158", symbol: "✅" },
+            { keywords: ["加速", "优化", "增强", "重定向"], bg: "#007AFF", symbol: "⚡" },
+            { keywords: ["路由", "分流", "规则", "Rule"], bg: "#AF52DE", symbol: "🔀" },
+            { keywords: ["微信小程序", "小程序"], bg: "#07C160", symbol: "⚛️" }
         ];
 
         function hashString(value) {
@@ -922,9 +1087,10 @@
             return Math.abs(hash);
         }
 
-        function createLocalSVGIcon(name) {
-            const nameLower = name.toLowerCase();
-            const matchedBrand = BRAND_RULES.find(rule => rule.keywords.some(kw => nameLower.includes(kw)));
+        /* 生成 iOS App 风格的 Squircle 图标 */
+        function createIOSAppIcon(name, tags = []) {
+            const searchText = (name + " " + tags.join(" ")).toLowerCase();
+            const matchedBrand = IOS_APP_ICONS.find(rule => rule.keywords.some(kw => searchText.includes(kw)));
 
             let background, content;
 
@@ -934,8 +1100,8 @@
             } else {
                 const hash = hashString(name);
                 const hue1 = hash % 360;
-                const hue2 = (hue1 + 55 + (hash % 45)) % 360;
-                background = `linear-gradient(135deg, hsl(${hue1},70%,50%), hsl(${hue2},70%,40%))`;
+                const hue2 = (hue1 + 50 + (hash % 40)) % 360;
+                background = `linear-gradient(135deg, hsl(${hue1},80%,55%), hsl(${hue2},85%,45%))`;
                 content = Array.from(name.trim())[0] || "模";
             }
 
@@ -946,21 +1112,22 @@
             if (isGradient) {
                 const hash = hashString(name);
                 const hue1 = hash % 360;
-                const hue2 = (hue1 + 55 + (hash % 45)) % 360;
+                const hue2 = (hue1 + 50 + (hash % 40)) % 360;
                 gradientDef = `
                 <defs>
                     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="hsl(${hue1},75%,55%)"/>
-                        <stop offset="100%" stop-color="hsl(${hue2},75%,48%)"/>
+                        <stop offset="0%" stop-color="hsl(${hue1},80%,55%)"/>
+                        <stop offset="100%" stop-color="hsl(${hue2},85%,45%)"/>
                     </linearGradient>
                 </defs>`;
             }
 
+            // Apple 官方 Squircle 标准圆角比例
             const svg = `
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                 ${gradientDef}
-                <rect width="256" height="256" rx="58" ${fillAttr}/>
-                <text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="108" font-weight="700">${escapeHTML(content)}</text>
+                <rect width="256" height="256" rx="58" ry="58" ${fillAttr}/>
+                <text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="108" font-weight="700">${escapeHTML(content)}</text>
             </svg>`;
 
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
@@ -977,9 +1144,9 @@
             }
         }
 
+        /* 1. 核心改进：修改为直接打开 Shadowrocket，无需跳转链接 */
         function createInstallURL(rawURL) {
-            const shadowrocketURL = "shadowrocket://install?module=" + rawURL;
-            return CONFIG.REDIRECT_URL + "?url=" + encodeURIComponent(shadowrocketURL);
+            return "shadowrocket://install?module=" + encodeURIComponent(rawURL);
         }
 
         function getRepositoryAvatar(rawURL) {
@@ -1027,7 +1194,7 @@
         }
 
         /* =========================================================
-           首屏流式渲染 (Stream Processor)
+           首屏流式渲染
         ========================================================= */
         async function processModulesStream(items, onItemLoaded) {
             const results = new Array(items.length);
@@ -1072,9 +1239,9 @@
             const card = document.createElement("article");
             card.className = "module-card";
 
-            // 本地原生生成的智能 SVG 图标
-            const localSvgIcon = createLocalSVGIcon(module.name);
-            const icon = module.icon || localSvgIcon;
+            // 2. 核心改进：计算 iOS App 风格高精度图标
+            const iosAppIcon = createIOSAppIcon(module.name, module.tags);
+            const icon = module.icon || iosAppIcon;
 
             const authorHTML = renderAuthor(module);
             const tags = Array.isArray(module.tags) ? module.tags : [];
@@ -1120,10 +1287,9 @@
                 });
             }
 
-            // 图像加载失败时，退回本地原生 SVG
             const image = card.querySelector(".module-icon img");
             if (image) {
-                image.addEventListener("error", () => { image.src = localSvgIcon; }, { once: true });
+                image.addEventListener("error", () => { image.src = iosAppIcon; }, { once: true });
             }
 
             return card;
@@ -1151,12 +1317,12 @@
         }
 
         /* =========================================================
-           Search & Filter
+           Search & Filter (3. 修复清除按钮交互)
         ========================================================= */
         function filterModules() {
             const keyword = searchInput.value.trim().toLowerCase();
 
-            if (keyword.length > 0) {
+            if (searchInput.value.length > 0) {
                 searchClear.classList.add("visible");
             } else {
                 searchClear.classList.remove("visible");
