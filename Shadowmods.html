@@ -143,7 +143,7 @@
             opacity: 0.8;
         }
 
-        /* 主题切换按钮（已修复像素级绝对居中） */
+        /* 主题切换按钮（完美绝对居中修复） */
         .theme-toggle {
             display: inline-flex;
             align-items: center;
@@ -151,20 +151,26 @@
             width: 42px;
             height: 42px;
             padding: 0;
-            line-height: 1;
+            margin: 0;
             border: 0;
             border-radius: 50%;
             background: var(--card);
             color: var(--text-primary);
-            font-size: 20px;
             cursor: pointer;
             box-shadow: inset 0 0 0 1px var(--border-subtle);
-            transition: background 0.2s ease, transform 0.2s ease;
+            transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
             flex-shrink: 0;
         }
 
         .theme-toggle:active {
             transform: scale(0.92);
+        }
+
+        .theme-toggle svg {
+            display: block;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
         }
 
         .subtitle {
@@ -641,7 +647,7 @@
                 <h1 class="title">
                     <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">Shadowrocket 模块中心</a>
                 </h1>
-                <button id="themeToggle" class="theme-toggle" title="切换深/浅色模式">🌙</button>
+                <button id="themeToggle" class="theme-toggle" title="切换深/浅色模式" aria-label="切换深/浅色模式"></button>
             </div>
             <div class="subtitle">
                 资源来自于
@@ -702,6 +708,10 @@
             CACHE_EXPIRE: 3600 * 6 * 1000
         };
 
+        /* SVG 图标定义（像素级绝对居中） */
+        const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+        const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
         /* =========================================================
            DOM Elements
         ========================================================= */
@@ -731,10 +741,10 @@
         function applyTheme(theme) {
             if (theme === "light") {
                 document.documentElement.setAttribute("data-theme", "light");
-                themeToggle.textContent = "☀️";
+                themeToggle.innerHTML = SUN_ICON;
             } else {
                 document.documentElement.removeAttribute("data-theme");
-                themeToggle.textContent = "🌙";
+                themeToggle.innerHTML = MOON_ICON;
             }
             localStorage.setItem("sr_theme", theme);
         }
