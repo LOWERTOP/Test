@@ -65,4 +65,3 @@ ShadowStore 的存在完全建立在广大开源作者的无私奉献之上，�
 Made with ❤️ for the Open Source Community by [LOWERTOP](https://github.com/LOWERTOP)
 
 </div>
-```
