@@ -1,8 +1,8 @@
+![ShadowStore](https://socialify.git.ci/LOWERTOP/ShadowStore/image?custom_description=%E5%B0%8F%E7%81%AB%E7%AE%AD%E5%BC%80%E6%BA%90%E8%B5%84%E6%BA%90%E7%B4%A2%E5%BC%95%E5%B9%B3%E5%8F%B0%0AResources+for+Shadowrocket&description=1&font=Jost&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLOWERTOP%2FShadowrocket-First%2Frefs%2Fheads%2Fmain%2Fimg%2FShadowrocket.png&name=1&pattern=Circuit+Board&theme=Light)
+
 <div align="center">
 
-# ShadowStore | 模块中心
-
-**汇聚开源力量 · 坚持原链引用 · 打造开放丰富的第三方模块导航平台**
+ **汇聚开源力量 · 坚持原链引用 · 打造开放丰富的第三方模块导航平台**
 
 [![Sync Modules](https://github.com/LOWERTOP/Shadowrocket-First/actions/workflows/sync-modules.yml/badge.svg)](https://github.com/LOWERTOP/Shadowrocket-First/actions/workflows/sync-modules.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
