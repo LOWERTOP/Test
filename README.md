@@ -4,9 +4,6 @@
 
  **汇聚开源力量 · 坚持原链引用 · 打造开放丰富的第三方资源导航平台**
 
-[![Sync Modules](https://github.com/LOWERTOP/Shadowrocket-First/actions/workflows/sync-modules.yml/badge.svg)](https://github.com/LOWERTOP/Shadowrocket-First/actions/workflows/sync-modules.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-
 [🌐 在线访问](https://shadowstore.dpdns.org) · [💡 建议反馈](https://github.com/LOWERTOP/Shadowrocket-First/issues)
 
 </div>
