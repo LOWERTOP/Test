@@ -823,63 +823,58 @@
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* =========================================================
-            6. 单列布局与响应式适配 (iOS / 移动端 Fixed 独立层)
+            6. 单列布局与响应式适配 (iOS / 移动端 吸顶悬浮与底部导航)
         ========================================================= */
         .control-bar.is-single-column {
             display: block;
-            position: relative;
-            top: auto;
-            height: 44px;
+            position: sticky;
+            top: max(12px, env(safe-area-inset-top, 0px));
+            z-index: 999990;
+            width: 100%;
             margin-bottom: 16px;
-            padding: 0;
-            z-index: auto;
+            padding: 4px 0;
+            pointer-events: none;
         }
 
-.control-bar.is-single-column .search-wrapper {
-    position: sticky;
-    top: max(12px, env(safe-area-inset-top, 0px));
-
-    width: 100%;
-    height: 44px;
-
-    padding: 0;
-    margin: 0;
-
-    z-index: 999995;
-    pointer-events: none;
-}
+        .control-bar.is-single-column .search-wrapper {
+            position: relative;
+            top: auto;
+            width: 100%;
+            height: 44px;
+            padding: 0;
+            margin: 0;
+            z-index: 999995;
+            pointer-events: none;
+        }
 
         .control-bar.is-single-column .search-box-inner,
         .control-bar.is-single-column .back-to-top-btn {
             pointer-events: auto;
         }
 
-.control-bar.is-single-column .tab-bar-wrapper {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: max(16px, env(safe-area-inset-bottom));
+        .control-bar.is-single-column .tab-bar-wrapper {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: max(16px, env(safe-area-inset-bottom));
+            width: 100%;
+            height: 44px;
+            padding: 0 clamp(16px, 2.5vw, 40px);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 999999;
+        }
 
-    width: 100%;
-    height: 44px;
-    padding: 0 clamp(16px, 2.5vw, 40px);
-    margin: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    pointer-events: none;
-    z-index: 999999;
-}
-
-@media (max-width: 600px) {
-    .control-bar.is-single-column .tab-bar-wrapper {
-        bottom: 12px;
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-}
+        @media (max-width: 600px) {
+            .control-bar.is-single-column .tab-bar-wrapper {
+                bottom: max(12px, env(safe-area-inset-bottom));
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+        }
 
         .control-bar.is-single-column .tab-bar {
             pointer-events: auto;
@@ -908,10 +903,6 @@
 
         @media (max-width: 600px) {
             body { 
-                padding-left: 12px; 
-                padding-right: 12px; 
-            }
-            .control-bar.is-single-column .tab-bar-wrapper { 
                 padding-left: 12px; 
                 padding-right: 12px; 
             }
