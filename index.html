@@ -835,19 +835,19 @@
             z-index: auto;
         }
 
-        .control-bar.is-single-column .search-wrapper {
-            position: fixed;
-            top: max(12px, env(safe-area-inset-top, 0px));
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 44px;
-            padding: 0 clamp(16px, 2.5vw, 40px);
-            margin: 0 auto;
-            max-width: clamp(1080px, 95vw, 2560px);
-            z-index: 999995;
-            pointer-events: none;
-        }
+.control-bar.is-single-column .search-wrapper {
+    position: sticky;
+    top: max(12px, env(safe-area-inset-top, 0px));
+
+    width: 100%;
+    height: 44px;
+
+    padding: 0;
+    margin: 0;
+
+    z-index: 999995;
+    pointer-events: none;
+}
 
         .control-bar.is-single-column .search-box-inner,
         .control-bar.is-single-column .back-to-top-btn {
@@ -910,10 +910,6 @@
             body { 
                 padding-left: 12px; 
                 padding-right: 12px; 
-            }
-            .control-bar.is-single-column .search-wrapper {
-                padding-left: 12px;
-                padding-right: 12px;
             }
             .control-bar.is-single-column .tab-bar-wrapper { 
                 padding-left: 12px; 
