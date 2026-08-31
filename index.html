@@ -344,7 +344,7 @@
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
-            z-index: 999999;
+            z-index: 999990;
             display: grid;
             grid-template-columns: var(--card-width, 380px) minmax(0, 1fr);
             gap: var(--layout-gap, 44px);
@@ -364,7 +364,7 @@
             display: flex;
             align-items: center;
             position: relative;
-            z-index: 999999;
+            z-index: 999990;
         }
 
         .tab-bar {
@@ -823,30 +823,62 @@
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* =========================================================
-            6. 单列布局与响应式适配
+            6. 单列布局与响应式适配 (iOS / 移动端 Fixed 独立层)
         ========================================================= */
         .control-bar.is-single-column {
             display: block;
             position: relative;
             top: auto;
-            margin-bottom: 14px;
-            padding: 4px 0;
+            height: 44px;
+            margin-bottom: 16px;
+            padding: 0;
+            z-index: auto;
+        }
+
+        .control-bar.is-single-column .search-wrapper {
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top, 0px));
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 44px;
+            padding: 0 clamp(16px, 2.5vw, 40px);
+            margin: 0 auto;
+            max-width: clamp(1080px, 95vw, 2560px);
+            z-index: 999995;
+            pointer-events: none;
+        }
+
+        .control-bar.is-single-column .search-box-inner,
+        .control-bar.is-single-column .back-to-top-btn {
+            pointer-events: auto;
         }
 
 .control-bar.is-single-column .tab-bar-wrapper {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: max(16px, env(safe-area-inset-bottom));
+
     width: 100%;
-    height: calc(44px + env(safe-area-inset-bottom, 0px));
-    padding: 0 clamp(16px, 2.5vw, 40px) env(safe-area-inset-bottom, 0px);
+    height: 44px;
+    padding: 0 clamp(16px, 2.5vw, 40px);
     margin: 0;
+
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
+
     pointer-events: none;
     z-index: 999999;
+}
+
+@media (max-width: 600px) {
+    .control-bar.is-single-column .tab-bar-wrapper {
+        bottom: 12px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
 }
 
         .control-bar.is-single-column .tab-bar {
@@ -875,8 +907,18 @@
         }
 
         @media (max-width: 600px) {
-            body { padding-left: 12px; padding-right: 12px; }
-            .control-bar.is-single-column .tab-bar-wrapper { padding-left: 12px; padding-right: 12px; }
+            body { 
+                padding-left: 12px; 
+                padding-right: 12px; 
+            }
+            .control-bar.is-single-column .search-wrapper {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            .control-bar.is-single-column .tab-bar-wrapper { 
+                padding-left: 12px; 
+                padding-right: 12px; 
+            }
             .title { font-size: 22px; }
             .module-card { padding: 22px; border-radius: 42px; }
             .module-description { flex: none; }
@@ -995,7 +1037,7 @@
         /* =========================================================
             1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "202609010550"; 
+        const CACHE_VERSION = "202609010604"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1005,7 +1047,6 @@
         };
 
         const STATIC_RESOURCES = [
-            // 配置文件
             {
                 name: "懒人配置",
                 category: "config",
@@ -1022,7 +1063,6 @@
                 statusBadge: "推荐配置文件",
                 primaryBtnText: "安装配置"
             },
-            // 使用手册
             {
                 name: "使用手册",
                 category: "manual",
@@ -1039,7 +1079,6 @@
                 statusBadge: "软件使用手册",
                 primaryBtnText: "查阅手册"
             },
-            // 更多资源
             {
                 name: "配色与配置仓库",
                 category: "more",
@@ -1062,7 +1101,6 @@
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
 
-        // DOM 句柄
         const controlBarEl = document.getElementById("controlBar");
         const searchWrapperEl = document.querySelector('.search-wrapper');
         const searchBoxInner = document.querySelector('.search-box-inner');
@@ -1086,14 +1124,13 @@
         const ptrIcon = document.getElementById("ptrIcon");
         const ptrText = document.getElementById("ptrText");
 
-        // 全局状态总线
         const state = {
             allModules: [],
             filteredModules: [],
             currentlyRendered: 0,
             isDataLoading: false,
             isPullRefreshing: false,
-            activeTab: "module" // module | config | manual | more
+            activeTab: "module"
         };
 
         let searchTimer = null;
@@ -1239,7 +1276,7 @@
         }
 
         /* =========================================================
-            3. UI 交互与吸顶控制 (带状态锁的高频滚动优化)
+            3. UI 交互与吸顶控制
         ========================================================= */
         let backToTopVisible = false;
         function updateSearchLayer() {
@@ -1265,7 +1302,7 @@
         }
 
         /* =========================================================
-            4. 层叠控制、卡片宽度感知与单列布局识别 (防抖与差异拦截)
+            4. 层叠控制、卡片宽度感知与单列布局识别
         ========================================================= */
         function getGridColumns() {
             const style = window.getComputedStyle(modulesContainer);
@@ -1630,7 +1667,7 @@
         }
 
         /* =========================================================
-            6. 主题管理系统 (智能三态切换逻辑)
+            6. 主题管理系统
         ========================================================= */
         const mediaQueryDark = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -1723,7 +1760,7 @@
         updateThemeUI();
 
         /* =========================================================
-            7. 移动端下拉刷新手势 (基于 top 的防Containing Block破坏方案)
+            7. 移动端下拉刷新手势
         ========================================================= */
         let touchStartX = 0, touchStartY = 0, isPulling = false, isPullLocked = false, pullRafId = null;
         const MIN_DRAG_DEADZONE = 30;
@@ -1863,7 +1900,7 @@
         window.addEventListener('touchcancel', resetPullState, { passive: true });
 
         /* =========================================================
-            8. 核心数据同步引擎 (Stale-While-Revalidate 异步高可用架构)
+            8. 核心数据同步引擎
         ========================================================= */
         function cleanOldCaches() {
             try {
@@ -1893,7 +1930,6 @@
 
             let hasRenderedCache = false;
 
-            // 阶段一：存在缓存且非强制刷新时，立即呈现
             if (!forceRefresh && cachedData) {
                 try {
                     const parsed = JSON.parse(cachedData);
@@ -1913,7 +1949,6 @@
                 }
             }
 
-            // 无缓存呈现时展示骨架屏与首屏提示
             if (!hasRenderedCache && state.allModules.length === 0) {
                 state.allModules = staticItems;
                 filterModules();
@@ -1922,7 +1957,6 @@
                 statusDot.className = "status-dot loading";
             }
 
-            // 阶段二：后台异步拉取最新数据（SWR）
             try {
                 const fetchUrl = forceRefresh ? `${CONFIG.DATA_JSON_URL}?_t=${Date.now()}` : CONFIG.DATA_JSON_URL;
                 const response = await fetch(fetchUrl, { cache: forceRefresh ? "no-store" : "default" });
@@ -1964,7 +1998,6 @@
             }
         }
 
-        // 初始化入口
         cleanOldCaches();
         loadModules();
     </script>
