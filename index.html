@@ -821,7 +821,7 @@
             CACHE_EXPIRE: 3600 * 2 * 1000 
         };
 
-        // 顶部置顶核心仓库与手册卡片
+        // 顶部置顶核心手册、仓库与懒人配置卡片
         const PINNED_REPOS = [
             {
                 name: "配色与配置仓库",
@@ -852,6 +852,21 @@
                 isRepoCard: true,
                 statusBadge: "软件使用手册",
                 primaryBtnText: "查阅手册"
+            },
+            {
+                name: "懒人配置",
+                description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，相当于内置了一部使用手册，是除默认配置外首推的配置文件。",
+                icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
+                author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
+                authorAvatar: "https://github.com/LOWERTOP.png?size=64",
+                sourceName: "Shadowrocket",
+                sourceURL: "https://github.com/LOWERTOP/Shadowrocket",
+                rawURL: "https://lowertop.github.io/Shadowrocket/lazy_group.conf",
+                installURL: "shadowrocket://config/add/https://lowertop.github.io/Shadowrocket/lazy_group.conf",
+                isDubious: false,
+                isRepoCard: false,
+                statusBadge: "推荐配置文件",
+                primaryBtnText: "安装配置"
             }
         ];
 
