@@ -632,6 +632,19 @@
             border-color: rgba(160, 110, 140, 0.35);
             text-shadow: none;
         }
+        .status-badge-pinned {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-color: rgba(118, 138, 158, 0.35);
+            font-weight: 500;
+            text-shadow: none;
+        }
+        [data-theme="dark"] .status-badge-pinned {
+            background: var(--primary-soft);
+            color: #8da1b5;
+            border-color: rgba(117, 139, 159, 0.4);
+            text-shadow: none;
+        }
 
         .action-buttons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         
@@ -798,7 +811,7 @@
         /* =========================================================
             1. 全局配置与状态架构
         ========================================================= */
-        const CACHE_VERSION = "20260831"; 
+        const CACHE_VERSION = "20260831_V2"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -807,6 +820,40 @@
             CACHE_TIME_KEY: `sr_modules_time_${CACHE_VERSION}`,
             CACHE_EXPIRE: 3600 * 2 * 1000 
         };
+
+        // 顶部置顶核心仓库与手册卡片
+        const PINNED_REPOS = [
+            {
+                name: "配色与配置仓库",
+                description: "Shadowrocket 精选模块、规则、配色方案的聚合类型的核心资源仓库，汇聚开源社区优质资源，提供快捷安装支持。",
+                icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
+                author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
+                authorAvatar: "https://github.com/LOWERTOP.png?size=64",
+                sourceName: "Shadowrocket-First",
+                sourceURL: "https://github.com/LOWERTOP/Shadowrocket-First",
+                rawURL: "https://github.com/LOWERTOP/Shadowrocket-First",
+                installURL: "https://github.com/LOWERTOP/Shadowrocket-First",
+                isDubious: false,
+                isRepoCard: true,
+                statusBadge: "核心资源仓库",
+                primaryBtnText: "访问仓库"
+            },
+            {
+                name: "Shadowrocket 使用手册",
+                description: "Shadowrocket 准官方中文使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置项目与知识。",
+                icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
+                author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
+                authorAvatar: "https://github.com/LOWERTOP.png?size=64",
+                sourceName: "Shadowrocket",
+                sourceURL: "https://github.com/LOWERTOP/Shadowrocket",
+                rawURL: "https://github.com/LOWERTOP/Shadowrocket",
+                installURL: "https://github.com/LOWERTOP/Shadowrocket",
+                isDubious: false,
+                isRepoCard: true,
+                statusBadge: "准官方手册",
+                primaryBtnText: "查阅手册"
+            }
+        ];
 
         const SYSTEM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
@@ -874,6 +921,27 @@
             return safeURL(value, ["shadowrocket:", "https:", "http:"]);
         }
 
+        function normalizeRepoCards() {
+            return PINNED_REPOS.map(repo => {
+                const searchTokens = [
+                    repo.name,
+                    repo.description,
+                    repo.author.name,
+                    repo.sourceName,
+                    "shadowrocket",
+                    "手册",
+                    "教程",
+                    "仓库",
+                    "文档"
+                ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
+
+                return {
+                    ...repo,
+                    _searchText: searchTokens
+                };
+            });
+        }
+
         function normalizeModules(data) {
             if (!Array.isArray(data)) return [];
             return data.filter(item => item && typeof item === "object").map(m => {
@@ -910,6 +978,7 @@
                     rawURL,
                     installURL,
                     isDubious: Boolean(m.isDubious),
+                    isRepoCard: false,
                     _searchText: searchTokens
                 };
             });
@@ -1033,8 +1102,9 @@
             const icon = module.icon || fallbackIcon;
             const authorHTML = renderAuthor(module);
             
-            const statusTextVal = module.isDubious ? "信息获取失败" : "资源获取成功";
-            const statusClass = module.isDubious ? "status-badge-dubious" : "";
+            const isRepo = Boolean(module.isRepoCard);
+            const statusTextVal = module.statusBadge || (module.isDubious ? "信息获取失败" : "资源获取成功");
+            const statusClass = module.statusBadge ? "status-badge-pinned" : (module.isDubious ? "status-badge-dubious" : "");
 
             const sourceLinkHTML = module.sourceURL
                 ? `<a class="source-link" href="${escapeHTML(module.sourceURL)}" target="_blank" rel="noopener" title="${escapeHTML(module.sourceName)}">${escapeHTML(module.sourceName)}</a>`
@@ -1043,8 +1113,11 @@
             const copyBtnHTML = module.rawURL 
                 ? `<button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}" aria-label="复制 ${escapeHTML(module.name)} 链接">复制链接</button>` 
                 : "";
+
+            const primaryText = module.primaryBtnText || "安装";
+            const primaryTarget = isRepo ? `target="_blank" rel="noopener"` : "";
             const installBtnHTML = module.installURL 
-                ? `<a class="button button-primary" href="${escapeHTML(module.installURL)}" aria-label="安装 ${escapeHTML(module.name)} 模块">安装</a>` 
+                ? `<a class="button button-primary" href="${escapeHTML(module.installURL)}" ${primaryTarget} aria-label="${escapeHTML(primaryText)} ${escapeHTML(module.name)}">${escapeHTML(primaryText)}</a>` 
                 : "";
 
             card.innerHTML = `
@@ -1080,11 +1153,12 @@
                     e.stopPropagation();
                     const url = copyBtn.getAttribute("data-url");
                     if (!url) {
-                        showToast("模块链接无效");
+                        showToast("链接无效");
                         return;
                     }
                     const success = await copyToClipboard(url);
-                    showToast(success ? "已复制模块 Raw 直链" : "复制失败，请手动复制");
+                    const toastMessage = isRepo ? "已复制仓库链接" : "已复制模块 Raw 直链";
+                    showToast(success ? toastMessage : "复制失败，请手动复制");
                 });
             }
             
@@ -1132,7 +1206,7 @@
                 return;
             }
 
-            countText.textContent = `${state.filteredModules.length} 个模块`;
+            countText.textContent = `${state.filteredModules.length} 个资源`;
             appendNextBatch();
         }
 
@@ -1325,7 +1399,6 @@
             const isSystemDark = mediaQueryDark.matches;
             let nextMode, toastText;
 
-            // 自动模式下根据系统当前色调智能反切
             if (currentMode === "auto") {
                 if (isSystemDark) {
                     nextMode = "light";
@@ -1342,7 +1415,7 @@
                     nextMode = "auto";
                     toastText = "已切换为自动跟随系统";
                 }
-            } else { // currentMode === "dark"
+            } else { 
                 if (isSystemDark) {
                     nextMode = "auto";
                     toastText = "已切换为自动跟随系统";
@@ -1535,6 +1608,7 @@
 
             const now = Date.now();
             let hasValidCache = false;
+            const repoCards = normalizeRepoCards();
 
             if (!forceRefresh && cachedData) {
                 try {
@@ -1542,7 +1616,7 @@
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         const normalized = normalizeModules(parsed);
                         if (normalized.length > 0) {
-                            state.allModules = normalized;
+                            state.allModules = [...repoCards, ...normalized];
                             renderFilteredList(state.allModules);
                             hasValidCache = true;
                             setSearchState(true);
@@ -1565,6 +1639,8 @@
             }
 
             if (!hasValidCache && state.allModules.length === 0) {
+                state.allModules = repoCards;
+                renderFilteredList(state.allModules);
                 setSearchState(false);
                 statusText.textContent = "正在拉取最新静态资源索引...";
                 statusDot.className = "status-dot loading";
@@ -1582,7 +1658,7 @@
                 const normalized = normalizeModules(data);
                 if (!normalized.length) throw new Error("未解析到有效模块数据");
 
-                state.allModules = normalized;
+                state.allModules = [...repoCards, ...normalized];
                 renderFilteredList(state.allModules);
                 setSearchState(true);
 
@@ -1597,20 +1673,13 @@
             } catch (error) {
                 console.error("加载 modules.json 失败:", error);
                 
-                if (state.allModules.length > 0) {
+                if (state.allModules.length > repoCards.length) {
                     statusText.textContent = "在线同步异常，当前展示缓存数据";
                     statusDot.className = "status-dot error";
                 } else {
-                    setSearchState(false);
-                    statusText.textContent = "同步失败";
+                    setSearchState(true);
+                    statusText.textContent = "在线资源同步失败，已展示核心入口";
                     statusDot.className = "status-dot error";
-                    countText.textContent = "";
-                    modulesContainer.innerHTML = `
-                        <div class="empty">
-                            <div class="empty-icon">⚠️</div>
-                            无法读取静态索引数据
-                            <div class="empty-error">${escapeHTML(error.message)}</div>
-                        </div>`;
                 }
                 return false;
             } finally {
