@@ -40,6 +40,8 @@
             1. 浅色主题设计令牌 (Light Theme Tokens)
         ========================================================= */
         :root, [data-theme="light"] {
+            --layout-gap: 44px;
+
             --bg-overscroll: #ffffff;
             --bg-page-base: #ffffff;
             --bg-page-grad: radial-gradient(circle at 50% 0%, #ffffff 0%, #f0f2f5 35%, #e8ebf0 70%, #dce1e8 100%);
@@ -127,6 +129,8 @@
             --radius-pill: 9999px;
             --toast-bg: #4a4f59;
             --toast-text: #FFFFFF;
+
+            --card-width: 380px;
         }
 
         /* =========================================================
@@ -219,8 +223,6 @@
             max-width: clamp(1080px, 95vw, 2560px); 
             margin: 0 auto; 
             position: relative; 
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
         }
 
         .glass-element {
@@ -262,8 +264,6 @@
             pointer-events: none;
             opacity: 0;
             will-change: transform, opacity;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
         }
         .ptr-icon {
             display: inline-flex;
@@ -311,7 +311,12 @@
             border-radius: 50%; 
             color: var(--text-secondary); cursor: pointer; 
             box-shadow: var(--shadow-glass-ui); 
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            transition: 
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.3s ease,
+                background-image 0.3s ease,
+                color 0.2s ease;
         }
         .theme-toggle:hover { 
             background-image: var(--noise-pattern), var(--glass-bg-hover);
@@ -332,25 +337,124 @@
             filter: none; 
         }
 
+        /* =========================================================
+            3. 搜索 + 分类控制栏 (宽屏下吸顶于屏幕上方)
+        ========================================================= */
+        .control-bar {
+            position: sticky;
+            top: max(12px, env(safe-area-inset-top, 0px));
+            z-index: 999999;
+            display: grid;
+            grid-template-columns: var(--card-width, 380px) minmax(0, 1fr);
+            gap: var(--layout-gap, 44px);
+            align-items: center;
+            width: 100%;
+            margin-bottom: 16px;
+            padding: 4px 0;
+        }
+
+        /* =========================================================
+            4. 分类标签页
+        ========================================================= */
+        .tab-bar-wrapper {
+            width: 100%;
+            min-width: 0;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 999999;
+        }
+
+        .tab-bar {
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 5px;
+            border-radius: 22px;
+            box-shadow: var(--shadow-search);
+            transition: 
+                width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-item {
+            flex: 1 1 0;
+            min-width: 0;
+            height: 34px;
+            line-height: 34px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 0 8px;
+            border-radius: 17px;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 
+                color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab-item:hover {
+            color: var(--text-primary);
+            background: var(--primary-soft);
+        }
+
+        .tab-item.active {
+            color: #FFFFFF;
+            background: var(--primary);
+            box-shadow: 0 4px 12px var(--primary-soft);
+            font-weight: 600;
+        }
+
+        /* =========================================================
+            5. 搜索框区域
+        ========================================================= */
         .search-wrapper { 
-            position: sticky; 
-            top: env(safe-area-inset-top, 0px); 
-            z-index: 999999; 
-            padding: 8px 0 12px; margin-bottom: 12px; 
+            position: relative;
+            height: 44px;
+            min-width: 0;
+            padding: 0; 
+            margin: 0; 
             background: transparent; 
             display: flex;
             align-items: center;
             width: 100%;
-            -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); 
         }
 
         .search-box-inner {
-            position: relative; flex: 1 1 auto; min-width: 0; height: 44px; display: flex; align-items: center; gap: 8px; 
+            position: relative; 
+            flex: 1 1 auto; 
+            min-width: 0; 
+            height: 44px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
             border-radius: 22px; 
             box-shadow: var(--shadow-search); 
-            padding: 6px; cursor: text;
-            -webkit-transform: translateZ(0); transform: translateZ(0);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+            padding: 6px; 
+            cursor: text;
+            -webkit-transform: translateZ(0); 
+            transform: translateZ(0);
+            transition: 
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.35s ease,
+                background-color 0.35s ease;
         }
 
         .search-box-inner:focus-within {
@@ -421,7 +525,8 @@
         .search-shortcut, .search-clear { 
             width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             background: transparent; border: none; box-shadow: none;
-            font-size: 12px; font-weight: 600; transition: all 0.2s ease; 
+            font-size: 12px; font-weight: 600; 
+            transition: color 0.2s ease, opacity 0.2s ease; 
         }
         .search-shortcut { color: var(--text-tertiary); pointer-events: none; }
         .search-clear { display: none; color: var(--primary); cursor: pointer; padding: 0; }
@@ -485,7 +590,7 @@
         .modules { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); 
-            gap: 44px; 
+            gap: var(--layout-gap, 44px); 
             align-items: stretch; 
             padding-bottom: 24px; 
         }
@@ -500,7 +605,10 @@
             border-radius: var(--radius-card); 
             box-shadow: var(--shadow-glass-ui); 
             overflow: hidden; 
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-image 0.4s ease;
+            transition: 
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-image 0.4s ease;
             -webkit-transform: translateZ(0); transform: translateZ(0); 
         }
 
@@ -652,7 +760,12 @@
             display: inline-flex; align-items: center; justify-content: center; 
             height: 44px; padding: 0 20px; border: 0; border-radius: 22px; 
             font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; 
-            text-decoration: none; transition: all 0.2s ease; 
+            text-decoration: none; 
+            transition: 
+                transform 0.2s ease,
+                background-color 0.2s ease,
+                color 0.2s ease,
+                box-shadow 0.2s ease; 
         }
         .button:active { transform: scale(0.96); }
         
@@ -695,7 +808,10 @@
         .footer { padding: 36px 0 16px; color: var(--text-tertiary); text-align: center; font-size: 12.5px; line-height: 1.6; font-weight: 300; }
         
         .toast { 
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); 
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%) translateY(100px); 
             z-index: 999999; 
             padding: 12px 24px; border-radius: var(--radius-pill); 
             background: var(--toast-bg); color: var(--toast-text); 
@@ -705,20 +821,73 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+        /* =========================================================
+            6. 单列布局与响应式适配
+        ========================================================= */
+        .control-bar.is-single-column {
+            display: block;
+            position: sticky;
+            top: max(8px, env(safe-area-inset-top, 0px));
+            margin-bottom: 14px;
+            padding: 4px 0;
+        }
+
+        .control-bar.is-single-column .tab-bar-wrapper {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: max(16px, env(safe-area-inset-bottom));
+            width: 100%;
+            height: 44px;
+            padding: 0 clamp(16px, 2.5vw, 40px);
+            margin: 0;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 999999;
+        }
+
+        .control-bar.is-single-column .tab-bar {
+            pointer-events: auto;
+            width: 100%;
+            height: 44px;
+            max-width: clamp(1080px, 95vw, 2560px);
+            border-radius: 22px;
+        }
+
+        .control-bar.is-single-column .tab-item {
+            height: 34px;
+            line-height: 34px;
+        }
+
+        @media (max-width: 860px) {
+            body { 
+                padding-bottom: max(96px, calc(env(safe-area-inset-bottom) + 76px)); 
+            }
+            .modules { 
+                grid-template-columns: 1fr; 
+            }
+            .toast {
+                bottom: max(78px, calc(env(safe-area-inset-bottom) + 68px));
+            }
+        }
+
         @media (max-width: 600px) {
             body { padding-left: 12px; padding-right: 12px; }
+            .control-bar.is-single-column .tab-bar-wrapper { padding-left: 12px; padding-right: 12px; }
             .title { font-size: 22px; }
-            .modules { grid-template-columns: 1fr; gap: 44px; }
             .module-card { padding: 22px; border-radius: 42px; }
             .module-description { flex: none; }
             .card-bottom { margin-top: 20px; padding-top: 20px; }
             .search-shortcut { display: none; }
         }
+
         @media (max-width: 420px) {
             .card-bottom { flex-direction: column; align-items: stretch; gap: 12px; }
             .card-status { width: 100%; }
             .card-status .status-pill { width: 100%; }
             .action-buttons { width: 100%; justify-content: flex-end; }
+            .tab-bar { padding: 4px; gap: 2px; }
+            .tab-item { font-size: 12px; padding: 0 2px; }
         }
     </style>
 </head>
@@ -728,7 +897,7 @@
         <span id="ptrIcon" class="ptr-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
-                <polyline points="19 12 12 19 5 12"></polyline>
+                <polyline points="19 12 12 5 19 12"></polyline>
             </svg>
         </span>
         <span id="ptrText">继续下拉将强制刷新本站</span>
@@ -757,36 +926,48 @@
             </div>
         </header>
 
-        <div class="search-wrapper">
-            <div class="search-box-inner glass-element" role="search">
-                <div class="search-icon" aria-hidden="true">🔍</div>
-                
-                <div class="input-wrapper">
-                    <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
+        <!-- 搜索与分类控制栏 -->
+        <div id="controlBar" class="control-bar">
+            <nav class="tab-bar-wrapper" aria-label="资源分类导航">
+                <div class="tab-bar glass-element" role="tablist">
+                    <button class="tab-item active" role="tab" aria-selected="true" data-tab="module">模块资源</button>
+                    <button class="tab-item" role="tab" aria-selected="false" data-tab="config">配置文件</button>
+                    <button class="tab-item" role="tab" aria-selected="false" data-tab="manual">使用手册</button>
+                    <button class="tab-item" role="tab" aria-selected="false" data-tab="more">更多资源</button>
+                </div>
+            </nav>
+
+            <div class="search-wrapper">
+                <div class="search-box-inner glass-element" role="search">
+                    <div class="search-icon" aria-hidden="true">🔍</div>
                     
-                    <div id="placeholderTrack" class="placeholder-track">
-                        <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
-                        <div class="placeholder-item">相关资源均来源于开源社区</div>
-                        <div class="placeholder-item">所有权利责任归原作者所有</div>
+                    <div class="input-wrapper">
+                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
+                        
+                        <div id="placeholderTrack" class="placeholder-track">
+                            <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
+                            <div class="placeholder-item">相关资源均来源于开源社区</div>
+                            <div class="placeholder-item">所有权利责任归原作者所有</div>
+                        </div>
                     </div>
+
+                    <span class="search-shortcut">/</span>
+                    <button id="searchClear" class="search-clear" type="button" title="清空搜索">✕</button>
                 </div>
 
-                <span class="search-shortcut">/</span>
-                <button id="searchClear" class="search-clear" type="button" title="清空搜索">✕</button>
+                <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                </button>
             </div>
-
-            <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <polyline points="5 12 12 5 19 12"></polyline>
-                </svg>
-            </button>
         </div>
 
         <div class="status">
             <div class="status-left">
                 <span id="statusDot" class="status-dot loading"></span>
-                <span id="statusText">正在获取最新资源，请稍后...</span>
+                <span id="statusText">正在同步资源索引...</span>
             </div>
             <div id="countText"></div>
         </div>
@@ -809,37 +990,39 @@
 
     <script>
         /* =========================================================
-            1. 全局配置与状态架构
+            1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "20260831_V2"; 
+        const CACHE_VERSION = "20260831_V6"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
             PAGE_SIZE: 30,
             CACHE_KEY: `sr_modules_data_${CACHE_VERSION}`, 
-            CACHE_TIME_KEY: `sr_modules_time_${CACHE_VERSION}`,
-            CACHE_EXPIRE: 3600 * 2 * 1000 
+            CACHE_TIME_KEY: `sr_modules_time_${CACHE_VERSION}`
         };
 
-        // 顶部置顶核心手册、仓库与懒人配置卡片
-        const PINNED_REPOS = [
+        const STATIC_RESOURCES = [
+            // 配置文件
             {
-                name: "配色与配置仓库",
-                description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。",
-                icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
+                name: "懒人配置",
+                category: "config",
+                description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，相当于内置了一部使用手册，是除默认配置外首推的配置文件。",
+                icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
                 authorAvatar: "https://github.com/LOWERTOP.png?size=64",
-                sourceName: "Shadowrocket-First",
-                sourceURL: "https://github.com/LOWERTOP/Shadowrocket-First",
-                rawURL: "https://github.com/LOWERTOP/Shadowrocket-First",
-                installURL: "https://github.com/LOWERTOP/Shadowrocket-First",
+                sourceName: "Shadowrocket",
+                sourceURL: "https://github.com/LOWERTOP/Shadowrocket",
+                rawURL: "https://lowertop.github.io/Shadowrocket/lazy_group.conf",
+                installURL: "shadowrocket://config/add/https://lowertop.github.io/Shadowrocket/lazy_group.conf",
                 isDubious: false,
-                isRepoCard: true,
-                statusBadge: "核心资源仓库",
-                primaryBtnText: "访问仓库"
+                isRepoCard: false,
+                statusBadge: "推荐配置文件",
+                primaryBtnText: "安装配置"
             },
+            // 使用手册
             {
                 name: "使用手册",
+                category: "manual",
                 description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。",
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -853,29 +1036,31 @@
                 statusBadge: "软件使用手册",
                 primaryBtnText: "查阅手册"
             },
+            // 更多资源
             {
-                name: "懒人配置",
-                description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，相当于内置了一部使用手册，是除默认配置外首推的配置文件。",
-                icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
+                name: "配色与配置仓库",
+                category: "more",
+                description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。",
+                icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
                 authorAvatar: "https://github.com/LOWERTOP.png?size=64",
-                sourceName: "Shadowrocket",
-                sourceURL: "https://github.com/LOWERTOP/Shadowrocket",
-                rawURL: "https://lowertop.github.io/Shadowrocket/lazy_group.conf",
-                installURL: "shadowrocket://config/add/https://lowertop.github.io/Shadowrocket/lazy_group.conf",
+                sourceName: "Shadowrocket-First",
+                sourceURL: "https://github.com/LOWERTOP/Shadowrocket-First",
+                rawURL: "https://github.com/LOWERTOP/Shadowrocket-First",
+                installURL: "https://github.com/LOWERTOP/Shadowrocket-First",
                 isDubious: false,
-                isRepoCard: false,
-                statusBadge: "推荐配置文件",
-                primaryBtnText: "安装配置"
+                isRepoCard: true,
+                statusBadge: "核心资源仓库",
+                primaryBtnText: "访问仓库"
             }
         ];
 
         const SYSTEM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
-        const REFRESH_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`;
 
         // DOM 句柄
+        const controlBarEl = document.getElementById("controlBar");
         const searchWrapperEl = document.querySelector('.search-wrapper');
         const searchBoxInner = document.querySelector('.search-box-inner');
         const modulesContainer = document.getElementById("modules");
@@ -891,6 +1076,7 @@
         
         const themeToggleBtn = document.getElementById("themeToggle");
         const backToTopBtn = document.getElementById("backToTopBtn");
+        const tabItems = document.querySelectorAll(".tab-item");
 
         const pageContainer = document.getElementById("pageContainer");
         const pullRefreshIndicator = document.getElementById("pullRefreshIndicator");
@@ -903,7 +1089,8 @@
             filteredModules: [],
             currentlyRendered: 0,
             isDataLoading: false,
-            isPullRefreshing: false
+            isPullRefreshing: false,
+            activeTab: "module" // module | config | manual | more
         };
 
         let searchTimer = null;
@@ -933,25 +1120,28 @@
         }
 
         function safeInstallURL(value) {
-            return safeURL(value, ["shadowrocket:", "https:", "http:"]);
+            return safeURL(value, ["shadowrocket:", "https:"]);
         }
 
-        function normalizeRepoCards() {
-            return PINNED_REPOS.map(repo => {
+        function normalizeStaticResources() {
+            return STATIC_RESOURCES.map(item => {
                 const searchTokens = [
-                    repo.name,
-                    repo.description,
-                    repo.author.name,
-                    repo.sourceName,
+                    item.name,
+                    item.description,
+                    item.author.name,
+                    item.sourceName,
+                    item.category,
                     "shadowrocket",
                     "手册",
                     "教程",
                     "仓库",
-                    "文档"
+                    "文档",
+                    "配置"
                 ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                 return {
-                    ...repo,
+                    ...item,
+                    category: item.category || "more",
                     _searchText: searchTokens
                 };
             });
@@ -967,23 +1157,31 @@
                 const sourceName = m.sourceName || "开源仓库";
                 const sourceURL = safeURL(m.sourceURL || "", ["https:", "http:"]);
                 
-                // 自定义安装地址合法则使用，非法/缺失则自动降级到标准 Shadowrocket 协议
                 const customInstall = safeInstallURL(m.installURL || "");
                 const fallbackInstall = rawURL ? `shadowrocket://install?url=${encodeURIComponent(rawURL)}` : "";
                 const installURL = customInstall || fallbackInstall;
                 
-                // 预构建全量小写并做 Unicode NFKC 归一化处理
+                let category = "module";
+                if (m.category) {
+                    const c = String(m.category).toLowerCase();
+                    if (c.includes("config") || c.includes("配置")) category = "config";
+                    else if (c.includes("manual") || c.includes("手册") || c.includes("文档")) category = "manual";
+                    else if (c.includes("more") || c.includes("更多") || c.includes("工具")) category = "more";
+                }
+
                 const searchTokens = [
                     m.name,
                     m.description,
                     authorName,
                     m.author?.username,
                     sourceName,
+                    category,
                     m._searchKeywords
                 ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                 return {
                     name: m.name || "未命名模块",
+                    category: category,
                     description: m.description || "暂无描述",
                     icon: safeURL(m.icon || "", ["https:", "http:"]),
                     author: { name: authorName, url: authorURL, username: m.author?.username || "" },
@@ -993,7 +1191,9 @@
                     rawURL,
                     installURL,
                     isDubious: Boolean(m.isDubious),
-                    isRepoCard: false,
+                    isRepoCard: Boolean(m.isRepoCard),
+                    statusBadge: m.statusBadge || "",
+                    primaryBtnText: m.primaryBtnText || "",
                     _searchText: searchTokens
                 };
             });
@@ -1036,15 +1236,15 @@
         }
 
         /* =========================================================
-            3. UI 交互与吸顶控制
+            3. UI 交互与吸顶控制 (带状态锁的高频滚动优化)
         ========================================================= */
+        let backToTopVisible = false;
         function updateSearchLayer() {
-            if (!searchWrapperEl) return;
-            if (window.scrollY > 160) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
+            if (!backToTopBtn) return;
+            const shouldShow = window.scrollY > 160;
+            if (shouldShow === backToTopVisible) return;
+            backToTopVisible = shouldShow;
+            backToTopBtn.classList.toggle("visible", shouldShow);
         }
         
         window.addEventListener('scroll', updateSearchLayer, { passive: true });
@@ -1062,12 +1262,34 @@
         }
 
         /* =========================================================
-            4. 层叠控制与卡片渲染 (ResizeObserver 动态感知)
+            4. 层叠控制、卡片宽度感知与单列布局识别 (防抖与差异拦截)
         ========================================================= */
         function getGridColumns() {
             const style = window.getComputedStyle(modulesContainer);
             const template = style.getPropertyValue("grid-template-columns");
             return template ? template.trim().split(/\s+/).length : 1;
+        }
+
+        function updateControlBarLayout() {
+            const bar = document.getElementById("controlBar");
+            if (!bar || !modulesContainer) return;
+            const columns = getGridColumns();
+            bar.classList.toggle("is-single-column", columns === 1);
+        }
+
+        function updateCardWidth() {
+            const firstCard = modulesContainer.querySelector('.module-card, .loading-card');
+            if (firstCard && firstCard.offsetWidth > 0) {
+                document.documentElement.style.setProperty('--card-width', `${firstCard.offsetWidth}px`);
+            } else if (modulesContainer.offsetWidth > 0) {
+                const cols = getGridColumns() || 1;
+                const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--layout-gap")) || 44;
+                const totalGap = (cols - 1) * gap;
+                const colWidth = Math.max(0, (modulesContainer.offsetWidth - totalGap) / cols);
+                if (colWidth > 0) {
+                    document.documentElement.style.setProperty('--card-width', `${colWidth}px`);
+                }
+            }
         }
 
         function updateCardLayerOrder() {
@@ -1084,9 +1306,27 @@
         }
 
         let resizeTimer = null;
+        let lastCardWidth = 0;
+        let lastColumns = 0;
+
         function scheduleCardLayerUpdate() {
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(updateCardLayerOrder, 120);
+            resizeTimer = setTimeout(() => {
+                const columns = getGridColumns();
+                const firstCard = modulesContainer.querySelector(".module-card, .loading-card");
+                const cardWidth = firstCard?.offsetWidth || 0;
+
+                if (cardWidth === lastCardWidth && columns === lastColumns) {
+                    return;
+                }
+
+                lastCardWidth = cardWidth;
+                lastColumns = columns;
+
+                updateCardWidth();
+                updateCardLayerOrder();
+                updateControlBarLayout();
+            }, 60);
         }
 
         window.addEventListener("resize", scheduleCardLayerUpdate);
@@ -1097,6 +1337,10 @@
             });
             gridResizeObserver.observe(modulesContainer);
         }
+
+        requestAnimationFrame(() => {
+            updateControlBarLayout();
+        });
 
         function renderAuthor(module) {
             const author = module.author || {};
@@ -1129,7 +1373,7 @@
                 ? `<button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}" aria-label="复制 ${escapeHTML(module.name)} 链接">复制链接</button>` 
                 : "";
 
-            const primaryText = module.primaryBtnText || "安装";
+            const primaryText = module.primaryBtnText || (module.category === "config" ? "安装配置" : (module.category === "manual" ? "查阅手册" : "安装"));
             const primaryTarget = isRepo ? `target="_blank" rel="noopener"` : "";
             const installBtnHTML = module.installURL 
                 ? `<a class="button button-primary" href="${escapeHTML(module.installURL)}" ${primaryTarget} aria-label="${escapeHTML(primaryText)} ${escapeHTML(module.name)}">${escapeHTML(primaryText)}</a>` 
@@ -1172,7 +1416,10 @@
                         return;
                     }
                     const success = await copyToClipboard(url);
-                    const toastMessage = isRepo ? "已复制仓库链接" : "已复制模块 Raw 直链";
+                    let toastMessage = "已复制模块 Raw 直链";
+                    if (isRepo) toastMessage = "已复制仓库链接";
+                    else if (module.category === "config") toastMessage = "已复制配置文件直链";
+                    else if (module.category === "manual") toastMessage = "已复制手册链接";
                     showToast(success ? toastMessage : "复制失败，请手动复制");
                 });
             }
@@ -1205,7 +1452,7 @@
             state.currentlyRendered += nextBatch.length;
             
             sentinel.style.display = state.currentlyRendered >= state.filteredModules.length ? "none" : "block";
-            updateCardLayerOrder();
+            scheduleCardLayerUpdate();
             updateSearchLayer();
         }
 
@@ -1214,14 +1461,23 @@
             state.currentlyRendered = 0;
             modulesContainer.innerHTML = "";
 
+            const categoryLabels = {
+                module: "模块",
+                config: "配置",
+                manual: "手册",
+                more: "资源"
+            };
+            const currentLabel = categoryLabels[state.activeTab] || "资源";
+
             if (!state.filteredModules.length) {
                 sentinel.style.display = "none";
-                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div>没有找到匹配的模块</div>`;
-                countText.textContent = "0 个模块";
+                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div>没有找到匹配的${escapeHTML(currentLabel)}</div>`;
+                countText.textContent = `0 个${currentLabel}`;
+                scheduleCardLayerUpdate();
                 return;
             }
 
-            countText.textContent = `${state.filteredModules.length} 个资源`;
+            countText.textContent = `${state.filteredModules.length} 个${currentLabel}`;
             appendNextBatch();
         }
 
@@ -1233,7 +1489,7 @@
         observer.observe(sentinel);
 
         /* =========================================================
-            5. 搜索功能
+            5. 分类标签切换与搜索联动
         ========================================================= */
         function filterModules() {
             const keyword = searchInput.value.trim().normalize("NFKC").toLowerCase();
@@ -1245,13 +1501,31 @@
                 if (searchShortcut) searchShortcut.style.display = "";
             }
 
-            let result = state.allModules;
+            let result = state.allModules.filter(m => (m.category || "module") === state.activeTab);
+
             if (keyword) {
                 result = result.filter(m => m._searchText && m._searchText.includes(keyword));
             }
 
             renderFilteredList(result);
         }
+
+        tabItems.forEach(tab => {
+            tab.addEventListener("click", () => {
+                const targetTab = tab.getAttribute("data-tab");
+                if (state.activeTab === targetTab) return;
+
+                state.activeTab = targetTab;
+                tabItems.forEach(t => {
+                    const isActive = t === tab;
+                    t.classList.toggle("active", isActive);
+                    t.setAttribute("aria-selected", isActive ? "true" : "false");
+                });
+
+                filterModules();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        });
 
         searchInput.addEventListener("input", () => {
             clearTimeout(searchTimer);
@@ -1279,21 +1553,18 @@
         });
 
         function setSearchState(enabled) {
+            searchInput.disabled = !enabled;
+
+            const text = enabled ? "输入关键字快捷搜索..." : "请在加载完成后执行搜索...";
             const mainP = document.getElementById("mainPlaceholder");
-            const mainPClone = document.getElementById("mainPlaceholderClone");
-            
-            if (enabled) {
-                searchInput.disabled = false;
-                const text = "输入关键字快捷搜索...";
-                if (mainP) mainP.textContent = text;
-                if (mainPClone) mainPClone.textContent = text;
-                if (searchShortcut) searchShortcut.style.opacity = "1";
-            } else {
-                searchInput.disabled = true;
-                const text = "请在加载完成后执行搜索...";
-                if (mainP) mainP.textContent = text;
-                if (mainPClone) mainPClone.textContent = text;
-                if (searchShortcut) searchShortcut.style.opacity = "0.35";
+            if (mainP) mainP.textContent = text;
+
+            if (searchShortcut) {
+                searchShortcut.style.opacity = enabled ? "1" : "0.35";
+            }
+
+            if (!enabled) {
+                searchInput.value = "";
                 searchClear.classList.remove("visible");
             }
         }
@@ -1301,7 +1572,6 @@
         let noticeInterval = null;
         if (noticeTrack) {
             const firstItemClone = noticeTrack.children[0].cloneNode(true);
-            firstItemClone.id = "mainPlaceholderClone";
             noticeTrack.appendChild(firstItemClone);
 
             let noticeIndex = 0;
@@ -1460,9 +1730,7 @@
             if (state.isPullRefreshing || state.isDataLoading) return;
             state.isPullRefreshing = true;
 
-            ptrIcon.innerHTML = REFRESH_ICON;
             ptrIcon.classList.remove("rotate");
-            ptrIcon.querySelector("svg")?.classList.add("spin-anim");
             ptrText.textContent = "正在强制刷新本站...";
 
             const success = await loadModules(true);
@@ -1471,7 +1739,7 @@
             setTimeout(() => {
                 const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
                 pageContainer.style.transition = reboundBezier;
-                pageContainer.style.transform = 'translate3d(0, 0, 0)';
+                pageContainer.style.transform = 'none';
 
                 pullRefreshIndicator.style.transition = `${reboundBezier}, opacity 0.25s ease`;
                 pullRefreshIndicator.style.opacity = '0';
@@ -1488,7 +1756,7 @@
             if (pullRafId) cancelAnimationFrame(pullRafId);
             const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
             pageContainer.style.transition = reboundBezier;
-            pageContainer.style.transform = 'translate3d(0, 0, 0)';
+            pageContainer.style.transform = 'none';
             pullRefreshIndicator.style.transition = `${reboundBezier}, opacity 0.25s ease`;
             pullRefreshIndicator.style.opacity = '0';
             pullRefreshIndicator.style.transform = 'translate3d(-50%, -60px, 0)';
@@ -1592,7 +1860,7 @@
         window.addEventListener('touchcancel', resetPullState, { passive: true });
 
         /* =========================================================
-            8. 核心数据同步引擎 (完整异常隔离与安全存储)
+            8. 核心数据同步引擎 (Stale-While-Revalidate 异步高可用架构)
         ========================================================= */
         function cleanOldCaches() {
             try {
@@ -1612,55 +1880,46 @@
         async function loadModules(forceRefresh = false) {
             state.isDataLoading = true;
             let cachedData = null;
-            let cachedTime = null;
+            const staticItems = normalizeStaticResources();
 
             try {
                 cachedData = localStorage.getItem(CONFIG.CACHE_KEY);
-                cachedTime = localStorage.getItem(CONFIG.CACHE_TIME_KEY);
             } catch (e) {
-                console.warn("无法读取本地缓存:", e);
+                console.warn("读取本地缓存失败:", e);
             }
 
-            const now = Date.now();
-            let hasValidCache = false;
-            const repoCards = normalizeRepoCards();
+            let hasRenderedCache = false;
 
+            // 阶段一：存在缓存且非强制刷新时，立即呈现
             if (!forceRefresh && cachedData) {
                 try {
                     const parsed = JSON.parse(cachedData);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         const normalized = normalizeModules(parsed);
                         if (normalized.length > 0) {
-                            state.allModules = [...repoCards, ...normalized];
-                            renderFilteredList(state.allModules);
-                            hasValidCache = true;
+                            state.allModules = [...staticItems, ...normalized];
+                            filterModules();
                             setSearchState(true);
-                            
-                            const parsedTime = Number(cachedTime);
-                            const isValidTime = Number.isFinite(parsedTime) && parsedTime > 0;
-                            const isExpired = !isValidTime || (now - parsedTime > CONFIG.CACHE_EXPIRE);
-                            
-                            if (!isExpired) {
-                                statusText.textContent = "已同步";
-                                statusDot.className = "status-dot";
-                                state.isDataLoading = false;
-                                return true;
-                            }
+                            hasRenderedCache = true;
+                            statusText.textContent = "正在后台检查最新资源...";
+                            statusDot.className = "status-dot loading";
                         }
                     }
                 } catch (e) {
-                    hasValidCache = false;
+                    hasRenderedCache = false;
                 }
             }
 
-            if (!hasValidCache && state.allModules.length === 0) {
-                state.allModules = repoCards;
-                renderFilteredList(state.allModules);
+            // 无缓存呈现时展示骨架屏与首屏提示
+            if (!hasRenderedCache && state.allModules.length === 0) {
+                state.allModules = staticItems;
+                filterModules();
                 setSearchState(false);
                 statusText.textContent = "正在拉取最新静态资源索引...";
                 statusDot.className = "status-dot loading";
             }
 
+            // 阶段二：后台异步拉取最新数据（SWR）
             try {
                 const fetchUrl = forceRefresh ? `${CONFIG.DATA_JSON_URL}?_t=${Date.now()}` : CONFIG.DATA_JSON_URL;
                 const response = await fetch(fetchUrl, { cache: forceRefresh ? "no-store" : "default" });
@@ -1673,8 +1932,8 @@
                 const normalized = normalizeModules(data);
                 if (!normalized.length) throw new Error("未解析到有效模块数据");
 
-                state.allModules = [...repoCards, ...normalized];
-                renderFilteredList(state.allModules);
+                state.allModules = [...staticItems, ...normalized];
+                filterModules();
                 setSearchState(true);
 
                 try {
@@ -1682,13 +1941,13 @@
                     localStorage.setItem(CONFIG.CACHE_TIME_KEY, String(Date.now()));
                 } catch (e) {}
 
-                statusText.textContent = "已同步";
+                statusText.textContent = "已同步最新数据";
                 statusDot.className = "status-dot";
                 return true;
             } catch (error) {
                 console.error("加载 modules.json 失败:", error);
                 
-                if (state.allModules.length > repoCards.length) {
+                if (hasRenderedCache || state.allModules.length > staticItems.length) {
                     statusText.textContent = "在线同步异常，当前展示缓存数据";
                     statusDot.className = "status-dot error";
                 } else {
