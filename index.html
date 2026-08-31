@@ -200,7 +200,7 @@
             min-height: 100%;
             overscroll-behavior-y: none;
             -webkit-overscroll-behavior-y: none;
-            transition: background-color 0.4s ease;
+            transition: background-color 0.4s ease; 
         }
         
         body { 
@@ -339,7 +339,7 @@
         }
 
         /* =========================================================
-            3. 搜索 + 分类控制栏 (宽屏下吸顶于屏幕上方)
+            3. 搜索 + 分类控制栏 (宽屏吸顶)
         ========================================================= */
         .control-bar {
             position: sticky;
@@ -355,7 +355,7 @@
         }
 
         /* =========================================================
-            4. 分类标签页
+            4. 分类标签页 (桌面端)
         ========================================================= */
         .tab-bar-wrapper {
             width: 100%;
@@ -823,7 +823,7 @@
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* =========================================================
-            6. 单列布局与响应式适配 (iOS / 移动端 吸顶悬浮与底部导航)
+            6. 单列布局与响应式适配 (iOS / 移动端 规范底栏)
         ========================================================= */
         .control-bar.is-single-column {
             display: block;
@@ -856,10 +856,10 @@
             position: fixed;
             left: 0;
             right: 0;
-            bottom: max(16px, env(safe-area-inset-bottom));
+            bottom: max(16px, calc(env(safe-area-inset-bottom) + 6px));
             width: 100%;
-            height: 44px;
-            padding: 0 clamp(16px, 2.5vw, 40px);
+            height: 52px;
+            padding: 0 clamp(16px, 4vw, 32px);
             margin: 0;
             display: flex;
             align-items: center;
@@ -868,41 +868,45 @@
             z-index: 999999;
         }
 
-        @media (max-width: 600px) {
-            .control-bar.is-single-column .tab-bar-wrapper {
-                bottom: max(12px, env(safe-area-inset-bottom));
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-        }
-
         .control-bar.is-single-column .tab-bar {
             pointer-events: auto;
             width: 100%;
-            height: 44px;
-            max-width: clamp(1080px, 95vw, 2560px);
-            border-radius: 22px;
+            height: 52px;
+            max-width: 460px;
+            padding: 5px;
+            border-radius: 26px;
+            gap: 4px;
+            box-shadow: var(--shadow-glass-ui);
         }
 
         .control-bar.is-single-column .tab-item {
-            height: 34px;
-            line-height: 34px;
+            height: 42px;
+            line-height: 42px;
+            border-radius: 21px;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 0 10px;
         }
 
         @media (max-width: 860px) {
             body { 
-                padding-bottom: max(96px, calc(env(safe-area-inset-bottom) + 76px)); 
+                padding-bottom: max(108px, calc(env(safe-area-inset-bottom) + 88px)); 
             }
             .modules { 
                 grid-template-columns: 1fr; 
             }
             .toast {
-                bottom: max(78px, calc(env(safe-area-inset-bottom) + 68px));
+                bottom: max(88px, calc(env(safe-area-inset-bottom) + 78px));
             }
         }
 
         @media (max-width: 600px) {
             body { 
+                padding-left: 12px; 
+                padding-right: 12px; 
+            }
+            .control-bar.is-single-column .tab-bar-wrapper { 
+                bottom: max(14px, calc(env(safe-area-inset-bottom) + 4px));
                 padding-left: 12px; 
                 padding-right: 12px; 
             }
@@ -918,8 +922,8 @@
             .card-status { width: 100%; }
             .card-status .status-pill { width: 100%; }
             .action-buttons { width: 100%; justify-content: flex-end; }
-            .tab-bar { padding: 4px; gap: 2px; }
-            .tab-item { font-size: 12px; padding: 0 2px; }
+            .control-bar.is-single-column .tab-bar { padding: 4px; gap: 2px; }
+            .control-bar.is-single-column .tab-item { font-size: 13px; padding: 0 4px; border-radius: 19px; }
         }
     </style>
 </head>
