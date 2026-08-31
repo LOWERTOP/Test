@@ -223,6 +223,7 @@
             max-width: clamp(1080px, 95vw, 2560px); 
             margin: 0 auto; 
             position: relative; 
+            top: 0;
         }
 
         .glass-element {
@@ -826,8 +827,8 @@
         ========================================================= */
         .control-bar.is-single-column {
             display: block;
-            position: sticky;
-            top: max(8px, env(safe-area-inset-top, 0px));
+            position: relative;
+            top: auto;
             margin-bottom: 14px;
             padding: 4px 0;
         }
@@ -1720,7 +1721,7 @@
         updateThemeUI();
 
         /* =========================================================
-            7. 移动端下拉刷新手势
+            7. 移动端下拉刷新手势 (基于 top 的防Containing Block破坏方案)
         ========================================================= */
         let touchStartX = 0, touchStartY = 0, isPulling = false, isPullLocked = false, pullRafId = null;
         const MIN_DRAG_DEADZONE = 30;
@@ -1737,9 +1738,9 @@
             showToast(success ? "资源数据已刷新" : "在线同步失败，已保留现有数据");
             
             setTimeout(() => {
-                const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
+                const reboundBezier = 'top 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
                 pageContainer.style.transition = reboundBezier;
-                pageContainer.style.transform = 'none';
+                pageContainer.style.top = '0';
 
                 pullRefreshIndicator.style.transition = `${reboundBezier}, opacity 0.25s ease`;
                 pullRefreshIndicator.style.opacity = '0';
@@ -1754,9 +1755,9 @@
             isPulling = false;
             isPullLocked = false;
             if (pullRafId) cancelAnimationFrame(pullRafId);
-            const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
+            const reboundBezier = 'top 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
             pageContainer.style.transition = reboundBezier;
-            pageContainer.style.transform = 'none';
+            pageContainer.style.top = '0';
             pullRefreshIndicator.style.transition = `${reboundBezier}, opacity 0.25s ease`;
             pullRefreshIndicator.style.opacity = '0';
             pullRefreshIndicator.style.transform = 'translate3d(-50%, -60px, 0)';
@@ -1779,7 +1780,7 @@
                 isPulling = true;
                 isPullLocked = false;
                 
-                pageContainer.style.willChange = "transform";
+                pageContainer.style.willChange = "top";
                 pageContainer.style.transition = 'none';
                 pullRefreshIndicator.style.transition = 'none';
             } else {
@@ -1817,7 +1818,7 @@
 
                 if (pullRafId) cancelAnimationFrame(pullRafId);
                 pullRafId = requestAnimationFrame(() => {
-                    pageContainer.style.transform = `translate3d(0, ${containerShift}px, 0)`;
+                    pageContainer.style.top = `${containerShift}px`;
                     pullRefreshIndicator.style.opacity = Math.min(progress * 1.2, 1);
                     pullRefreshIndicator.style.transform = `translate3d(-50%, ${indicatorShift}px, 0)`;
 
@@ -1844,8 +1845,8 @@
             const diffY = currentY - touchStartY;
 
             if (diffY >= PULL_TRIGGER_DIFF && window.scrollY <= 0) {
-                pageContainer.style.transition = 'transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1)';
-                pageContainer.style.transform = `translate3d(0, 38px, 0)`;
+                pageContainer.style.transition = 'top 0.35s cubic-bezier(0.2, 0.9, 0.3, 1)';
+                pageContainer.style.top = '38px';
                 
                 pullRefreshIndicator.style.transition = 'transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.25s ease';
                 pullRefreshIndicator.style.transform = `translate3d(-50%, 16px, 0)`;
