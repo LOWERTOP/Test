@@ -1028,7 +1028,7 @@
         /* =========================================================
             1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "202609010604"; 
+        const CACHE_VERSION = "202609010655"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1167,7 +1167,9 @@
                     "教程",
                     "仓库",
                     "文档",
-                    "配置"
+                    "配置",
+                    "配色",
+                    "主题"
                 ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                 return {
@@ -1187,32 +1189,74 @@
                 const authorAvatar = safeURL(m.authorAvatar || m.author?.avatar || "", ["https:", "http:"]);
                 const sourceName = m.sourceName || "开源仓库";
                 const sourceURL = safeURL(m.sourceURL || "", ["https:", "http:"]);
-                
-                const customInstall = safeInstallURL(m.installURL || "");
-                const fallbackInstall = rawURL ? `shadowrocket://install?url=${encodeURIComponent(rawURL)}` : "";
-                const installURL = customInstall || fallbackInstall;
+                const name = m.name || "未命名资源";
                 
                 let category = "module";
                 if (m.category) {
                     const c = String(m.category).toLowerCase();
                     if (c.includes("config") || c.includes("配置")) category = "config";
                     else if (c.includes("manual") || c.includes("手册") || c.includes("文档")) category = "manual";
-                    else if (c.includes("more") || c.includes("更多") || c.includes("工具")) category = "more";
+                    else if (c.includes("more") || c.includes("更多") || c.includes("资源") || c.includes("theme") || c.includes("配色")) category = "more";
+                } else if (/\.(?:theme|srtheme)$/i.test(rawURL) || name.includes("配色") || name.includes("主题")) {
+                    category = "more";
+                } else if (rawURL.endsWith(".conf")) {
+                    category = "config";
+                } else if (!/\.(?:sgmodule|srmodule|module)$/i.test(rawURL)) {
+                    category = "more";
                 }
 
+                const isTheme = /\.(?:theme|srtheme)$/i.test(rawURL) || name.includes("配色") || name.includes("主题");
+                let fallbackInstall = "";
+                let defaultBadge = "";
+                let defaultBtn = "";
+
+                if (isTheme) {
+                    fallbackInstall = rawURL ? `shadowrocket://theme/add/${encodeURIComponent(rawURL)}` : "";
+                    defaultBadge = "主题配色";
+                    defaultBtn = "安装配色";
+                } else if (category === "config") {
+                    fallbackInstall = rawURL ? `shadowrocket://config/add/${encodeURIComponent(rawURL)}` : "";
+                    defaultBadge = "配置文件";
+                    defaultBtn = "安装配置";
+                } else if (category === "manual") {
+                    fallbackInstall = rawURL || sourceURL;
+                    defaultBadge = "手册文档";
+                    defaultBtn = "查阅手册";
+                } else if (category === "more") {
+                    if (/\.list$/i.test(rawURL)) {
+                        defaultBadge = "分流规则";
+                        defaultBtn = "查看规则";
+                    } else if (/\.snippet$/i.test(rawURL)) {
+                        defaultBadge = "功能片段";
+                        defaultBtn = "查看片段";
+                    } else {
+                        defaultBadge = "社区资源";
+                        defaultBtn = "访问资源";
+                    }
+                    fallbackInstall = rawURL || sourceURL;
+                } else {
+                    fallbackInstall = rawURL ? `shadowrocket://install?module=${encodeURIComponent(rawURL)}` : "";
+                    defaultBadge = "功能模块";
+                    defaultBtn = "安装";
+                }
+
+                const customInstall = safeInstallURL(m.installURL || "");
+                const installURL = customInstall || fallbackInstall;
+
                 const searchTokens = [
-                    m.name,
+                    name,
                     m.description,
                     authorName,
                     m.author?.username,
                     sourceName,
                     category,
+                    isTheme ? "配色 主题 theme" : "",
                     m._searchKeywords
                 ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                 return {
-                    name: m.name || "未命名模块",
-                    category: category,
+                    name,
+                    category,
                     description: m.description || "暂无描述",
                     icon: safeURL(m.icon || "", ["https:", "http:"]),
                     author: { name: authorName, url: authorURL, username: m.author?.username || "" },
@@ -1222,9 +1266,9 @@
                     rawURL,
                     installURL,
                     isDubious: Boolean(m.isDubious),
-                    isRepoCard: Boolean(m.isRepoCard),
-                    statusBadge: m.statusBadge || "",
-                    primaryBtnText: m.primaryBtnText || "",
+                    isRepoCard: Boolean(m.isRepoCard || category === "manual" || (category === "more" && !installURL.startsWith("shadowrocket:"))),
+                    statusBadge: m.statusBadge || defaultBadge,
+                    primaryBtnText: m.primaryBtnText || defaultBtn,
                     _searchText: searchTokens
                 };
             });
@@ -1261,7 +1305,7 @@
 
         function createIOSAppIcon(name) {
             const cleanName = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
-            const char = Array.from(cleanName)[0] || "模";
+            const char = Array.from(cleanName)[0] || "源";
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><circle cx="128" cy="128" r="128" fill="#768a9e"/><text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
@@ -1393,7 +1437,7 @@
             const authorHTML = renderAuthor(module);
             
             const isRepo = Boolean(module.isRepoCard);
-            const statusTextVal = module.statusBadge || (module.isDubious ? "信息获取失败" : "资源获取成功");
+            const statusTextVal = module.statusBadge || (module.isDubious ? "信息获取失败" : "资源解析成功");
             const statusClass = module.statusBadge ? "status-badge-pinned" : (module.isDubious ? "status-badge-dubious" : "");
 
             const sourceLinkHTML = module.sourceURL
@@ -1404,8 +1448,8 @@
                 ? `<button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}" aria-label="复制 ${escapeHTML(module.name)} 链接">复制链接</button>` 
                 : "";
 
-            const primaryText = module.primaryBtnText || (module.category === "config" ? "安装配置" : (module.category === "manual" ? "查阅手册" : "安装"));
-            const primaryTarget = isRepo ? `target="_blank" rel="noopener"` : "";
+            const primaryText = module.primaryBtnText || (module.category === "config" ? "安装配置" : (module.category === "manual" ? "查阅手册" : (module.category === "more" ? "查看详情" : "安装")));
+            const primaryTarget = isRepo || !module.installURL.startsWith("shadowrocket:") ? `target="_blank" rel="noopener"` : "";
             const installBtnHTML = module.installURL 
                 ? `<a class="button button-primary" href="${escapeHTML(module.installURL)}" ${primaryTarget} aria-label="${escapeHTML(primaryText)} ${escapeHTML(module.name)}">${escapeHTML(primaryText)}</a>` 
                 : "";
@@ -1449,8 +1493,10 @@
                     const success = await copyToClipboard(url);
                     let toastMessage = "已复制资源直链";
                     if (isRepo) toastMessage = "已复制仓库链接";
+                    else if (module.name.includes("配色") || module.name.includes("主题") || url.includes("theme")) toastMessage = "已复制配色直链";
                     else if (module.category === "config") toastMessage = "已复制配置直链";
                     else if (module.category === "manual") toastMessage = "已复制手册链接";
+                    else if (module.category === "more") toastMessage = "已复制资源直链";
                     showToast(success ? toastMessage : "复制失败，请手动复制");
                 });
             }
