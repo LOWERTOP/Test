@@ -986,7 +986,7 @@
         </footer>
     </div>
     
-    <div id="toast" class="toast">已复制模块链接</div>
+    <div id="toast" class="toast">已复制资源链接</div>
 
     <script>
         /* =========================================================
@@ -1416,9 +1416,9 @@
                         return;
                     }
                     const success = await copyToClipboard(url);
-                    let toastMessage = "已复制模块 Raw 直链";
+                    let toastMessage = "已复制资源直链";
                     if (isRepo) toastMessage = "已复制仓库链接";
-                    else if (module.category === "config") toastMessage = "已复制配置文件直链";
+                    else if (module.category === "config") toastMessage = "已复制配置直链";
                     else if (module.category === "manual") toastMessage = "已复制手册链接";
                     showToast(success ? toastMessage : "复制失败，请手动复制");
                 });
@@ -1734,7 +1734,7 @@
             ptrText.textContent = "正在强制刷新本站...";
 
             const success = await loadModules(true);
-            showToast(success ? "模块数据已刷新" : "在线同步失败，已保留现有数据");
+            showToast(success ? "资源数据已刷新" : "在线同步失败，已保留现有数据");
             
             setTimeout(() => {
                 const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
@@ -1927,10 +1927,10 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
-                if (!Array.isArray(data) || !data.length) throw new Error("模块列表为空");
+                if (!Array.isArray(data) || !data.length) throw new Error("资源列表为空");
 
                 const normalized = normalizeModules(data);
-                if (!normalized.length) throw new Error("未解析到有效模块数据");
+                if (!normalized.length) throw new Error("未解析到有效资源数据");
 
                 state.allModules = [...staticItems, ...normalized];
                 filterModules();
