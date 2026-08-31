@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#ffffff">
@@ -13,9 +13,15 @@
 
     <script>
         (function() {
-            const saved = localStorage.getItem("sr_theme_override");
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            const theme = saved === "dark" || saved === "light" ? saved : (saved === "auto" ? (prefersDark ? "dark" : "light") : "light");
+            let theme = "light";
+            try {
+                const saved = localStorage.getItem("sr_theme_override");
+                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                theme = (saved === "dark" || saved === "light") ? saved : (prefersDark ? "dark" : "light");
+            } catch (e) {
+                const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                theme = prefersDark ? "dark" : "light";
+            }
             document.documentElement.setAttribute("data-theme", theme);
             const themeColor = theme === 'dark' ? '#14161a' : '#ffffff';
             const themeMeta = document.querySelector('meta[name="theme-color"]');
@@ -31,7 +37,7 @@
 
     <style>
         /* =========================================================
-           1. 浅色主题设计令牌 (Light Theme Tokens - 默认)
+            1. 浅色主题设计令牌 (Light Theme Tokens)
         ========================================================= */
         :root, [data-theme="light"] {
             --bg-overscroll: #ffffff;
@@ -56,7 +62,7 @@
             --shadow-glass-ui: 
                 inset 0.5px -0.5px 2px rgba(0, 0, 0, 0.04),
                 inset 0 10px 20px -6px rgba(255, 255, 255, 0.65), 
-                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.08),      
+                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.08),     
                 -2.5px 7px 4.5px -3px rgba(255, 255, 255, 0.33),
                 -1.3px 8px 6px -3.5px rgba(255, 255, 255, 0.3),
                 -3.5px 10px 7.5px -4px rgba(255, 255, 255, 0.25),
@@ -68,7 +74,7 @@
             --shadow-glass-ui-hover: 
                 inset 0.5px -0.5px 2px rgba(0, 0, 0, 0.05),
                 inset 0 10px 20px -6px rgba(255, 255, 255, 0.75), 
-                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.1),      
+                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.1),     
                 -3px 8.5px 5px -3px rgba(255, 255, 255, 0.33),
                 -1.6px 9.5px 7px -3.5px rgba(255, 255, 255, 0.3),
                 -4.2px 12px 9px -4px rgba(255, 255, 255, 0.25),
@@ -80,7 +86,7 @@
             --shadow-search: 
                 inset 0.5px -0.5px 2px rgba(0, 0, 0, 0.04),
                 inset 0 10px 20px -6px rgba(255, 255, 255, 0.65), 
-                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.08),      
+                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.08),     
                 -1.7px 4.7px 3px -2px rgba(255, 255, 255, 0.22),
                 -0.9px 5.3px 4px -2.3px rgba(255, 255, 255, 0.20),
                 -2.3px 6.7px 5px -2.7px rgba(255, 255, 255, 0.17),
@@ -92,7 +98,7 @@
             --shadow-search-hover: 
                 inset 0.5px -0.5px 2px rgba(0, 0, 0, 0.05),
                 inset 0 10px 20px -6px rgba(255, 255, 255, 0.75), 
-                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.1),      
+                inset 0 -10px 20px -6px rgba(0, 0, 0, 0.1),     
                 -2px 5.7px 3.3px -2px rgba(255, 255, 255, 0.22),
                 -1.1px 6.3px 4.7px -2.3px rgba(255, 255, 255, 0.20),
                 -2.8px 8px 6px -2.7px rgba(255, 255, 255, 0.17),
@@ -124,7 +130,7 @@
         }
 
         /* =========================================================
-           2. 暗色主题设计令牌 (Dark Theme Tokens)
+            2. 暗色主题设计令牌 (Dark Theme Tokens)
         ========================================================= */
         [data-theme="dark"] {
             --bg-overscroll: #14161a;
@@ -213,7 +219,6 @@
             max-width: clamp(1080px, 95vw, 2560px); 
             margin: 0 auto; 
             position: relative; 
-            will-change: transform;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
         }
@@ -223,7 +228,6 @@
             background-image: var(--noise-pattern), var(--glass-bg);
             backdrop-filter: blur(32px) saturate(120%) brightness(102%);
             -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
-            border: none;
             border-top: 1px solid var(--glass-border-t);
             border-left: 1px solid var(--glass-border-l);
             border-right: 1px solid var(--glass-border-r);
@@ -327,17 +331,9 @@
             display: block; width: 20px; height: 20px; pointer-events: none; stroke-width: 2; 
             filter: none; 
         }
-        
-        @keyframes spinNode { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .spin-anim { 
-            animation: spinNode 1s linear infinite; 
-            transform-origin: 50% 50%; 
-            transform-box: view-box; 
-        }
 
         .search-wrapper { 
             position: sticky; 
-            top: 0; 
             top: env(safe-area-inset-top, 0px); 
             z-index: 999999; 
             padding: 8px 0 12px; margin-bottom: 12px; 
@@ -347,7 +343,6 @@
             width: 100%;
             -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); 
         }
-        .search-wrapper.is-sticky { z-index: 999999; }
 
         .search-box-inner {
             position: relative; flex: 1 1 auto; min-width: 0; height: 44px; display: flex; align-items: center; gap: 8px; 
@@ -498,22 +493,19 @@
         .module-card { 
             position: relative; 
             padding: 28px; 
-            width: auto;
             height: 100%;
             min-width: 0;
-            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             border-radius: var(--radius-card); 
             box-shadow: var(--shadow-glass-ui); 
             overflow: hidden; 
-            content-visibility: auto; 
-            contain-intrinsic-size: 0 180px; 
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-image 0.4s ease;
             -webkit-transform: translateZ(0); transform: translateZ(0); 
         }
 
         .module-card:hover { 
+            z-index: 50000 !important;
             transform: translateY(-2px);
             background-image: var(--noise-pattern), var(--glass-bg-hover);
             box-shadow: var(--shadow-glass-ui-hover); 
@@ -534,7 +526,6 @@
             mask-image: radial-gradient(white, black);
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
-            will-change: transform;
         }
         .module-icon img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
         
@@ -557,7 +548,6 @@
         }
         .meta-separator { opacity: .4; }
         
-        /* 统一的作者与仓库展示样式 */
         .author, .source-link { 
             display: inline-flex; 
             align-items: center; 
@@ -571,10 +561,12 @@
             text-overflow: ellipsis;
             white-space: nowrap; 
         }
-        .author:hover, .source-link:hover { 
+        .author:hover, .source-link:hover:not(.source-link-static) { 
             color: var(--primary); 
             text-decoration: underline;
         }
+        .source-link-static { cursor: default; }
+        
         .author-avatar { 
             width: 18px; 
             height: 18px; 
@@ -610,7 +602,6 @@
             flex: 1;
         }
         
-        /* 状态标签样式：低明度、无投影、弱化视觉规范 */
         .status-pill {
             display: inline-flex;
             align-items: center;
@@ -681,7 +672,6 @@
         
         .loading-card { 
             height: 180px; 
-            width: auto; 
             min-width: 0;
             border-radius: var(--radius-card); 
             box-shadow: var(--shadow-glass-ui); 
@@ -741,7 +731,6 @@
                     </h1>
                 </div>
                 <div class="theme-controls">
-                    <button id="refreshCacheBtn" class="theme-toggle glass-element" aria-label="强制刷新缓存" title="强制拉取最新数据"></button>
                     <button id="themeToggle" class="theme-toggle glass-element" aria-label="切换主题模式"></button>
                     <a id="githubStarBtn" class="theme-toggle glass-element" href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star">
                         <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px;">
@@ -756,11 +745,11 @@
         </header>
 
         <div class="search-wrapper">
-            <label for="search" class="search-box-inner glass-element">
-                <div class="search-icon">🔍</div>
+            <div class="search-box-inner glass-element" role="search">
+                <div class="search-icon" aria-hidden="true">🔍</div>
                 
                 <div class="input-wrapper">
-                    <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" disabled>
+                    <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
                     
                     <div id="placeholderTrack" class="placeholder-track">
                         <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
@@ -771,11 +760,11 @@
 
                 <span class="search-shortcut">/</span>
                 <button id="searchClear" class="search-clear" type="button" title="清空搜索">✕</button>
-            </label>
+            </div>
 
             <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
                     <polyline points="5 12 12 5 19 12"></polyline>
                 </svg>
             </button>
@@ -807,9 +796,9 @@
 
     <script>
         /* =========================================================
-           全局配置与静态 JSON 缓存控制
+            1. 全局配置与状态架构
         ========================================================= */
-        const CACHE_VERSION = "2026_V2_STATIC"; 
+        const CACHE_VERSION = "20260831"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -824,7 +813,9 @@
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
         const REFRESH_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`;
 
+        // DOM 句柄
         const searchWrapperEl = document.querySelector('.search-wrapper');
+        const searchBoxInner = document.querySelector('.search-box-inner');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
         const searchClear = document.getElementById("searchClear");
@@ -837,7 +828,6 @@
         const noticeTrack = document.getElementById("placeholderTrack");
         
         const themeToggleBtn = document.getElementById("themeToggle");
-        const refreshCacheBtn = document.getElementById("refreshCacheBtn");
         const backToTopBtn = document.getElementById("backToTopBtn");
 
         const pageContainer = document.getElementById("pageContainer");
@@ -845,21 +835,127 @@
         const ptrIcon = document.getElementById("ptrIcon");
         const ptrText = document.getElementById("ptrText");
 
-        let allModules = [];
-        let filteredModules = [];
-        let currentlyRendered = 0;
-        let searchTimer = null;
-        let isPageLoading = true;
+        // 全局状态总线
+        const state = {
+            allModules: [],
+            filteredModules: [],
+            currentlyRendered: 0,
+            isDataLoading: false,
+            isPullRefreshing: false
+        };
 
+        let searchTimer = null;
+        let toastTimer = null;
+
+        /* =========================================================
+            2. 安全与数据格式化引擎
+        ========================================================= */
+        function escapeHTML(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function safeURL(value, allowed = ["https:", "http:"]) {
+            if (!value || typeof value !== "string") return "";
+            const trimmed = value.trim();
+            try {
+                const parsed = new URL(trimmed, location.href);
+                return allowed.includes(parsed.protocol) ? parsed.href : "";
+            } catch {
+                return "";
+            }
+        }
+
+        function safeInstallURL(value) {
+            return safeURL(value, ["shadowrocket:", "https:", "http:"]);
+        }
+
+        function normalizeModules(data) {
+            if (!Array.isArray(data)) return [];
+            return data.filter(item => item && typeof item === "object").map(m => {
+                const rawURL = safeURL(m.rawURL || m.url || "", ["https:", "http:"]);
+                const authorName = m.author?.name || m.author?.username || "";
+                const authorURL = safeURL(m.author?.url || (m.author?.username ? `https://github.com/${m.author.username}` : ""), ["https:", "http:"]);
+                const authorAvatar = safeURL(m.authorAvatar || m.author?.avatar || "", ["https:", "http:"]);
+                const sourceName = m.sourceName || "开源仓库";
+                const sourceURL = safeURL(m.sourceURL || "", ["https:", "http:"]);
+                
+                // 自定义安装地址合法则使用，非法/缺失则自动降级到标准 Shadowrocket 协议
+                const customInstall = safeInstallURL(m.installURL || "");
+                const fallbackInstall = rawURL ? `shadowrocket://install?url=${encodeURIComponent(rawURL)}` : "";
+                const installURL = customInstall || fallbackInstall;
+                
+                // 预构建全量小写并做 Unicode NFKC 归一化处理
+                const searchTokens = [
+                    m.name,
+                    m.description,
+                    authorName,
+                    m.author?.username,
+                    sourceName,
+                    m._searchKeywords
+                ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
+
+                return {
+                    name: m.name || "未命名模块",
+                    description: m.description || "暂无描述",
+                    icon: safeURL(m.icon || "", ["https:", "http:"]),
+                    author: { name: authorName, url: authorURL, username: m.author?.username || "" },
+                    authorAvatar,
+                    sourceName,
+                    sourceURL,
+                    rawURL,
+                    installURL,
+                    isDubious: Boolean(m.isDubious),
+                    _searchText: searchTokens
+                };
+            });
+        }
+
+        function showToast(text) {
+            clearTimeout(toastTimer);
+            toast.textContent = text;
+            toast.classList.add("show");
+            toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2000);
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                }
+            } catch (e) {}
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            let success = false;
+            try { success = document.execCommand("copy"); } catch (e) {}
+            document.body.removeChild(textArea);
+            return success;
+        }
+
+        function createIOSAppIcon(name) {
+            const cleanName = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
+            const char = Array.from(cleanName)[0] || "模";
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><circle cx="128" cy="128" r="128" fill="#768a9e"/><text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
+            return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+        }
+
+        /* =========================================================
+            3. UI 交互与吸顶控制
+        ========================================================= */
         function updateSearchLayer() {
             if (!searchWrapperEl) return;
-            const stickyTop = parseFloat(window.getComputedStyle(searchWrapperEl).top) || 0;
-            if (searchWrapperEl.getBoundingClientRect().top <= stickyTop + 1) {
-                searchWrapperEl.classList.add('is-sticky');
-            } else {
-                searchWrapperEl.classList.remove('is-sticky');
-            }
-
             if (window.scrollY > 160) {
                 backToTopBtn.classList.add('visible');
             } else {
@@ -872,67 +968,417 @@
         backToTopBtn.addEventListener("click", () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
-        
-        function updateCardLayerOrder() {
-            const cards = modulesContainer.querySelectorAll('.module-card');
-            if (!cards.length) return;
 
-            const cardOffsets = [];
-            for (let i = 0; i < cards.length; i++) {
-                cardOffsets.push({ card: cards[i], top: cards[i].offsetTop });
-            }
-
-            const rowsMap = new Map();
-            cardOffsets.forEach(({ card, top }) => {
-                let foundKey = Array.from(rowsMap.keys()).find(k => Math.abs(k - top) < 12);
-                if (foundKey === undefined) {
-                    foundKey = top;
-                    rowsMap.set(foundKey, []);
+        if (searchBoxInner) {
+            searchBoxInner.addEventListener("click", (e) => {
+                if (e.target !== searchClear && !searchInput.disabled) {
+                    searchInput.focus();
                 }
-                rowsMap.get(foundKey).push(card);
             });
+        }
 
-            const sortedRows = Array.from(rowsMap.entries()).sort((a, b) => a[0] - b[0]);
+        /* =========================================================
+            4. 层叠控制与卡片渲染 (ResizeObserver 动态感知)
+        ========================================================= */
+        function getGridColumns() {
+            const style = window.getComputedStyle(modulesContainer);
+            const template = style.getPropertyValue("grid-template-columns");
+            return template ? template.trim().split(/\s+/).length : 1;
+        }
 
-            sortedRows.forEach(([_, rowCards], rowIndex) => {
-                const rowBaseZ = (rowIndex + 1) * 1000;
-                rowCards.forEach((card, colIndex) => {
-                    card.style.zIndex = rowBaseZ + (rowCards.length - colIndex);
-                });
-            });
+        function updateCardLayerOrder() {
+            const cards = modulesContainer.querySelectorAll(".module-card");
+            const count = cards.length;
+            if (!count) return;
             
-            updateSearchLayer();
+            const cols = getGridColumns() || 1;
+            for (let i = 0; i < count; i++) {
+                const r = Math.floor(i / cols);
+                const c = i % cols;
+                cards[i].style.zIndex = (r + 1) * 100 - c;
+            }
         }
 
         let resizeTimer = null;
-        window.addEventListener("resize", () => {
+        function scheduleCardLayerUpdate() {
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(updateCardLayerOrder, 150);
-        });
+            resizeTimer = setTimeout(updateCardLayerOrder, 120);
+        }
+
+        window.addEventListener("resize", scheduleCardLayerUpdate);
+
+        if (typeof ResizeObserver !== "undefined" && modulesContainer) {
+            const gridResizeObserver = new ResizeObserver(() => {
+                scheduleCardLayerUpdate();
+            });
+            gridResizeObserver.observe(modulesContainer);
+        }
+
+        function renderAuthor(module) {
+            const author = module.author || {};
+            const avatar = module.authorAvatar;
+            const avatarHTML = avatar ? `<img class="author-avatar" src="${escapeHTML(avatar)}" loading="lazy" referrerpolicy="no-referrer" alt="">` : "";
+            const authorURL = author.url;
+            if (authorURL) {
+                return `<a class="author" href="${escapeHTML(authorURL)}" target="_blank" rel="noopener">${avatarHTML}${escapeHTML(author.name || author.username)}</a>`;
+            }
+            return `<span class="author">${avatarHTML}${escapeHTML(author.name || "作者信息识别失败")}</span>`;
+        }
+
+        function createModuleCard(module) {
+            const card = document.createElement("article");
+            card.className = "module-card glass-element";
+
+            const fallbackIcon = createIOSAppIcon(module.name);
+            const icon = module.icon || fallbackIcon;
+            const authorHTML = renderAuthor(module);
+            
+            const statusTextVal = module.isDubious ? "信息获取失败" : "资源获取成功";
+            const statusClass = module.isDubious ? "status-badge-dubious" : "";
+
+            const sourceLinkHTML = module.sourceURL
+                ? `<a class="source-link" href="${escapeHTML(module.sourceURL)}" target="_blank" rel="noopener" title="${escapeHTML(module.sourceName)}">${escapeHTML(module.sourceName)}</a>`
+                : `<span class="source-link source-link-static">${escapeHTML(module.sourceName)}</span>`;
+
+            const copyBtnHTML = module.rawURL 
+                ? `<button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}" aria-label="复制 ${escapeHTML(module.name)} 链接">复制链接</button>` 
+                : "";
+            const installBtnHTML = module.installURL 
+                ? `<a class="button button-primary" href="${escapeHTML(module.installURL)}" aria-label="安装 ${escapeHTML(module.name)} 模块">安装</a>` 
+                : "";
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="module-icon">
+                        <img src="${escapeHTML(icon)}" alt="${escapeHTML(module.name)}" loading="lazy" referrerpolicy="no-referrer">
+                    </div>
+                    <div class="card-main">
+                        <h2 class="module-name">${escapeHTML(module.name)}</h2>
+                        <div class="module-meta">
+                            ${authorHTML}
+                            <span class="meta-separator">/</span>
+                            ${sourceLinkHTML}
+                        </div>
+                    </div>
+                </div>
+                <div class="module-description">${escapeHTML(module.description)}</div>
+                <div class="card-bottom">
+                    <div class="card-status">
+                        <span class="status-pill ${statusClass}">${escapeHTML(statusTextVal)}</span>
+                    </div>
+                    <div class="action-buttons">
+                        ${copyBtnHTML}
+                        ${installBtnHTML}
+                    </div>
+                </div>
+            `;
+            
+            const copyBtn = card.querySelector(".copy-btn");
+            if (copyBtn) {
+                copyBtn.addEventListener("click", async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const url = copyBtn.getAttribute("data-url");
+                    if (!url) {
+                        showToast("模块链接无效");
+                        return;
+                    }
+                    const success = await copyToClipboard(url);
+                    showToast(success ? "已复制模块 Raw 直链" : "复制失败，请手动复制");
+                });
+            }
+            
+            const iconImg = card.querySelector(".module-icon img");
+            if (iconImg) {
+                iconImg.addEventListener("error", () => { iconImg.src = fallbackIcon; }, { once: true });
+            }
+
+            const avatarImg = card.querySelector(".author-avatar");
+            if (avatarImg) {
+                avatarImg.addEventListener("error", () => { avatarImg.remove(); }, { once: true });
+            }
+
+            return card;
+        }
+
+        function appendNextBatch() {
+            if (state.currentlyRendered >= state.filteredModules.length) {
+                sentinel.style.display = "none";
+                return;
+            }
+            const fragment = document.createDocumentFragment();
+            const nextBatch = state.filteredModules.slice(state.currentlyRendered, state.currentlyRendered + CONFIG.PAGE_SIZE);
+            for (let i = 0; i < nextBatch.length; i++) {
+                const module = nextBatch[i];
+                if (module) fragment.appendChild(createModuleCard(module));
+            }
+            modulesContainer.appendChild(fragment);
+            state.currentlyRendered += nextBatch.length;
+            
+            sentinel.style.display = state.currentlyRendered >= state.filteredModules.length ? "none" : "block";
+            updateCardLayerOrder();
+            updateSearchLayer();
+        }
+
+        function renderFilteredList(list) {
+            state.filteredModules = list;
+            state.currentlyRendered = 0;
+            modulesContainer.innerHTML = "";
+
+            if (!state.filteredModules.length) {
+                sentinel.style.display = "none";
+                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div>没有找到匹配的模块</div>`;
+                countText.textContent = "0 个模块";
+                return;
+            }
+
+            countText.textContent = `${state.filteredModules.length} 个模块`;
+            appendNextBatch();
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !state.isDataLoading) {
+                appendNextBatch();
+            }
+        }, { rootMargin: "300px" });
+        observer.observe(sentinel);
 
         /* =========================================================
-           移动端下拉刷新手势
+            5. 搜索功能
         ========================================================= */
-        let touchStartX = 0, touchStartY = 0, isPulling = false, isRefreshing = false, isPullLocked = false, pullRafId = null;
+        function filterModules() {
+            const keyword = searchInput.value.trim().normalize("NFKC").toLowerCase();
+            if (searchInput.value.length > 0) {
+                searchClear.classList.add("visible");
+                if (searchShortcut) searchShortcut.style.display = "none";
+            } else {
+                searchClear.classList.remove("visible");
+                if (searchShortcut) searchShortcut.style.display = "";
+            }
+
+            let result = state.allModules;
+            if (keyword) {
+                result = result.filter(m => m._searchText && m._searchText.includes(keyword));
+            }
+
+            renderFilteredList(result);
+        }
+
+        searchInput.addEventListener("input", () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(filterModules, 120);
+        });
+
+        searchClear.addEventListener("click", (e) => {
+            e.preventDefault();
+            searchInput.value = "";
+            filterModules();
+            if (window.innerWidth > 768) searchInput.focus();
+        });
+
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "/" && document.activeElement !== searchInput) {
+                if (searchInput.disabled) return;
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            } else if (e.key === "Escape" && document.activeElement === searchInput) {
+                searchInput.value = "";
+                searchInput.blur();
+                filterModules();
+            }
+        });
+
+        function setSearchState(enabled) {
+            const mainP = document.getElementById("mainPlaceholder");
+            const mainPClone = document.getElementById("mainPlaceholderClone");
+            
+            if (enabled) {
+                searchInput.disabled = false;
+                const text = "输入关键字快捷搜索...";
+                if (mainP) mainP.textContent = text;
+                if (mainPClone) mainPClone.textContent = text;
+                if (searchShortcut) searchShortcut.style.opacity = "1";
+            } else {
+                searchInput.disabled = true;
+                const text = "请在加载完成后执行搜索...";
+                if (mainP) mainP.textContent = text;
+                if (mainPClone) mainPClone.textContent = text;
+                if (searchShortcut) searchShortcut.style.opacity = "0.35";
+                searchClear.classList.remove("visible");
+            }
+        }
+
+        let noticeInterval = null;
+        if (noticeTrack) {
+            const firstItemClone = noticeTrack.children[0].cloneNode(true);
+            firstItemClone.id = "mainPlaceholderClone";
+            noticeTrack.appendChild(firstItemClone);
+
+            let noticeIndex = 0;
+            const originalCount = noticeTrack.children.length - 1; 
+            let isAnimating = false;
+
+            function updateNoticePosition() {
+                noticeTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
+                noticeTrack.style.transform = `translateY(-${noticeIndex * 32}px)`;
+            }
+
+            function nextNotice() {
+                if (document.activeElement === searchInput || searchInput.value.length > 0) return;
+                if (isAnimating) return;
+                isAnimating = true;
+                noticeIndex++;
+                updateNoticePosition();
+
+                if (noticeIndex === originalCount) {
+                    setTimeout(() => {
+                        noticeTrack.style.transition = 'none';
+                        noticeIndex = 0;
+                        noticeTrack.style.transform = `translateY(0)`;
+                        void noticeTrack.offsetHeight;
+                        isAnimating = false;
+                    }, 450); 
+                } else {
+                    setTimeout(() => { isAnimating = false; }, 450);
+                }
+            }
+
+            function startNoticeLoop() {
+                if (noticeInterval) clearInterval(noticeInterval);
+                noticeInterval = setInterval(nextNotice, 3800);
+            }
+
+            function stopNoticeLoop() {
+                if (noticeInterval) {
+                    clearInterval(noticeInterval);
+                    noticeInterval = null;
+                }
+            }
+
+            startNoticeLoop();
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    stopNoticeLoop();
+                } else {
+                    startNoticeLoop();
+                }
+            });
+        }
+
+        /* =========================================================
+            6. 主题管理系统 (智能三态切换逻辑)
+        ========================================================= */
+        const mediaQueryDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function getThemeMode() {
+            try {
+                const saved = localStorage.getItem("sr_theme_override");
+                if (saved === "dark" || saved === "light" || saved === "auto") return saved;
+            } catch (e) {}
+            return "auto"; 
+        }
+
+        function getEffectiveTheme(mode) {
+            if (mode === "dark" || mode === "light") return mode;
+            if (mode === "auto") return mediaQueryDark.matches ? "dark" : "light";
+            return "light";
+        }
+
+        function updateThemeUI() {
+            const mode = getThemeMode();
+            const currentTheme = getEffectiveTheme(mode);
+            document.documentElement.setAttribute("data-theme", currentTheme);
+            
+            const themeColor = currentTheme === "dark" ? "#14161a" : "#ffffff";
+            const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+            if (themeColorMeta) {
+                themeColorMeta.setAttribute("content", themeColor);
+            }
+            document.documentElement.style.backgroundColor = themeColor;
+
+            if (mode === "light") {
+                themeToggleBtn.innerHTML = SUN_ICON;
+                const desc = "当前：浅色模式（点击切换深色）";
+                themeToggleBtn.setAttribute("title", desc);
+                themeToggleBtn.setAttribute("aria-label", desc);
+            } else if (mode === "dark") {
+                themeToggleBtn.innerHTML = MOON_ICON;
+                const desc = "当前：深色模式（点击切换自动跟随）";
+                themeToggleBtn.setAttribute("title", desc);
+                themeToggleBtn.setAttribute("aria-label", desc);
+            } else {
+                themeToggleBtn.innerHTML = SYSTEM_ICON;
+                const desc = "当前：自动跟随系统（点击切换反色模式）";
+                themeToggleBtn.setAttribute("title", desc);
+                themeToggleBtn.setAttribute("aria-label", desc);
+            }
+        }
+
+        mediaQueryDark.addEventListener("change", () => {
+            if (getThemeMode() === "auto") updateThemeUI();
+        });
+
+        themeToggleBtn.addEventListener("click", () => {
+            const currentMode = getThemeMode();
+            const isSystemDark = mediaQueryDark.matches;
+            let nextMode, toastText;
+
+            // 自动模式下根据系统当前色调智能反切
+            if (currentMode === "auto") {
+                if (isSystemDark) {
+                    nextMode = "light";
+                    toastText = "已切换为浅色模式";
+                } else {
+                    nextMode = "dark";
+                    toastText = "已切换为深色模式";
+                }
+            } else if (currentMode === "light") {
+                if (isSystemDark) {
+                    nextMode = "dark";
+                    toastText = "已切换为深色模式";
+                } else {
+                    nextMode = "auto";
+                    toastText = "已切换为自动跟随系统";
+                }
+            } else { // currentMode === "dark"
+                if (isSystemDark) {
+                    nextMode = "auto";
+                    toastText = "已切换为自动跟随系统";
+                } else {
+                    nextMode = "light";
+                    toastText = "已切换为浅色模式";
+                }
+            }
+
+            try {
+                localStorage.setItem("sr_theme_override", nextMode);
+            } catch (e) {}
+            updateThemeUI();
+            showToast(toastText);
+        });
+
+        updateThemeUI();
+
+        /* =========================================================
+            7. 移动端下拉刷新手势
+        ========================================================= */
+        let touchStartX = 0, touchStartY = 0, isPulling = false, isPullLocked = false, pullRafId = null;
         const MIN_DRAG_DEADZONE = 30;
-        const PULL_TRIGGER_DIFF = 280;
+        const PULL_TRIGGER_DIFF = 150; 
 
         async function triggerForceReload() {
-            if (isRefreshing) return;
-            isRefreshing = true;
-            isPageLoading = true;
+            if (state.isPullRefreshing || state.isDataLoading) return;
+            state.isPullRefreshing = true;
 
             ptrIcon.innerHTML = REFRESH_ICON;
             ptrIcon.classList.remove("rotate");
             ptrIcon.querySelector("svg")?.classList.add("spin-anim");
             ptrText.textContent = "正在强制刷新本站...";
 
-            try {
-                localStorage.removeItem(CONFIG.CACHE_KEY);
-                localStorage.removeItem(CONFIG.CACHE_TIME_KEY);
-            } catch (e) {}
-
-            await loadModules(true);
+            const success = await loadModules(true);
+            showToast(success ? "模块数据已刷新" : "在线同步失败，已保留现有数据");
             
             setTimeout(() => {
                 const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
@@ -943,12 +1389,31 @@
                 pullRefreshIndicator.style.opacity = '0';
                 pullRefreshIndicator.style.transform = 'translate3d(-50%, -60px, 0)';
                 ptrIcon.classList.remove("rotate");
-                isRefreshing = false;
+                state.isPullRefreshing = false;
+                pageContainer.style.willChange = "auto";
             }, 500);
         }
 
+        function resetPullState() {
+            isPulling = false;
+            isPullLocked = false;
+            if (pullRafId) cancelAnimationFrame(pullRafId);
+            const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
+            pageContainer.style.transition = reboundBezier;
+            pageContainer.style.transform = 'translate3d(0, 0, 0)';
+            pullRefreshIndicator.style.transition = `${reboundBezier}, opacity 0.25s ease`;
+            pullRefreshIndicator.style.opacity = '0';
+            pullRefreshIndicator.style.transform = 'translate3d(-50%, -60px, 0)';
+            ptrIcon.classList.remove("rotate");
+            pageContainer.style.willChange = "auto";
+        }
+
         window.addEventListener('touchstart', (e) => {
-            if (isRefreshing || isPageLoading) {
+            if (state.isPullRefreshing || state.isDataLoading) {
+                isPulling = false;
+                return;
+            }
+            if (e.target.closest("input, button, a, textarea, select, label")) {
                 isPulling = false;
                 return;
             }
@@ -958,6 +1423,7 @@
                 isPulling = true;
                 isPullLocked = false;
                 
+                pageContainer.style.willChange = "transform";
                 pageContainer.style.transition = 'none';
                 pullRefreshIndicator.style.transition = 'none';
             } else {
@@ -966,7 +1432,7 @@
         }, { passive: true });
 
         window.addEventListener('touchmove', (e) => {
-            if (!isPulling || isRefreshing || isPageLoading || window.scrollY > 0) {
+            if (!isPulling || state.isPullRefreshing || state.isDataLoading || window.scrollY > 0) {
                 isPulling = false;
                 return;
             }
@@ -1013,7 +1479,7 @@
         }, { passive: false });
 
         window.addEventListener('touchend', (e) => {
-            if (!isPulling || isRefreshing || isPageLoading) return;
+            if (!isPulling || state.isPullRefreshing || state.isDataLoading) return;
             isPulling = false;
             isPullLocked = false;
             if (pullRafId) cancelAnimationFrame(pullRafId);
@@ -1031,410 +1497,110 @@
                 
                 triggerForceReload();
             } else {
-                const reboundBezier = 'transform 0.38s cubic-bezier(0.2, 0.9, 0.3, 1)';
-                pageContainer.style.transition = reboundBezier;
-                pageContainer.style.transform = 'translate3d(0, 0, 0)';
-
-                pullRefreshIndicator.style.transition = `${reboundBezier}, opacity 0.25s ease`;
-                pullRefreshIndicator.style.opacity = '0';
-                pullRefreshIndicator.style.transform = 'translate3d(-50%, -60px, 0)';
-                ptrIcon.classList.remove("rotate");
+                resetPullState();
             }
         }, { passive: true });
 
-        function setSearchState(enabled) {
-            const mainP = document.getElementById("mainPlaceholder");
-            const mainPClone = document.getElementById("mainPlaceholderClone");
-            
-            if (enabled) {
-                searchInput.disabled = false;
-                const text = "输入关键字快捷搜索...";
-                if (mainP) mainP.textContent = text;
-                if (mainPClone) mainPClone.textContent = text;
-                if (searchShortcut) searchShortcut.style.opacity = "1";
-            } else {
-                searchInput.disabled = true;
-                const text = "请在加载完成后执行搜索...";
-                if (mainP) mainP.textContent = text;
-                if (mainPClone) mainPClone.textContent = text;
-                if (searchShortcut) searchShortcut.style.opacity = "0.35";
-                searchClear.classList.remove("visible");
-            }
-        }
-
-        if (noticeTrack) {
-            const firstItemClone = noticeTrack.children[0].cloneNode(true);
-            firstItemClone.id = "mainPlaceholderClone";
-            noticeTrack.appendChild(firstItemClone);
-
-            let noticeIndex = 0;
-            const originalCount = noticeTrack.children.length - 1; 
-            let isAnimating = false;
-
-            function updateNoticePosition() {
-                noticeTrack.style.transition = 'transform 0.45s cubic-bezier(0.25, 1, 0.5, 1)';
-                noticeTrack.style.transform = `translateY(-${noticeIndex * 32}px)`;
-            }
-
-            function nextNotice() {
-                if (document.activeElement === searchInput || searchInput.value.length > 0) return;
-                if (isAnimating) return;
-                isAnimating = true;
-                noticeIndex++;
-                updateNoticePosition();
-
-                if (noticeIndex === originalCount) {
-                    setTimeout(() => {
-                        noticeTrack.style.transition = 'none';
-                        noticeIndex = 0;
-                        noticeTrack.style.transform = `translateY(0)`;
-                        void noticeTrack.offsetHeight;
-                        isAnimating = false;
-                    }, 450); 
-                } else {
-                    setTimeout(() => { isAnimating = false; }, 450);
-                }
-            }
-
-            setInterval(nextNotice, 3800);
-        }
+        window.addEventListener('touchcancel', resetPullState, { passive: true });
 
         /* =========================================================
-           主题管理系统
+            8. 核心数据同步引擎 (完整异常隔离与安全存储)
         ========================================================= */
-        const mediaQueryDark = window.matchMedia("(prefers-color-scheme: dark)");
-        refreshCacheBtn.innerHTML = REFRESH_ICON;
-
-        function getThemeMode() {
-            const saved = localStorage.getItem("sr_theme_override");
-            if (saved === "dark" || saved === "light" || saved === "auto") return saved;
-            return "light";
-        }
-
-        function getEffectiveTheme(mode) {
-            if (mode === "dark" || mode === "light") return mode;
-            if (mode === "auto") return mediaQueryDark.matches ? "dark" : "light";
-            return "light";
-        }
-
-        function updateThemeUI() {
-            const mode = getThemeMode();
-            const currentTheme = getEffectiveTheme(mode);
-            document.documentElement.setAttribute("data-theme", currentTheme);
-            
-            const themeColor = currentTheme === "dark" ? "#14161a" : "#ffffff";
-            const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-            if (themeColorMeta) {
-                themeColorMeta.setAttribute("content", themeColor);
-            }
-            document.documentElement.style.backgroundColor = themeColor;
-
-            if (mode === "light") {
-                themeToggleBtn.innerHTML = SUN_ICON;
-                themeToggleBtn.setAttribute("title", "当前：浅色模式（点击切换深色）");
-            } else if (mode === "dark") {
-                themeToggleBtn.innerHTML = MOON_ICON;
-                themeToggleBtn.setAttribute("title", "当前：深色模式（点击切换自动跟随）");
-            } else {
-                themeToggleBtn.innerHTML = SYSTEM_ICON;
-                themeToggleBtn.setAttribute("title", "当前：自动跟随系统（点击切换浅色）");
-            }
-        }
-
-        mediaQueryDark.addEventListener("change", () => {
-            if (getThemeMode() === "auto") updateThemeUI();
-        });
-
-        themeToggleBtn.addEventListener("click", () => {
-            const currentMode = getThemeMode();
-            let nextMode, toastText;
-            if (currentMode === "light") {
-                nextMode = "dark";
-                toastText = "已切换为深色模式";
-            } else if (currentMode === "dark") {
-                nextMode = "auto";
-                toastText = "已切换为自动跟随系统";
-            } else {
-                nextMode = "light";
-                toastText = "已切换为浅色模式";
-            }
-            localStorage.setItem("sr_theme_override", nextMode);
-            updateThemeUI();
-            showToast(toastText);
-        });
-        
-        refreshCacheBtn.addEventListener("click", async () => {
-            if (statusDot.classList.contains("loading") || isPageLoading) {
-                showToast("正在获取最新资源，请稍后...");
-                return;
-            }
-            
-            showToast("正在拉取最新数据...");
-            await loadModules(true);
-            showToast("模块数据已刷新");
-        });
-
-        updateThemeUI();
-
-        /* =========================================================
-           工具函数与 DOM 渲染
-        ========================================================= */
-        function escapeHTML(value) {
-            return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
-        function showToast(text) {
-            toast.textContent = text;
-            toast.classList.add("show");
-            setTimeout(() => { toast.classList.remove("show"); }, 2000);
-        }
-
-        async function copyToClipboard(text) {
+        function cleanOldCaches() {
             try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    await navigator.clipboard.writeText(text);
-                    return true;
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && (key.startsWith("sr_modules_data_") || key.startsWith("sr_modules_time_"))) {
+                        if (key !== CONFIG.CACHE_KEY && key !== CONFIG.CACHE_TIME_KEY) {
+                            keysToRemove.push(key);
+                        }
+                    }
                 }
+                keysToRemove.forEach(k => localStorage.removeItem(k));
             } catch (e) {}
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.opacity = "0";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            let success = false;
-            try { success = document.execCommand("copy"); } catch (e) {}
-            document.body.removeChild(textArea);
-            return success;
         }
 
-        function createIOSAppIcon(name) {
-            const cleanName = (name || "").trim();
-            const char = Array.from(cleanName)[0] || "模";
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><circle cx="128" cy="128" r="128" fill="#768a9e"/><text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
-            return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-        }
-
-        function renderAuthor(module) {
-            const author = module.author || {};
-            const avatar = module.authorAvatar;
-            const avatarHTML = avatar ? `<img class="author-avatar" src="${escapeHTML(avatar)}" loading="lazy" alt="" onerror="this.style.display='none';">` : "";
-            const authorURL = author.url || (author.username ? `https://github.com/${encodeURIComponent(author.username)}` : "");
-            if (authorURL) {
-                return `<a class="author" href="${escapeHTML(authorURL)}" target="_blank" rel="noopener">${avatarHTML}${escapeHTML(author.name || author.username)}</a>`;
-            }
-            return `<span class="author">${avatarHTML}${escapeHTML(author.name || "作者信息识别失败")}</span>`;
-        }
-
-        function createModuleCard(module, index = 0) {
-            const card = document.createElement("article");
-            card.className = "module-card glass-element";
-            card.style.zIndex = Math.max(1, 1000 - index);
-
-            const fallbackIcon = createIOSAppIcon(module.name);
-            const icon = module.icon || fallbackIcon;
-            const authorHTML = renderAuthor(module);
-            
-            const sourceName = module.sourceName || "开源仓库";
-            const sourceURL = module.sourceURL || "#";
-
-            const statusTextVal = module.isDubious ? "信息获取失败" : "资源获取成功";
-            const statusClass = module.isDubious ? "status-badge-dubious" : "";
-
-            const sourceLinkHTML = `<a class="source-link" href="${escapeHTML(sourceURL)}" target="_blank" rel="noopener" title="${escapeHTML(sourceName)}">${escapeHTML(sourceName)}</a>`;
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <div class="module-icon">
-                        <img src="${escapeHTML(icon)}" alt="" loading="lazy">
-                    </div>
-                    <div class="card-main">
-                        <h2 class="module-name">${escapeHTML(module.name)}</h2>
-                        <div class="module-meta">
-                            ${authorHTML}
-                            <span class="meta-separator">/</span>
-                            ${sourceLinkHTML}
-                        </div>
-                    </div>
-                </div>
-                <div class="module-description">${escapeHTML(module.description)}</div>
-                <div class="card-bottom">
-                    <div class="card-status">
-                        <span class="status-pill ${statusClass}">${escapeHTML(statusTextVal)}</span>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}">复制链接</button>
-                        <a class="button button-primary" href="${escapeHTML(module.installURL)}">安装</a>
-                    </div>
-                </div>
-            `;
-            
-            const copyBtn = card.querySelector(".copy-btn");
-            if (copyBtn) {
-                copyBtn.addEventListener("click", async (e) => {
-                    e.preventDefault();
-                    const url = copyBtn.getAttribute("data-url");
-                    const success = await copyToClipboard(url);
-                    showToast(success ? "已复制模块 Raw 直链" : "复制失败，请手动复制");
-                });
-            }
-            
-            const image = card.querySelector(".module-icon img");
-            if (image) image.addEventListener("error", () => { image.src = fallbackIcon; }, { once: true });
-            return card;
-        }
-
-        function appendNextBatch() {
-            if (currentlyRendered >= filteredModules.length) return;
-            const fragment = document.createDocumentFragment();
-            const nextBatch = filteredModules.slice(currentlyRendered, currentlyRendered + CONFIG.PAGE_SIZE);
-            for (let i = 0; i < nextBatch.length; i++) {
-                const module = nextBatch[i];
-                if (module) fragment.appendChild(createModuleCard(module, currentlyRendered + i));
-            }
-            modulesContainer.appendChild(fragment);
-            currentlyRendered += nextBatch.length;
-            requestAnimationFrame(updateCardLayerOrder);
-        }
-
-        function renderFilteredList(list) {
-            filteredModules = list;
-            currentlyRendered = 0;
-            modulesContainer.innerHTML = "";
-
-            if (!filteredModules.length) {
-                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div>没有找到匹配的模块</div>`;
-                countText.textContent = "0 个模块";
-                return;
-            }
-
-            countText.textContent = `${filteredModules.length} 个模块`;
-            appendNextBatch();
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                appendNextBatch();
-            }
-        }, { rootMargin: "300px" });
-        observer.observe(sentinel);
-
-        function filterModules() {
-            const keyword = searchInput.value.trim().toLowerCase();
-            if (searchInput.value.length > 0) {
-                searchClear.classList.add("visible");
-                if (searchShortcut) searchShortcut.style.display = "none";
-            } else {
-                searchClear.classList.remove("visible");
-                if (searchShortcut) searchShortcut.style.display = "";
-            }
-
-            let result = allModules;
-            if (keyword) {
-                result = result.filter(m => m._searchKeywords && m._searchKeywords.includes(keyword));
-            }
-
-            renderFilteredList(result);
-        }
-
-        searchInput.addEventListener("input", () => {
-            clearTimeout(searchTimer);
-            searchTimer = setTimeout(filterModules, 120);
-        });
-
-        searchClear.addEventListener("click", (e) => {
-            e.preventDefault();
-            searchInput.value = "";
-            filterModules();
-            searchInput.focus();
-        });
-
-        window.addEventListener("keydown", (e) => {
-            if (e.key === "/" && document.activeElement !== searchInput) {
-                if (searchInput.disabled) return;
-                e.preventDefault();
-                searchInput.focus();
-                searchInput.select();
-            } else if (e.key === "Escape" && document.activeElement === searchInput) {
-                searchInput.value = "";
-                searchInput.blur();
-                filterModules();
-            }
-        });
-
-        /* =========================================================
-           数据加载入口 (直接读取 modules.json)
-        ========================================================= */
         async function loadModules(forceRefresh = false) {
-            isPageLoading = true;
-            const svgIcon = refreshCacheBtn.querySelector("svg");
-            
-            const setBtnLoading = (isLoading) => {
-                if (isLoading) {
-                    refreshCacheBtn.classList.add("active");
-                    if (svgIcon) svgIcon.classList.add("spin-anim");
-                } else {
-                    refreshCacheBtn.classList.remove("active");
-                    if (svgIcon) svgIcon.classList.remove("spin-anim");
-                }
-            };
+            state.isDataLoading = true;
+            let cachedData = null;
+            let cachedTime = null;
 
-            const cachedData = localStorage.getItem(CONFIG.CACHE_KEY);
-            const cachedTime = localStorage.getItem(CONFIG.CACHE_TIME_KEY);
+            try {
+                cachedData = localStorage.getItem(CONFIG.CACHE_KEY);
+                cachedTime = localStorage.getItem(CONFIG.CACHE_TIME_KEY);
+            } catch (e) {
+                console.warn("无法读取本地缓存:", e);
+            }
+
             const now = Date.now();
-            let hasCache = false;
+            let hasValidCache = false;
 
             if (!forceRefresh && cachedData) {
                 try {
-                    allModules = JSON.parse(cachedData);
-                    renderFilteredList(allModules);
-                    hasCache = true;
-                    setSearchState(true);
-                    
-                    const isExpired = !cachedTime || (now - Number(cachedTime) > CONFIG.CACHE_EXPIRE);
-                    if (!isExpired) {
-                        statusText.textContent = "已同步";
-                        statusDot.className = "status-dot";
-                        setBtnLoading(false);
-                        isPageLoading = false;
-                        return;
+                    const parsed = JSON.parse(cachedData);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        const normalized = normalizeModules(parsed);
+                        if (normalized.length > 0) {
+                            state.allModules = normalized;
+                            renderFilteredList(state.allModules);
+                            hasValidCache = true;
+                            setSearchState(true);
+                            
+                            const parsedTime = Number(cachedTime);
+                            const isValidTime = Number.isFinite(parsedTime) && parsedTime > 0;
+                            const isExpired = !isValidTime || (now - parsedTime > CONFIG.CACHE_EXPIRE);
+                            
+                            if (!isExpired) {
+                                statusText.textContent = "已同步";
+                                statusDot.className = "status-dot";
+                                state.isDataLoading = false;
+                                return true;
+                            }
+                        }
                     }
                 } catch (e) {
-                    hasCache = false;
+                    hasValidCache = false;
                 }
             }
 
-            if (!hasCache) {
+            if (!hasValidCache && state.allModules.length === 0) {
                 setSearchState(false);
                 statusText.textContent = "正在拉取最新静态资源索引...";
                 statusDot.className = "status-dot loading";
-                setBtnLoading(true);
             }
 
             try {
-                const fetchUrl = `${CONFIG.DATA_JSON_URL}?_t=${Date.now()}`;
-                const response = await fetch(fetchUrl, { cache: "no-store" });
+                const fetchUrl = forceRefresh ? `${CONFIG.DATA_JSON_URL}?_t=${Date.now()}` : CONFIG.DATA_JSON_URL;
+                const response = await fetch(fetchUrl, { cache: forceRefresh ? "no-store" : "default" });
                 
-                if (!response.ok) throw new Error(`HTTP Error ${response.status}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 const data = await response.json();
-                if (!Array.isArray(data) || !data.length) throw new Error("获取到的模块列表为空");
+                if (!Array.isArray(data) || !data.length) throw new Error("模块列表为空");
 
-                allModules = data;
-                renderFilteredList(allModules);
+                const normalized = normalizeModules(data);
+                if (!normalized.length) throw new Error("未解析到有效模块数据");
+
+                state.allModules = normalized;
+                renderFilteredList(state.allModules);
                 setSearchState(true);
 
                 try {
-                    localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(allModules));
+                    localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(data));
                     localStorage.setItem(CONFIG.CACHE_TIME_KEY, String(Date.now()));
                 } catch (e) {}
 
                 statusText.textContent = "已同步";
                 statusDot.className = "status-dot";
+                return true;
             } catch (error) {
                 console.error("加载 modules.json 失败:", error);
-                if (!hasCache) {
+                
+                if (state.allModules.length > 0) {
+                    statusText.textContent = "在线同步异常，当前展示缓存数据";
+                    statusDot.className = "status-dot error";
+                } else {
                     setSearchState(false);
                     statusText.textContent = "同步失败";
                     statusDot.className = "status-dot error";
@@ -1445,16 +1611,15 @@
                             无法读取静态索引数据
                             <div class="empty-error">${escapeHTML(error.message)}</div>
                         </div>`;
-                } else {
-                    statusText.textContent = "在线同步异常，当前展示缓存数据";
-                    statusDot.className = "status-dot error";
                 }
+                return false;
             } finally {
-                setBtnLoading(false);
-                isPageLoading = false;
+                state.isDataLoading = false;
             }
         }
 
+        // 初始化入口
+        cleanOldCaches();
         loadModules();
     </script>
 </body>
