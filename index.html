@@ -37,7 +37,7 @@
         })();
     </script>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22%23768a9e%22 stroke=%22rgba(255,255,255,0.6)%22 stroke-width=%224%22/><text x=%2250%22 y=%2255%22 font-size=%2248%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🚀</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 stop-color=%22%2306b6d4%22/><stop offset=%2250%25%22 stop-color=%22%233b82f6%22/><stop offset=%22100%25%22 stop-color=%22%238b5cf6%22/></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22url(%23g)%22 stroke=%22rgba(255,255,255,0.6)%22 stroke-width=%224%22/><text x=%2250%22 y=%2255%22 font-size=%2248%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🚀</text></svg>">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore.png">
 
     <style>
@@ -118,9 +118,14 @@
             --text-secondary: #7e8596;
             --text-tertiary: #a1a9ba;
 
-            --primary: #768a9e; 
-            --primary-hover: #62768a;
-            --primary-soft: rgba(118, 138, 158, 0.15);
+            --primary: #0891b2; 
+            --primary-hover: #0e7490;
+            --primary-soft: rgba(6, 182, 212, 0.15);
+
+            /* 标题渐变主色设计令牌 */
+            --primary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            --primary-gradient-hover: linear-gradient(135deg, #0891b2 0%, #2563eb 50%, #7c3aed 100%);
+            --primary-gradient-shadow: 0 4px 14px rgba(59, 130, 246, 0.28);
             
             --bg-surface: #e6eaf0;
             --border-subtle: #d6dbe3;
@@ -185,9 +190,15 @@
             --text-secondary: #939aa8;
             --text-tertiary: #6b7280;
 
-            --primary: #758b9f;
-            --primary-hover: #8da1b5;
-            --primary-soft: rgba(117, 139, 159, 0.2);
+            --primary: #0891b2;
+            --primary-hover: #06b6d4;
+            --primary-soft: rgba(6, 182, 212, 0.2);
+
+            /* 暗色渐变主色设计令牌 */
+            --primary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            --primary-gradient-hover: linear-gradient(135deg, #22d3ee 0%, #60a5fa 50%, #a78bfa 100%);
+            --primary-gradient-shadow: 0 4px 16px rgba(59, 130, 246, 0.38);
+
             --bg-surface: #1d2026;
             --border-subtle: #2b3038;
 
@@ -440,7 +451,7 @@
             cursor: pointer;
             transition: 
                 color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
             user-select: none;
@@ -458,10 +469,11 @@
             background: var(--primary-soft);
         }
 
+        /* 当前标签激活项：三色渐变配色 */
         .tab-item.active {
             color: #FFFFFF;
-            background: var(--primary);
-            box-shadow: 0 4px 12px var(--primary-soft);
+            background: var(--primary-gradient);
+            box-shadow: var(--primary-gradient-shadow);
             font-weight: 600;
         }
 
@@ -784,16 +796,16 @@
             text-shadow: none;
         }
         .status-badge-pinned {
-            background: var(--primary-soft);
-            color: var(--primary);
-            border-color: rgba(118, 138, 158, 0.35);
+            background: rgba(6, 182, 212, 0.12);
+            color: #0891b2;
+            border-color: rgba(6, 182, 212, 0.25);
             font-weight: 500;
             text-shadow: none;
         }
         [data-theme="dark"] .status-badge-pinned {
-            background: var(--primary-soft);
-            color: #8da1b5;
-            border-color: rgba(117, 139, 159, 0.4);
+            background: rgba(6, 182, 212, 0.18);
+            color: #22d3ee;
+            border-color: rgba(6, 182, 212, 0.35);
             text-shadow: none;
         }
 
@@ -806,26 +818,36 @@
             text-decoration: none; 
             transition: 
                 transform 0.2s ease,
-                background-color 0.2s ease,
+                background 0.2s ease,
                 color 0.2s ease,
                 box-shadow 0.2s ease; 
         }
         .button:active { transform: scale(0.96); }
         
+        /* 次要按钮（复制链接、安装前置）：字体颜色与未选标签一致，无投影 */
         .button-secondary { 
-            background: var(--bg-surface); color: var(--text-primary); 
-            border: 1px solid var(--border-subtle); box-shadow: none; 
-            text-shadow: var(--text-shadow-sm); 
+            background: var(--bg-surface); 
+            color: var(--text-secondary); 
+            border: 1px solid var(--border-subtle); 
+            box-shadow: none; 
+            text-shadow: none; 
         }
-        .button-secondary:hover { background: var(--border-subtle); }
+        .button-secondary:hover { 
+            background: var(--border-subtle); 
+            color: var(--text-primary); 
+        }
         
+        /* 主要按钮（安装、查阅、访问等）：三色渐变配色 */
         .button-primary { 
-            background: var(--primary); color: #FFFFFF; 
-            border: none; box-shadow: 0 4px 12px var(--primary-soft); 
+            background: var(--primary-gradient); 
+            color: #FFFFFF; 
+            border: none; 
+            box-shadow: var(--primary-gradient-shadow); 
             text-shadow: var(--text-shadow-sm); 
         }
         .button-primary:hover { 
-            background: var(--primary-hover); transform: translateY(-1px); 
+            background: var(--primary-gradient-hover); 
+            transform: translateY(-1px); 
         }
         
         .sentinel { height: 20px; margin: 10px 0; }
@@ -1063,7 +1085,7 @@
         /* =========================================================
             1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "202609011648"; 
+        const CACHE_VERSION = "202609011706"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1301,7 +1323,7 @@
         function createIOSAppIcon(name) {
             const cleanName = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const char = Array.from(cleanName)[0] || "模";
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><circle cx="128" cy="128" r="128" fill="#768a9e"/><text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="132" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
