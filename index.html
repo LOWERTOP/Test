@@ -1028,7 +1028,7 @@
         /* =========================================================
             1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "202609010712"; 
+        const CACHE_VERSION = "202609010842"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1221,6 +1221,8 @@
                     sourceURL,
                     rawURL,
                     installURL,
+                    preInstallURL: safeInstallURL(m.preInstallURL || ""),
+                    secondaryBtnText: m.secondaryBtnText || "",
                     isDubious: Boolean(m.isDubious),
                     isRepoCard: Boolean(m.isRepoCard),
                     statusBadge: m.statusBadge || "",
@@ -1400,9 +1402,14 @@
                 ? `<a class="source-link" href="${escapeHTML(module.sourceURL)}" target="_blank" rel="noopener" title="${escapeHTML(module.sourceName)}">${escapeHTML(module.sourceName)}</a>`
                 : `<span class="source-link source-link-static">${escapeHTML(module.sourceName)}</span>`;
 
-            const copyBtnHTML = module.rawURL 
-                ? `<button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}" aria-label="复制 ${escapeHTML(module.name)} 链接">复制链接</button>` 
-                : "";
+            // 智能按钮：若有前置模块安装链接则渲染为“安装前置”，否则渲染为标准的“复制链接”
+            let secondaryBtnHTML = "";
+            if (module.preInstallURL) {
+                const preText = module.secondaryBtnText || "安装前置";
+                secondaryBtnHTML = `<a class="button button-secondary" href="${escapeHTML(module.preInstallURL)}" aria-label="${escapeHTML(preText)} ${escapeHTML(module.name)}">${escapeHTML(preText)}</a>`;
+            } else if (module.rawURL) {
+                secondaryBtnHTML = `<button class="button button-secondary copy-btn" data-url="${escapeHTML(module.rawURL)}" aria-label="复制 ${escapeHTML(module.name)} 链接">复制链接</button>`;
+            }
 
             const primaryText = module.primaryBtnText || (module.category === "config" ? "安装配置" : (module.category === "manual" ? "查阅手册" : "安装"));
             const primaryTarget = isRepo ? `target="_blank" rel="noopener"` : "";
@@ -1430,7 +1437,7 @@
                         <span class="status-pill ${statusClass}">${escapeHTML(statusTextVal)}</span>
                     </div>
                     <div class="action-buttons">
-                        ${copyBtnHTML}
+                        ${secondaryBtnHTML}
                         ${installBtnHTML}
                     </div>
                 </div>
