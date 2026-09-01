@@ -29,6 +29,11 @@
                 themeMeta.setAttribute('content', themeColor);
             }
             document.documentElement.style.backgroundColor = themeColor;
+
+            // PWA 独立运行模式标记
+            if (window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
+                document.documentElement.classList.add('is-pwa');
+            }
         })();
     </script>
 
@@ -131,6 +136,11 @@
             --toast-text: #FFFFFF;
 
             --card-width: 380px;
+
+            /* 触控条与底部动力学布局设计令牌 */
+            --bottom-offset: max(16px, calc(env(safe-area-inset-bottom) - 14px));
+            --safe-pad-bottom: max(104px, calc(env(safe-area-inset-bottom) + 70px));
+            --toast-bottom: max(93px, calc(env(safe-area-inset-bottom) + 59px));
         }
 
         /* =========================================================
@@ -206,7 +216,10 @@
         body { 
             margin: 0; 
             min-height: 100vh;
-            padding: max(16px, env(safe-area-inset-top)) clamp(16px, 2.5vw, 40px) max(36px, env(safe-area-inset-bottom)); 
+            padding-top: max(16px, env(safe-area-inset-top));
+            padding-right: 16px;
+            padding-bottom: var(--safe-pad-bottom);
+            padding-left: 16px;
             background: transparent;
             color: var(--text-primary); 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif; 
@@ -223,7 +236,7 @@
             max-width: clamp(1080px, 95vw, 2560px); 
             margin: 0 auto; 
             position: relative; 
-            top: 0;
+            top: 0; 
         }
 
         .glass-element {
@@ -579,7 +592,7 @@
 
         .status { 
             display: flex; align-items: center; justify-content: space-between; 
-            min-height: 22px; margin: 0 6px 14px; color: var(--text-secondary); font-size: 13px; font-weight: 400; 
+            min-height: 22px; margin: 0 4px 14px; color: var(--text-secondary); font-size: 13px; font-weight: 400; 
             text-shadow: none; 
         }
         .status-left { display: flex; align-items: center; gap: 8px; }
@@ -810,7 +823,7 @@
         
         .toast { 
             position: fixed; 
-            bottom: 30px; 
+            bottom: var(--toast-bottom); 
             left: 50%; 
             transform: translateX(-50%) translateY(100px); 
             z-index: 999999; 
@@ -823,7 +836,7 @@
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* =========================================================
-            6. 单列布局与响应式适配 (iOS / 移动端 规范底栏)
+            6. 单列布局与底栏完全重构规范
         ========================================================= */
         .control-bar.is-single-column {
             display: block;
@@ -852,14 +865,16 @@
             pointer-events: auto;
         }
 
+        /* 悬浮底栏外层固定容器：
+           触控条厚度 5px，触控条距底 8px，对称间距 8px -> 距底 21px (calc(34px - 13px)) */
         .control-bar.is-single-column .tab-bar-wrapper {
             position: fixed;
             left: 0;
             right: 0;
-            bottom: max(16px, calc(env(safe-area-inset-bottom) + 6px));
+            bottom: var(--bottom-offset);
             width: 100%;
-            height: 52px;
-            padding: 0 clamp(16px, 4vw, 32px);
+            height: 62px;
+            padding: 0 16px;
             margin: 0;
             display: flex;
             align-items: center;
@@ -868,50 +883,46 @@
             z-index: 999999;
         }
 
+        /* 标签页主体：宽度 100% 自动与主卡片等宽，高度 62px，左右半圆直径 62px (border-radius: 31px)
+           内边距设定为 5px，与多列模式下的内部偏移绝对值完全保持一致 */
         .control-bar.is-single-column .tab-bar {
             pointer-events: auto;
             width: 100%;
-            height: 52px;
-            max-width: 460px;
+            max-width: clamp(1080px, 95vw, 2560px);
+            height: 62px;
             padding: 5px;
-            border-radius: 26px;
+            border-radius: 31px;
             gap: 4px;
             box-shadow: var(--shadow-glass-ui);
         }
 
+        /* 内部按钮：高度撑满自适应，内缩圆角 26px (31px - 5px) */
         .control-bar.is-single-column .tab-item {
-            height: 42px;
-            line-height: 42px;
-            border-radius: 21px;
-            font-size: 14px;
+            height: 100%;
+            min-height: 0;
+            line-height: normal;
+            border-radius: 26px;
+            font-size: 14.5px;
             font-weight: 500;
             padding: 0 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* 单列及移动端断点 */
         @media (max-width: 860px) {
-            body { 
-                padding-bottom: max(108px, calc(env(safe-area-inset-bottom) + 88px)); 
-            }
             .modules { 
                 grid-template-columns: 1fr; 
-            }
-            .toast {
-                bottom: max(88px, calc(env(safe-area-inset-bottom) + 78px));
             }
         }
 
         @media (max-width: 600px) {
-            body { 
-                padding-left: 12px; 
-                padding-right: 12px; 
-            }
-            .control-bar.is-single-column .tab-bar-wrapper { 
-                bottom: max(14px, calc(env(safe-area-inset-bottom) + 4px));
-                padding-left: 12px; 
-                padding-right: 12px; 
+            :root {
+                --radius-card: 42px;
             }
             .title { font-size: 22px; }
-            .module-card { padding: 22px; border-radius: 42px; }
+            .module-card { padding: 22px; border-radius: var(--radius-card); }
             .module-description { flex: none; }
             .card-bottom { margin-top: 20px; padding-top: 20px; }
             .search-shortcut { display: none; }
@@ -922,8 +933,8 @@
             .card-status { width: 100%; }
             .card-status .status-pill { width: 100%; }
             .action-buttons { width: 100%; justify-content: flex-end; }
-            .control-bar.is-single-column .tab-bar { padding: 4px; gap: 2px; }
-            .control-bar.is-single-column .tab-item { font-size: 13px; padding: 0 4px; border-radius: 19px; }
+            .control-bar.is-single-column .tab-bar { padding: 5px; gap: 2px; }
+            .control-bar.is-single-column .tab-item { font-size: 13px; padding: 0 4px; border-radius: 26px; }
         }
     </style>
 </head>
@@ -1028,7 +1039,7 @@
         /* =========================================================
             1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "202609010842"; 
+        const CACHE_VERSION = "202609011430"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1276,7 +1287,6 @@
             if (!backToTopBtn) return;
             const shouldShow = window.scrollY > 160;
             if (shouldShow === backToTopVisible) return;
-            backToTopVisible = shouldShow;
             backToTopBtn.classList.toggle("visible", shouldShow);
         }
         
@@ -1371,9 +1381,8 @@
             gridResizeObserver.observe(modulesContainer);
         }
 
-        requestAnimationFrame(() => {
-            updateControlBarLayout();
-        });
+        updateCardWidth();
+        updateControlBarLayout();
 
         function renderAuthor(module) {
             const author = module.author || {};
@@ -1402,7 +1411,6 @@
                 ? `<a class="source-link" href="${escapeHTML(module.sourceURL)}" target="_blank" rel="noopener" title="${escapeHTML(module.sourceName)}">${escapeHTML(module.sourceName)}</a>`
                 : `<span class="source-link source-link-static">${escapeHTML(module.sourceName)}</span>`;
 
-            // 智能按钮：若有前置模块安装链接则渲染为“安装前置”，否则渲染为标准的“复制链接”
             let secondaryBtnHTML = "";
             if (module.preInstallURL) {
                 const preText = module.secondaryBtnText || "安装前置";
