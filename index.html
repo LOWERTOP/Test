@@ -295,20 +295,49 @@
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
         .brand-wrapper { display: flex; align-items: center; gap: 10px; }
 
+        /* =========================================================
+            标题与标签徽章增强设计
+        ========================================================= */
         .title { 
-            margin: 0; font-size: 26px; line-height: 1.2; font-weight: 300;
+            margin: 0; font-size: 26px; line-height: 1.2;
             letter-spacing: -0.6px; display: flex; align-items: center; gap: 10px; 
             text-shadow: none; 
         }
-        .title a { transition: opacity 0.2s ease; }
-        .title a:hover { opacity: 0.85; }
+        .title a { 
+            display: inline-flex; 
+            align-items: center; 
+            text-decoration: none; 
+            transition: opacity 0.2s ease; 
+        }
+        .title a:hover { opacity: 0.88; }
+
+        .title-shadow {
+            font-weight: 300;
+            color: var(--text-primary);
+        }
+
+        .title-store {
+            font-weight: 750;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-left: 1px;
+        }
 
         .tag-pill-badge {
             display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
-            border-radius: var(--radius-pill); background: var(--bg-surface);
-            color: var(--text-secondary); font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+            border-radius: var(--radius-pill); 
+            background: rgba(6, 182, 212, 0.12);
+            color: #0891b2; 
+            font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
             border: none; box-shadow: none; 
             text-shadow: none; 
+        }
+
+        [data-theme="dark"] .tag-pill-badge {
+            background: rgba(6, 182, 212, 0.18);
+            color: #22d3ee;
         }
 
         .subtitle { 
@@ -865,7 +894,6 @@
             pointer-events: auto;
         }
 
-        /* 悬浮底栏外层固定容器 */
         .control-bar.is-single-column .tab-bar-wrapper {
             position: fixed;
             left: 0;
@@ -882,7 +910,6 @@
             z-index: 999999;
         }
 
-        /* 标签页主体 */
         .control-bar.is-single-column .tab-bar {
             pointer-events: auto;
             width: 100%;
@@ -894,7 +921,6 @@
             box-shadow: var(--shadow-glass-ui);
         }
 
-        /* 内部按钮 */
         .control-bar.is-single-column .tab-item {
             height: 100%;
             min-height: 0;
@@ -908,7 +934,6 @@
             justify-content: center;
         }
 
-        /* 单列及移动端断点 */
         @media (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
@@ -953,7 +978,9 @@
             <div class="header-top">
                 <div class="brand-wrapper">
                     <h1 class="title">
-                        <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">ShadowStore</a>
+                        <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">
+                            <span class="title-shadow">Shadow</span><span class="title-store">/Store</span>
+                        </a>
                         <span class="tag-pill-badge">社区资源</span>
                     </h1>
                 </div>
@@ -1036,7 +1063,7 @@
         /* =========================================================
             1. 全局配置与预置资源数据集
         ========================================================= */
-        const CACHE_VERSION = "202609011619"; 
+        const CACHE_VERSION = "202609011648"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1279,7 +1306,7 @@
         }
 
         /* =========================================================
-            3. UI 交互与吸顶控制 (精准联动与返回顶部)
+            3. UI 交互与吸顶控制
         ========================================================= */
         let backToTopVisible = false;
         function updateSearchLayer() {
@@ -1336,13 +1363,6 @@
             }
         }
 
-        /**
-         * 精准动力学层级运算：
-         * 阴影投射方向为向左（-X）和向下（+Y）。
-         * 因此：行号越靠下（r 越大）z-index 越高；列号越靠左（c 越小）z-index 越高。
-         * 公式：(r + 1) * 100 + (cols - c)
-         * 确保所有阴影永远被其下方和左方的卡片主体自然覆盖在图层之下，绝不遮挡卡片正面。
-         */
         function updateCardLayerOrder() {
             const cards = modulesContainer.querySelectorAll(".module-card, .loading-card");
             const count = cards.length;
@@ -1496,7 +1516,6 @@
             
             sentinel.style.display = state.currentlyRendered >= state.filteredModules.length ? "none" : "block";
             
-            // 即时更新层叠与尺寸
             updateCardWidth();
             updateCardLayerOrder();
             updateSearchLayer();
