@@ -30,6 +30,14 @@
             }
             document.documentElement.style.backgroundColor = themeColor;
 
+            // 移动设备环境与触控特征识别标记
+            const isMobileDevice = ('ontouchstart' in window) || 
+                                   (navigator.maxTouchPoints > 0) || 
+                                   (window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches);
+            if (isMobileDevice) {
+                document.documentElement.classList.add('is-mobile');
+            }
+
             // PWA 独立运行模式标记
             if (window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) {
                 document.documentElement.classList.add('is-pwa');
@@ -430,7 +438,7 @@
             padding: 5px;
             border-radius: 22px;
             box-shadow: var(--shadow-search);
-            overflow: hidden; /* 漫射范围受标签栏边界严格约束 */
+            overflow: hidden;
             transition: 
                 width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
                 box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -491,7 +499,7 @@
             filter: blur(10px);
         }
 
-        /* 滑过与预点击态：不显示胶囊轮廓，仅文字与无边界漫射光晕 */
+        /* 滑过与预点击态：仅桌面环境生效 */
         .tab-item:not(.active):hover,
         .tab-item:not(.active):active,
         .tab-item:not(.active):focus-visible {
@@ -507,7 +515,7 @@
             opacity: 1;
         }
 
-        /* 标签栏主按钮（激活项）：三色渐变胶囊、柔和投影，保持原设计完全不变 */
+        /* 标签栏主按钮（激活项） */
         .tab-item.active {
             color: #FFFFFF !important;
             background: var(--primary-gradient) !important;
@@ -719,29 +727,6 @@
             }
         }
 
-        /* 移动/触控设备：彻底禁用主卡片及其阴影的预点击图层跳动、位移与弹起变化 */
-        @media (hover: none), (pointer: coarse), (max-width: 860px) {
-            .module-card,
-            .module-card:hover,
-            .module-card:active,
-            .module-card:focus,
-            .module-card:focus-within {
-                transform: none !important;
-                box-shadow: var(--shadow-glass-ui) !important;
-                transition: none !important;
-            }
-            [data-theme="dark"] .module-card,
-            [data-theme="dark"] .module-card:hover,
-            [data-theme="dark"] .module-card:active,
-            [data-theme="dark"] .module-card:focus,
-            [data-theme="dark"] .module-card:focus-within {
-                transform: none !important;
-                box-shadow: var(--shadow-glass-ui) !important;
-                background-image: var(--noise-pattern) !important;
-                background-color: var(--bg-surface) !important;
-            }
-        }
-
         .card-header { display: flex; align-items: center; gap: 20px; }
         
         .module-icon { 
@@ -829,7 +814,6 @@
             flex: 1;
         }
         
-        /* 移除“资源获取成功”及核心资源等胶囊外形，仅保留纯文字展示 */
         .status-pill {
             display: inline-flex;
             align-items: center;
@@ -890,7 +874,6 @@
                 box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
         }
         
-        /* 主卡片次要按钮（复制链接、安装前置）：效果与标签栏非激活项一致，无胶囊、无边框、仅文字与漫射 */
         .button-secondary { 
             position: relative;
             isolation: isolate;
@@ -910,7 +893,6 @@
             color: #22d3ee;
         }
         
-        /* 主卡片次要按钮预点击态：无胶囊轮廓，仅文字与漫射光晕 */
         .button-secondary:hover,
         .button-secondary:active,
         .button-secondary:focus-visible { 
@@ -930,7 +912,6 @@
             color: #22d3ee;
         }
         
-        /* 主要按钮（安装、查阅、访问等）：无果冻位移，基础渐变漫射光晕 */
         .button-primary { 
             background: var(--primary-gradient); 
             color: #FFFFFF; 
@@ -1067,14 +1048,12 @@
             justify-content: center;
         }
 
-        /* 移动设备下单列布局的次要按钮保持纯文本透明效果 */
         .control-bar.is-single-column .tab-item:not(.active) {
             background: transparent !important;
             border: none !important;
             box-shadow: none !important;
         }
 
-        /* 移动设备下的标签页主按钮（激活项）：保持与正常模式完全一致的主题渐变胶囊与高亮投影 */
         .control-bar.is-single-column .tab-item.active {
             color: #FFFFFF !important;
             background: var(--primary-gradient) !important;
@@ -1082,10 +1061,141 @@
             font-weight: 600;
         }
 
-        @media (max-width: 860px) {
+        /* =========================================================
+            7. 移动与触控设备：禁用所有预点击动画与动效交互 (双重兜底)
+        ========================================================= */
+        @media (hover: none), (pointer: coarse), (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
             }
+
+            /* 禁用主卡片及其阴影的预点击图层跳动、位移与弹起变化 */
+            .module-card,
+            .module-card:hover,
+            .module-card:active,
+            .module-card:focus,
+            .module-card:focus-within {
+                transform: none !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                transition: none !important;
+            }
+            [data-theme="dark"] .module-card,
+            [data-theme="dark"] .module-card:hover,
+            [data-theme="dark"] .module-card:active,
+            [data-theme="dark"] .module-card:focus,
+            [data-theme="dark"] .module-card:focus-within {
+                transform: none !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                background-image: var(--noise-pattern) !important;
+                background-color: var(--bg-surface) !important;
+            }
+
+            /* 禁用标签栏与次要按钮的漫射光晕 (::before) */
+            .tab-item:not(.active)::before,
+            .button-secondary::before,
+            .tab-item:not(.active):hover::before,
+            .tab-item:not(.active):active::before,
+            .tab-item:not(.active):focus-visible::before,
+            .button-secondary:hover::before,
+            .button-secondary:active::before,
+            .button-secondary:focus-visible::before {
+                display: none !important;
+                opacity: 0 !important;
+                transition: none !important;
+            }
+
+            /* 禁用非激活标签页预点击颜色跳动 */
+            .tab-item:not(.active):hover,
+            .tab-item:not(.active):active,
+            .tab-item:not(.active):focus-visible {
+                color: var(--text-secondary) !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+
+            /* 禁用次要按钮的微缩放与预点击跳变 */
+            .button-secondary,
+            .button-secondary:hover,
+            .button-secondary:active,
+            .button-secondary:focus-visible {
+                transform: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                color: #0891b2 !important;
+            }
+            [data-theme="dark"] .button-secondary,
+            [data-theme="dark"] .button-secondary:hover,
+            [data-theme="dark"] .button-secondary:active,
+            [data-theme="dark"] .button-secondary:focus-visible {
+                color: #22d3ee !important;
+            }
+
+            /* 禁用主要操作按钮的多重扩散漫射光晕 */
+            .button-primary,
+            .button-primary:hover,
+            .button-primary:active,
+            .button-primary:focus-visible {
+                transform: none !important;
+                box-shadow: var(--primary-gradient-shadow) !important;
+                background: var(--primary-gradient) !important;
+            }
+            [data-theme="dark"] .button-primary:hover,
+            [data-theme="dark"] .button-primary:active,
+            [data-theme="dark"] .button-primary:focus-visible {
+                box-shadow: var(--primary-gradient-shadow) !important;
+            }
+
+            /* 禁用圆形控制按钮（主题切换、GitHub Star、回到顶部）的悬浮位移与缩放 */
+            .theme-toggle:hover,
+            .theme-toggle:active {
+                transform: none !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                color: var(--text-secondary) !important;
+            }
+            .theme-toggle.active {
+                color: var(--primary) !important;
+            }
+            .back-to-top-btn.visible:hover,
+            .back-to-top-btn.visible:active {
+                transform: scale(1) !important;
+                box-shadow: var(--shadow-search) !important;
+            }
+
+            /* 禁用文字链接与搜索清空按钮的悬停反馈 */
+            .title a:hover {
+                opacity: 1 !important;
+            }
+            .author:hover,
+            .source-link:hover:not(.source-link-static) {
+                color: var(--text-secondary) !important;
+                text-decoration: none !important;
+            }
+            .search-clear:hover {
+                color: var(--primary) !important;
+            }
+        }
+
+        /* 移动端 class 强力兜底约束 */
+        html.is-mobile .tab-item:not(.active)::before,
+        html.is-mobile .button-secondary::before,
+        html.is-mobile .tab-item:not(.active):hover::before,
+        html.is-mobile .tab-item:not(.active):active::before,
+        html.is-mobile .button-secondary:hover::before,
+        html.is-mobile .button-secondary:active::before {
+            display: none !important;
+            opacity: 0 !important;
+        }
+        html.is-mobile .button-secondary:active,
+        html.is-mobile .theme-toggle:hover,
+        html.is-mobile .theme-toggle:active,
+        html.is-mobile .back-to-top-btn.visible:hover,
+        html.is-mobile .back-to-top-btn.visible:active {
+            transform: none !important;
+        }
+        html.is-mobile .button-primary:hover,
+        html.is-mobile .button-primary:active,
+        html.is-mobile .button-primary:focus-visible {
+            box-shadow: var(--primary-gradient-shadow) !important;
         }
 
         @media (max-width: 600px) {
@@ -1126,7 +1236,7 @@
             <div class="header-top">
                 <div class="brand-wrapper">
                     <h1 class="title">
-                        <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener"[cite: 1]>
+                        <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">
                             <span class="title-shadow">Shadow</span><span class="title-store">/Store</span>
                         </a>
                         <span class="tag-pill-badge">社区资源</span>
@@ -1134,7 +1244,7 @@
                 </div>
                 <div class="theme-controls">
                     <button id="themeToggle" class="theme-toggle glass-element" aria-label="切换主题模式"></button>
-                    <a id="githubStarBtn" class="theme-toggle glass-element" href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star"[cite: 1]>
+                    <a id="githubStarBtn" class="theme-toggle glass-element" href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star">
                         <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px;">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                         </svg>
@@ -1142,7 +1252,7 @@
                 </div>
             </div>
             <div class="subtitle">
-                Shadowrocket 开源社区资源聚合检索平台[cite: 1]
+                Shadowrocket 开源社区资源聚合检索平台
             </div>
         </header>
 
