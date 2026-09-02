@@ -764,13 +764,14 @@
             gap: var(--layout-gap, 44px); 
             align-items: stretch; 
             padding-bottom: 24px; 
-            min-height: 380px; /* 维持骨架基底高度，防止列表清空时高度塌陷导致滚动条抖动 */
+            min-height: 0; 
         }
 
         .module-card { 
             position: relative; 
             padding: 28px; 
-            height: 100%;
+            height: auto;
+            min-height: 0;
             min-width: 0;
             display: flex;
             flex-direction: column;
@@ -867,20 +868,6 @@
             word-break: break-word; 
             text-shadow: var(--text-shadow-sm); 
             flex: 1 1 auto;
-        }
-
-        .module-description a {
-            color: inherit;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            text-decoration-thickness: 1px;
-            word-break: break-all;
-            transition: color 0.2s ease, opacity 0.2s ease;
-        }
-
-        .module-description a:hover {
-            color: var(--text-primary);
-            opacity: 0.85;
         }
         
         .card-bottom { 
@@ -1167,6 +1154,8 @@
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
+                min-height: 0;
+                align-items: start;
             }
 
             .module-card,
@@ -1174,6 +1163,7 @@
             .module-card:active,
             .module-card:focus,
             .module-card:focus-within {
+                height: auto !important;
                 transform: none !important;
                 box-shadow: var(--shadow-glass-ui) !important;
                 transition: none !important;
@@ -1430,7 +1420,7 @@
         /* =========================================================
             1. 全局多语言字典与系统配置
         ========================================================= */
-        const CACHE_VERSION = "202609021230"; 
+        const CACHE_VERSION = "202609021322"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1707,25 +1697,6 @@
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
-        }
-
-        function linkifyDescription(text) {
-            const fallback = I18N[state.currentLang].noDesc;
-            if (!text) return fallback;
-            const safeText = escapeHTML(text);
-            const urlPattern = /https?:\/\/(?:[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]|&amp;)+/g;
-
-            return safeText.replace(urlPattern, (matched) => {
-                let cleanUrl = matched;
-                const trailingPunctuationRegex = /([.,;!?()\[\]{}'"]|&amp;lt;|&amp;gt;|&amp;quot;|&#039;|[，。！？；：（）【】《》、])+$/;
-                let trailingPunct = "";
-                const matchPunct = cleanUrl.match(trailingPunctuationRegex);
-                if (matchPunct) {
-                    trailingPunct = matchPunct[0];
-                    cleanUrl = cleanUrl.slice(0, -trailingPunct.length);
-                }
-                return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a>${trailingPunct}`;
-            });
         }
 
         function safeURL(value, allowed = ["https:"]) {
@@ -2078,6 +2049,8 @@
                 ? `<a class="button button-primary" href="${escapeHTML(module.installURL)}" ${primaryTarget} aria-label="${escapeHTML(primaryText)} ${escapeHTML(module.name)}">${escapeHTML(primaryText)}</a>` 
                 : "";
 
+            const descriptionText = module.description ? escapeHTML(module.description) : langObj.noDesc;
+
             card.innerHTML = `
                 <div class="card-header">
                     <div class="module-icon">
@@ -2092,7 +2065,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="module-description">${linkifyDescription(module.description)}</div>
+                <div class="module-description">${descriptionText}</div>
                 <div class="card-bottom">
                     <div class="card-status">
                         <span class="status-pill ${statusClass}">${escapeHTML(statusTextVal)}</span>
