@@ -61,9 +61,6 @@
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore_01.png">
 
     <style>
-        /* =========================================================
-            1. 浅色主题设计令牌 (Light Theme Tokens)
-        ========================================================= */
         :root, [data-theme="light"] {
             --layout-gap: 44px;
             --bg-page-solid: #f0f2f5;
@@ -77,11 +74,6 @@
             --glass-border-l: rgba(255, 255, 255, 0.85);
 
             --noise-pattern: url("data:image/svg+xml,%3Csvg width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
-
-            --content-shadow-lg: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.18));
-            --text-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.18);
-            --content-shadow-sm: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
-            --text-shadow-sm: 0 6px 12px rgba(0, 0, 0, 0.15);
 
             --shadow-glass-ui: 
                 inset 3px 3px 10px 2px rgba(255, 255, 255, 0.45),
@@ -164,9 +156,6 @@
             --toast-bottom: max(93px, calc(env(safe-area-inset-bottom) + 59px));
         }
 
-        /* =========================================================
-            2. 暗色主题设计令牌 (Dark Theme Tokens)
-        ========================================================= */
         [data-theme="dark"] {
             --bg-page-solid: #14161a;
             
@@ -178,11 +167,6 @@
             --glass-border-l: transparent;
 
             --noise-pattern: url("data:image/svg+xml,%3Csvg width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
-
-            --content-shadow-lg: none;
-            --text-shadow-lg: none;
-            --content-shadow-sm: none;
-            --text-shadow-sm: none;
 
             --shadow-glass-ui: 
                 0 6px 20px rgba(0, 0, 0, 0.4),
@@ -269,17 +253,13 @@
             padding-right: 16px;
             padding-bottom: var(--safe-pad-bottom);
             padding-left: 16px;
-            background-color: transparent;
+            background-color: var(--bg-page-solid);
             background-image: none !important;
             color: var(--text-primary); 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif; 
             -webkit-font-smoothing: antialiased; 
             text-rendering: optimizeLegibility; 
             transition: color 0.4s ease; 
-        }
-
-        body.is-list-view {
-            padding-top: max(16px, env(safe-area-inset-top));
         }
 
         button, input { font: inherit; }
@@ -294,6 +274,13 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body.is-list-view .container > *:not(#controlBar) {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden;
         }
 
         .glass-element {
@@ -352,23 +339,6 @@
             padding: 24px 0 18px; 
             max-height: 140px;
             overflow: visible;
-            will-change: max-height, opacity;
-            transition: max-height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        opacity 0.16s ease,
-                        padding 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        margin 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        body.is-list-view .header {
-            max-height: 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            opacity: 0 !important;
-            pointer-events: none;
-            overflow: hidden !important;
-            transition: none !important;
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -526,9 +496,6 @@
             filter: none; 
         }
 
-        /* =========================================================
-            3. 搜索 + 分类控制栏 (宽屏吸顶)
-        ========================================================= */
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
@@ -540,12 +507,10 @@
             width: 100%;
             margin-bottom: 16px;
             padding: 4px 0;
-            transition: top 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin-bottom 0.35s ease;
+            background-color: transparent;
+            transition: margin-bottom 0.35s ease;
         }
 
-        /* =========================================================
-            4. 分类标签页与统一的悬停动效复用
-        ========================================================= */
         .tab-bar-wrapper {
             width: 100%;
             min-width: 0;
@@ -689,9 +654,6 @@
             font-weight: 400 !important;
         }
 
-        /* =========================================================
-            5. 搜索框区域
-        ========================================================= */
         .search-wrapper { 
             position: relative;
             height: 44px;
@@ -1183,9 +1145,7 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* =========================================================
-            6. 单列布局与底栏规范
-        ========================================================= */
+        /* 仅在单列模式下沉到底部，不受列表激活态干扰 */
         .control-bar.is-single-column {
             display: block;
             position: sticky;
@@ -1267,9 +1227,6 @@
             font-weight: 400 !important;
         }
 
-        /* =========================================================
-            7. 全局首字母字母表搜索视图 (胶囊柱与对齐规范)
-        ========================================================= */
         .alphabet-view-container {
             position: fixed;
             top: calc(max(16px, env(safe-area-inset-top)) + 72px);
@@ -1289,17 +1246,6 @@
 
         body.is-list-view .alphabet-view-container.is-visible {
             opacity: 1;
-        }
-
-        body.is-list-view .status,
-        body.is-list-view .modules,
-        body.is-list-view .sentinel,
-        body.is-list-view .footer {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            visibility: hidden;
-            transition: opacity 0.12s cubic-bezier(0.22, 1, 0.36, 1),
-                        visibility 0.12s linear;
         }
 
         .alphabet-content-box {
@@ -1546,9 +1492,6 @@
             border-color: var(--border-subtle);
         }
 
-        /* =========================================================
-            8. 移动与触控设备约束
-        ========================================================= */
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
@@ -1854,10 +1797,8 @@
 
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
-            <div id="alphabetScrollArea" class="alphabet-scroll-area">
-                </div>
-            <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航">
-                </div>
+            <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
+            <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航"></div>
             <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
         </div>
     </div>
@@ -1865,7 +1806,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609050242"; 
+        const CACHE_VERSION = "202609050250"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1879,12 +1820,7 @@
             zh: {
                 badgeCommunity: "社区资源",
                 subtitle: "Shadowrocket 开源社区资源聚合检索平台",
-                tabs: {
-                    module: "模块资源",
-                    config: "配置文件",
-                    manual: "使用手册",
-                    more: "更多资源"
-                },
+                tabs: { module: "模块资源", config: "配置文件", manual: "使用手册", more: "更多资源" },
                 searchPlaceholderWait: "请在加载完成后执行搜索...",
                 searchPlaceholderReady: "输入关键字全局搜索...",
                 notice1: "相关资源均来源于开源社区",
@@ -1932,12 +1868,7 @@
             en: {
                 badgeCommunity: "Community",
                 subtitle: "Shadowrocket Open-Source Community Resource Aggregator",
-                tabs: {
-                    module: "Modules",
-                    config: "Configs",
-                    manual: "Manual",
-                    more: "More"
-                },
+                tabs: { module: "Modules", config: "Configs", manual: "Manual", more: "More" },
                 searchPlaceholderWait: "Please wait for loading to complete...",
                 searchPlaceholderReady: "Type keywords to search globally...",
                 notice1: "All resources originate from open source",
@@ -1988,16 +1919,8 @@
             {
                 category: "config",
                 i18n: {
-                    zh: {
-                        name: "懒人配置",
-                        description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，是除默认配置外首推的配置文件。",
-                        primaryBtnText: "安装配置"
-                    },
-                    en: {
-                        name: "Lazy Config",
-                        description: "Out-of-the-box configuration with popular routing groups, well-balanced proxy rules, and detailed comments. Highly recommended.",
-                        primaryBtnText: "Install Config"
-                    }
+                    zh: { name: "懒人配置", description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，是除默认配置外首推的配置文件。", primaryBtnText: "安装配置" },
+                    en: { name: "Lazy Config", description: "Out-of-the-box configuration with popular routing groups, well-balanced proxy rules, and detailed comments. Highly recommended.", primaryBtnText: "Install Config" }
                 },
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -2012,16 +1935,8 @@
             {
                 category: "manual",
                 i18n: {
-                    zh: {
-                        name: "使用手册",
-                        description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。",
-                        primaryBtnText: "查阅手册"
-                    },
-                    en: {
-                        name: "User Manual",
-                        description: "Comprehensive guide and reference manual for Shadowrocket, covering protocols, routing rules, decryption, and advanced setups.",
-                        primaryBtnText: "View Manual"
-                    }
+                    zh: { name: "使用手册", description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。", primaryBtnText: "查阅手册" },
+                    en: { name: "User Manual", description: "Comprehensive guide and reference manual for Shadowrocket, covering protocols, routing rules, decryption, and advanced setups.", primaryBtnText: "View Manual" }
                 },
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -2036,16 +1951,8 @@
             {
                 category: "more",
                 i18n: {
-                    zh: {
-                        name: "配色与配置仓库",
-                        description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。",
-                        primaryBtnText: "访问仓库"
-                    },
-                    en: {
-                        name: "Theme & Config Repo",
-                        description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.",
-                        primaryBtnText: "Visit Repo"
-                    }
+                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
+                    en: { name: "Theme & Config Repo", description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.", primaryBtnText: "Visit Repo" }
                 },
                 icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -2063,7 +1970,6 @@
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
         const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-        const SEARCH_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>`;
         const LIST_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>`;
 
         const tagPillBadge = document.getElementById("tagPillBadge");
@@ -2077,7 +1983,6 @@
         const tabBarEl = document.querySelector(".tab-bar");
 
         const controlBarEl = document.getElementById("controlBar");
-        const searchWrapperEl = document.querySelector('.search-wrapper');
         const searchBoxInner = document.querySelector('.search-box-inner');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
@@ -2125,7 +2030,9 @@
             focusedModuleId: null,
             activeTab: "module",
             statusKey: "statusSyncing",
-            isAlphabetRendered: false
+            isAlphabetRendered: false,
+            listViewReturnScrollY: 0,
+            wasFloatingBeforeActive: false
         };
 
         let searchTimer = null;
@@ -2223,17 +2130,9 @@
                 .map((item, idx) => {
                     const localized = item.i18n[lang] || item.i18n.zh;
                     const searchTokens = [
-                        localized.name,
-                        localized.description,
-                        item.author.name,
-                        item.sourceName,
-                        item.category,
-                        "shadowrocket",
-                        "手册", "manual",
-                        "教程", "guide",
-                        "仓库", "repo",
-                        "文档", "docs",
-                        "配置", "config"
+                        localized.name, localized.description, item.author.name,
+                        item.sourceName, item.category, "shadowrocket", "手册",
+                        "manual", "教程", "guide", "仓库", "repo", "文档", "docs", "配置", "config"
                     ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                     return {
@@ -2268,7 +2167,6 @@
                     const authorAvatar = safeURL(m.authorAvatar || m.author?.avatar || "");
                     const sourceName = m.sourceName || "开源仓库";
                     const sourceURL = safeURL(m.sourceURL || "");
-                    
                     const customInstall = safeInstallURL(m.installURL || "");
                     const fallbackInstall = rawURL ? `shadowrocket://install?url=${encodeURIComponent(rawURL)}` : "";
                     const installURL = customInstall || fallbackInstall;
@@ -2282,13 +2180,7 @@
                     }
 
                     const searchTokens = [
-                        m.name,
-                        m.description,
-                        authorName,
-                        m.author?.username,
-                        sourceName,
-                        category,
-                        m._searchKeywords
+                        m.name, m.description, authorName, m.author?.username, sourceName, category, m._searchKeywords
                     ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                     return {
@@ -2318,9 +2210,7 @@
             clearTimeout(toastTimer);
             toast.textContent = text;
             toast.classList.add("show");
-            toastTimer = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 2000);
+            toastTimer = setTimeout(() => { toast.classList.remove("show"); }, 2000);
         }
 
         async function copyToClipboard(text) {
@@ -2348,6 +2238,31 @@
             const char = Array.from(cleanName)[0] || (state.currentLang === "en" ? "M" : "模");
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="128" text-anchor="middle" dominant-baseline="central" alignment-baseline="central" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+        }
+
+        // 获取当前搜索框吸顶（上浮）时页面对应的滚动目标高度
+        function getControlBarStickyScrollTop() {
+            if (!controlBarEl) return 0;
+            const style = window.getComputedStyle(controlBarEl);
+            const topSticky = parseFloat(style.top) || 12;
+            const elementTop = controlBarEl.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop || 0);
+            return Math.max(0, elementTop - topSticky);
+        }
+
+        // 判断当前搜索框是否已经处于上浮吸顶状态
+        function isSearchFloating() {
+            const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+            const threshold = getControlBarStickyScrollTop();
+            return currentScrollY >= (threshold - 2);
+        }
+
+        // 平滑上浮搜索框到吸顶停止位置
+        function floatSearchToTarget(smooth = true) {
+            const targetTop = getControlBarStickyScrollTop();
+            window.scrollTo({
+                top: targetTop,
+                behavior: smooth ? "smooth" : "auto"
+            });
         }
 
         let backToTopVisible = false;
@@ -2381,9 +2296,7 @@
             const activeTab = document.querySelector(".tab-item.active");
             if (!activeTab || !tabIndicator) return;
 
-            if (!animated && isTabAnimating) {
-                return;
-            }
+            if (!animated && isTabAnimating) return;
 
             if (!animated) {
                 tabIndicator.style.transition = 'none';
@@ -2411,6 +2324,7 @@
             return template ? template.trim().split(/\s+/).length : 1;
         }
 
+        // 标签栏上下位置的变化仅受是否是单列列表影响
         function updateControlBarLayout() {
             const bar = document.getElementById("controlBar");
             if (!bar || !modulesContainer) return;
@@ -2484,32 +2398,20 @@
 
         if (typeof ResizeObserver !== "undefined") {
             if (modulesContainer) {
-                const gridResizeObserver = new ResizeObserver(() => {
-                    scheduleCardLayerUpdate();
-                });
-                gridResizeObserver.observe(modulesContainer);
+                new ResizeObserver(() => scheduleCardLayerUpdate()).observe(modulesContainer);
             }
             if (tabBarEl) {
-                const tabBarObserver = new ResizeObserver(() => {
-                    if (!isTabAnimating) {
-                        updateTabIndicator(false);
-                    }
-                });
-                tabBarObserver.observe(tabBarEl);
+                new ResizeObserver(() => {
+                    if (!isTabAnimating) updateTabIndicator(false);
+                }).observe(tabBarEl);
             }
             if (searchBoxInner) {
-                const searchBoxObserver = new ResizeObserver(() => {
-                    if (state.isListView) {
-                        updateAlphabetPosition();
-                    }
-                });
-                searchBoxObserver.observe(searchBoxInner);
+                new ResizeObserver(() => {
+                    if (state.isListView) updateAlphabetPosition();
+                }).observe(searchBoxInner);
             }
         }
 
-        /* =========================================================
-            首字母列表与快速选择功能实现
-        ========================================================= */
         function getItemInitialLetter(name) {
             const clean = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const first = clean.charAt(0);
@@ -2518,7 +2420,6 @@
             
             if (/^[\u4e00-\u9fa5]$/.test(first)) {
                 try {
-                    const py = first.localeCompare("z", "zh-Hans-CN-u-co-pinyin");
                     const zhLetters = [
                         { l: "A", c: "啊" }, { l: "B", c: "芭" }, { l: "C", c: "擦" }, { l: "D", c: "搭" },
                         { l: "E", c: "蛾" }, { l: "F", c: "发" }, { l: "G", c: "噶" }, { l: "H", c: "哈" },
@@ -2701,8 +2602,7 @@
             const targetId = letter === '#' ? 'alphabet-group-hash' : `alphabet-group-${letter}`;
             const targetEl = document.getElementById(targetId);
             if (targetEl && alphabetScrollArea) {
-                const targetOffset = targetEl.offsetTop;
-                alphabetScrollArea.scrollTop = targetOffset;
+                alphabetScrollArea.scrollTop = targetEl.offsetTop;
             }
         }
 
@@ -2789,7 +2689,7 @@
             const containerRect = pageContainer.getBoundingClientRect();
             const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
-            const topPos = Math.round(searchRect.bottom + 20);
+            const topPos = Math.round(searchRect.bottom + 16);
 
             let bottomPos = 20;
             const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
@@ -2819,7 +2719,6 @@
 
         let listViewTransitionTimer = null;
         let listSyncRaf = null;
-        let listViewReturnScrollY = 0;
 
         function syncAlphabetPositionDuringTransition(duration = 240) {
             const startTime = performance.now();
@@ -2835,6 +2734,7 @@
             listSyncRaf = requestAnimationFrame(step);
         }
 
+        // 统一控制首字母列表激活与搜索框上浮交互
         function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
 
@@ -2842,12 +2742,20 @@
             cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
-                listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+                const alreadyFloating = isSearchFloating();
+                state.wasFloatingBeforeActive = alreadyFloating;
+                state.listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+
                 state.isListView = true;
                 state.focusedModuleId = null;
 
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
+
+                // 规则 1：无论搜索框处于什么位置，激活时都直接上浮到既定吸顶位置
+                if (!alreadyFloating) {
+                    floatSearchToTarget(true);
+                }
 
                 if (!state.isAlphabetRendered) {
                     renderAlphabetList();
@@ -2875,10 +2783,11 @@
                     checkScrollLock();
                     scheduleCardLayerUpdate();
 
-                    if (restoreScroll) {
-                        const targetScrollY = Math.max(0, listViewReturnScrollY);
+                    // 规则 1：取消后，若激活前尚未上浮，恢复激活前位置；若原本已处于上浮状态，则保持原样
+                    if (restoreScroll && !state.wasFloatingBeforeActive) {
+                        const targetScrollY = Math.max(0, state.listViewReturnScrollY);
                         requestAnimationFrame(() => {
-                            window.scrollTo({ top: targetScrollY, behavior: "auto" });
+                            window.scrollTo({ top: targetScrollY, behavior: "smooth" });
                             updateSearchLayer();
                         });
                     }
@@ -2886,7 +2795,6 @@
             }
         }
 
-        /* 修复：使用标识符防抖，确保点击输入框聚焦触发列表时不被后续的点击事件立即关闭 */
         let ignoreNextClick = false;
 
         document.addEventListener("click", (e) => {
@@ -2905,14 +2813,22 @@
             setListViewMode(false);
         });
 
+        // 点击搜索框聚焦：上浮到既定位置并呼出列表
         searchInput.addEventListener("focus", (e) => {
             e.stopPropagation();
+            if (!isSearchFloating()) {
+                floatSearchToTarget(true);
+            }
             if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
                 ignoreNextClick = true;
                 setListViewMode(true);
+                requestAnimationFrame(() => {
+                    updateAlphabetPosition();
+                });
             }
         });
 
+        // 点击右侧资源列表按钮
         listToggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
@@ -2939,6 +2855,9 @@
                 ignoreNextClick = true;
                 setListViewMode(true);
                 searchInput.focus();
+                requestAnimationFrame(() => {
+                    updateAlphabetPosition();
+                });
             }
         });
 
@@ -2990,7 +2909,6 @@
             const fallbackIcon = createIOSAppIcon(module.name);
             const icon = module.icon || fallbackIcon;
             const authorHTML = renderAuthor(module);
-            
             const isRepo = Boolean(module.isRepoCard);
 
             const directOpenURL = module.rawURL || module.sourceURL || "";
@@ -3177,9 +3095,7 @@
 
                 isTabAnimating = true;
                 clearTimeout(tabAnimTimer);
-                tabAnimTimer = setTimeout(() => {
-                    isTabAnimating = false;
-                }, 460);
+                tabAnimTimer = setTimeout(() => { isTabAnimating = false; }, 460);
 
                 updateTabIndicator(true);
 
@@ -3284,11 +3200,8 @@
             startNoticeLoop();
 
             document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    stopNoticeLoop();
-                } else {
-                    startNoticeLoop();
-                }
+                if (document.hidden) stopNoticeLoop();
+                else startNoticeLoop();
             });
         }
 
