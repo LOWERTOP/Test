@@ -1,4 +1,4 @@
-![ShadowStore](https://socialify.git.ci/LOWERTOP/ShadowStore/image?custom_description=%E5%B0%8F%E7%81%AB%E7%AE%AD%E5%BC%80%E6%BA%90%E8%B5%84%E6%BA%90%E7%B4%A2%E5%BC%95%E5%B9%B3%E5%8F%B0%0AResources+for+Shadowrocket&description=1&font=Jost&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLOWERTOP%2FShadowrocket-First%2Frefs%2Fheads%2Fmain%2Fimg%2FShadowrocket.png&name=1&pattern=Circuit+Board&theme=Light)
+![ShadowStore](https://socialify.git.ci/LOWERTOP/ShadowStore/image?font=Jost&logo=https%3A%2F%2Fraw.githubusercontent.com%2FLOWERTOP%2FShadowrocket-First%2Frefs%2Fheads%2Fmain%2Fimg%2FShadowStore_02.png&name=1&pattern=Plus&theme=Light)
 
 <div align="center">
 
