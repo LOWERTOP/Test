@@ -368,6 +368,7 @@
             opacity: 0 !important;
             pointer-events: none;
             overflow: hidden !important;
+            transition: none !important; /* 修复：在列表视图下禁用标题栏过渡，防止搜索栏产生上下滑动/位移 */
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
