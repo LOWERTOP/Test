@@ -12,7 +12,7 @@
 
 ## 📌 项目定位
 
-**ShadowStore** 是一个专为 Shadowrocket 打造的开放资源平台，提供 **资源索引**、**资源检索**、**一键安装**、**一键复制** 等功能，集中收录和整理公开资源。目前已收录超过 1000 款模块及其他多种资源，支持添加网页快捷方式至桌面，并提供应用图标显示，为 Shadowrocket 用户提供更加便捷的资源发现与使用体验。
+**[ShadowStore](https://shadowstore.dpdns.org/)** 是一个专为 Shadowrocket 打造的开放资源平台，提供 **资源索引**、**资源检索**、**一键安装**、**一键复制** 等功能，集中收录和整理公开资源。目前已收录超过 1000 款模块及其他多种资源，支持添加网页快捷方式至桌面，并提供应用图标显示，为 Shadowrocket 用户提供更加便捷的资源发现与使用体验。
 
 * **原始直链引用**：所有资源卡片均直接解析并指向 **原作者的官方开源仓库或原始资源直链**，不做任何代码篡改、二次打包或镜像托管。
 * **零侵权与透明开放**：平台仅作为纯粹的元数据索引与导航工具，完整保留原作者署名、源仓库跳转链接与原版描述。
@@ -20,11 +20,11 @@
 
 ---
 
-## 🙏 收录来源
+## 🙏 数据来源
 
-本仓仅以前端网页的方式保存 [ShadowStore](https://shadowstore.dpdns.org/) 的交互界面，后台数据保存于 [配色与配置](https://github.com/LOWERTOP/Shadowrocket-First/) 仓库，以 [自动化工作流](https://github.com/LOWERTOP/Shadowrocket-First/actions/workflows/sync-modules.yml) 的方式自动运行。
+本仓仅以前端网页的方式保存 [ShadowStore](https://shadowstore.dpdns.org/) 的交互界面，后台数据保存于 **[配色与配置](https://github.com/LOWERTOP/Shadowrocket-First/)** 仓库，以 [自动化工作流](https://github.com/LOWERTOP/Shadowrocket-First/actions/workflows/sync-modules.yml) 的方式自动运行。
 
-ShadowStore 的存在完全建立在广大开源作者的无私奉献之上，特别致谢以下核心项目、模块资源、图标资源贡献者：
+[ShadowStore](https://shadowstore.dpdns.org/) 的存在完全建立在广大开源作者的无私奉献之上，特别致谢以下核心项目、模块资源、图标资源贡献者：
 
 * 主要资源来源：[fmz200/wool_scripts](https://github.com/fmz200/wool_scripts)
 * 主要资源来源：[zirawell/R-Store](https://github.com/zirawell/R-Store)
