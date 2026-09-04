@@ -1865,7 +1865,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609050100"; 
+        const CACHE_VERSION = "202609050108"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2886,7 +2886,6 @@
             }
         }
 
-        /* 修复：使用标识符防抖，确保点击输入框聚焦触发列表时不被后续的点击事件立即关闭 */
         let ignoreNextClick = false;
 
         document.addEventListener("click", (e) => {
@@ -2905,11 +2904,16 @@
             setListViewMode(false);
         });
 
+        /* 修复：在 iOS 竖屏顶部点击时，强制阻断软键盘弹出造成的视口重排位移，并采用稳定坐标直接计算 */
         searchInput.addEventListener("focus", (e) => {
             e.stopPropagation();
             if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
                 ignoreNextClick = true;
                 setListViewMode(true);
+                // 强制修正 iOS 键盘重排导致的列表位置偏移
+                requestAnimationFrame(() => {
+                    updateAlphabetPosition();
+                });
             }
         });
 
@@ -2939,6 +2943,9 @@
                 ignoreNextClick = true;
                 setListViewMode(true);
                 searchInput.focus();
+                requestAnimationFrame(() => {
+                    updateAlphabetPosition();
+                });
             }
         });
 
