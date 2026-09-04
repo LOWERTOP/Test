@@ -57,7 +57,7 @@
         })();
     </script>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 stop-color=%22%2306b6d4%22/><stop offset=%2250%25%22 stop-color=%22%233b82f6%22/><stop offset=%22100%25%22 stop-color=%22%238b5cf6%22/></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22url(%23g)%22 stroke=%22rgba(255,255,255,0.6)%22 stroke-width=%224%22/><text x=%2250%22 y=%2255%22 font-size=%2248%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🚀</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2306b6d4%22%2F%3E%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%233b82f6%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%238b5cf6%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2246%22%20fill%3D%22url%28%23g%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C0.6%29%22%20stroke-width%3D%224%22%2F%3E%3Cpath%20d%3D%22M66%2029c-8%201-18%206-25%2013-5%205-8%2010-9%2015l-6%206%207%201%205%205%201%207%206-6c5-1%2010-4%2015-9%207-7%2012-17%2013-25%201-5-2-8-7-7zM38%2058l4%204m17-24%206%206M32%2067l-7%208%2010-3%203-5m17-12c-3%200-6-1%20-9-4l-4-4m7%2021c2-3%203-6%203-9m4-8a4.5%204.5%200%201%200-6.4-6.4A4.5%204.5%200%200%200%2056%2055z%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore.png">
 
     <style>
@@ -443,7 +443,7 @@
             text-shadow: none; 
         }
         
-        .theme-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .theme-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 
         .theme-toggle { 
             display: inline-flex; align-items: center; justify-content: center; 
@@ -471,6 +471,58 @@
             color: var(--primary); background-color: var(--primary-soft); 
         }
         
+        /* 右上角功能按钮：沉浸式图标，仅保留 SVG，不使用玻璃、边框和阴影 */
+        .theme-controls .immersive-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            margin: 0;
+            border: none !important;
+            border-radius: 50%;
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            color: var(--text-secondary);
+            transform: none;
+            transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .theme-controls .immersive-icon::before,
+        .theme-controls .immersive-icon::after {
+            display: none !important;
+            content: none !important;
+        }
+        .theme-controls .immersive-icon:hover {
+            border: none !important;
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+        .theme-controls .immersive-icon:active {
+            border: none !important;
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            transform: scale(0.9);
+        }
+        .theme-controls .immersive-icon.active {
+            background: transparent !important;
+            box-shadow: none !important;
+            color: var(--primary);
+        }
+        [data-theme="dark"] .theme-controls .immersive-icon {
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+        }
+        [data-theme="dark"] .theme-controls .immersive-icon:hover {
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            color: var(--text-primary);
+        }
+
         .theme-toggle svg { 
             display: block; width: 20px; height: 20px; pointer-events: none; stroke-width: 2; 
             filter: none; 
@@ -693,14 +745,20 @@
             width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%;
             background: transparent; box-shadow: none; border: 1px solid var(--border-subtle);
             display: flex; align-items: center; justify-content: center;
-            font-size: 14px; color: var(--primary); 
+            color: var(--text-secondary); 
             filter: none; 
             user-select: none;
             -webkit-user-select: none;
             line-height: 1;
         }
 
-        .search-icon { pointer-events: none; }
+        .search-icon { pointer-events: none; color: var(--text-secondary); }
+        .search-icon svg {
+            display: block;
+            width: 15px;
+            height: 15px;
+            pointer-events: none;
+        }
         
         .list-toggle-icon {
             cursor: pointer;
@@ -726,6 +784,7 @@
         .list-toggle-icon.active {
             border-color: var(--primary);
             background-color: var(--primary-soft);
+            color: var(--primary);
         }
         
         .input-wrapper {
@@ -1077,8 +1136,14 @@
             width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 50%;
             border: 1px solid var(--border-subtle); background: var(--bg-surface);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; opacity: 1; 
+            color: var(--primary);
+            opacity: 1; 
             filter: none; 
+        }
+        .empty-icon svg {
+            width: 22px;
+            height: 22px;
+            display: block;
         }
         
         .loading-card { 
@@ -1595,6 +1660,18 @@
                 box-shadow: var(--shadow-glass-ui) !important;
                 color: var(--text-secondary) !important;
             }
+            .theme-controls .immersive-icon,
+            .theme-controls .immersive-icon:hover,
+            .theme-controls .immersive-icon:active {
+                background: transparent !important;
+                background-image: none !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .theme-controls .immersive-icon:hover,
+            .theme-controls .immersive-icon:active {
+                transform: none !important;
+            }
             .theme-toggle.active {
                 color: var(--primary) !important;
             }
@@ -1699,13 +1776,13 @@
                     </h1>
                 </div>
                 <div class="theme-controls">
-                    <button id="themeToggle" class="theme-toggle glass-element" aria-label="切换主题模式"></button>
-                    <a id="githubStarBtn" class="theme-toggle glass-element" href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star">
+                    <button id="themeToggle" class="theme-toggle immersive-icon" aria-label="切换主题模式"></button>
+                    <a id="githubStarBtn" class="theme-toggle immersive-icon" href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star">
                         <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px;">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                         </svg>
                     </a>
-                    <button id="langToggle" class="theme-toggle glass-element" aria-label="切换语言" title="切换语言">
+                    <button id="langToggle" class="theme-toggle immersive-icon" aria-label="切换语言" title="切换语言">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m5 8 6 6"/>
                             <path d="m4 14 6-6 2-3"/>
@@ -1735,7 +1812,7 @@
 
             <div class="search-wrapper">
                 <div class="search-box-inner glass-element" role="search">
-                    <div class="search-icon" aria-hidden="true">🔍</div>
+                    <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
                     <div class="input-wrapper">
                         <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
@@ -1748,7 +1825,7 @@
                     </div>
 
                     <span class="search-shortcut">/</span>
-                    <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表">📋</button>
+                    <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg></button>
                 </div>
 
                 <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
@@ -1996,6 +2073,8 @@
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
         const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        const SEARCH_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>`;
+        const LIST_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>`;
 
         const tagPillBadge = document.getElementById("tagPillBadge");
         const subtitleEl = document.getElementById("subtitle");
@@ -2476,7 +2555,7 @@
                 listToggleBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
                 if (searchShortcut) searchShortcut.style.display = "none";
             } else {
-                listToggleBtn.textContent = "📋";
+                listToggleBtn.innerHTML = LIST_SVG;
                 listToggleBtn.classList.remove("active");
                 listToggleBtn.setAttribute("title", "首字母资源列表");
                 listToggleBtn.setAttribute("aria-label", "首字母资源列表");
@@ -3017,7 +3096,7 @@
 
             if (!state.filteredModules.length) {
                 sentinel.style.display = "none";
-                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div>${escapeHTML(langObj.emptyText(currentLabel))}</div>`;
+                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>${escapeHTML(langObj.emptyText(currentLabel))}</div>`;
                 countText.textContent = langObj.countText(0, currentLabel);
                 scheduleCardLayerUpdate();
                 checkScrollLock();
