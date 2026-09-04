@@ -694,7 +694,7 @@
                 background-color 0.35s ease;
         }
 
-        /* 列表激活态下，搜索框本体恢复为输入型热区视觉 */
+        /* 列表激活态下，搜索框恢复为输入型文本光标 */
         body.is-list-view .search-box-inner {
             cursor: text;
         }
@@ -740,7 +740,7 @@
             padding: 0;
             border-style: solid;
             position: relative;
-            z-index: 5;
+            z-index: 15;
         }
         .list-toggle-icon svg {
             display: block;
@@ -819,6 +819,29 @@
             font-size: 12px; font-weight: 600; 
             color: var(--text-tertiary); pointer-events: none;
             transition: color 0.2s ease, opacity 0.2s ease; 
+        }
+
+        /* 搜索框热区覆盖层：当列表未激活时覆盖在整个输入区域上方，充当资源列表按钮的热区 */
+        .search-mask-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 48px;
+            bottom: 0;
+            border-radius: 22px;
+            z-index: 10;
+            cursor: pointer;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 列表激活、聚焦或正在输入状态下，蒙层彻底隐藏，热区缩回右侧按钮 */
+        body.is-list-view .search-mask-overlay,
+        body.has-search-focus .search-mask-overlay,
+        body.has-search-text .search-mask-overlay,
+        .search-box-inner:focus-within .search-mask-overlay {
+            display: none !important;
+            pointer-events: none !important;
         }
 
         .back-to-top-btn {
@@ -1779,6 +1802,9 @@
 
                     <span class="search-shortcut">/</span>
                     <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg></button>
+                    
+                    <!-- 默认态全域热区蒙层：仅用于首次点击呼出列表，不触发任何输入/光标 -->
+                    <div id="searchMaskOverlay" class="search-mask-overlay" title="首字母资源列表" aria-label="首字母资源列表"></div>
                 </div>
 
                 <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
@@ -2001,6 +2027,7 @@
 
         const controlBarEl = document.getElementById("controlBar");
         const searchBoxInner = document.getElementById('searchBoxInner');
+        const searchMaskOverlay = document.getElementById('searchMaskOverlay');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
         const searchShortcut = document.querySelector(".search-shortcut");
@@ -2295,6 +2322,10 @@
             if (state.isListView) {
                 setListViewMode(false, false);
             }
+            searchInput.blur();
+            if (searchInput.value.length === 0) {
+                searchInput.readOnly = true;
+            }
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
@@ -2464,6 +2495,8 @@
             searchInput.value = mod.name;
             searchInput.readOnly = true;
             searchInput.blur();
+            document.body.classList.remove("has-search-focus");
+            document.body.classList.add("has-search-text");
             updateRightActionButton();
 
             if (state.activeTab !== mod.category) {
@@ -2733,6 +2766,9 @@
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
+                // 核心解耦：列表激活后，输入框解除只读，准备接收用户的下一次直接触摸点击
+                searchInput.readOnly = false;
+
                 if (!alreadyFloating) {
                     floatSearchToTarget(true);
                 }
@@ -2762,6 +2798,10 @@
                 checkScrollLock();
                 scheduleCardLayerUpdate();
 
+                if (searchInput.value.length === 0 && document.activeElement !== searchInput) {
+                    searchInput.readOnly = true;
+                }
+
                 if (restoreScroll && !state.wasFloatingBeforeActive) {
                     const targetScrollY = Math.max(0, state.listViewReturnScrollY);
                     requestAnimationFrame(() => {
@@ -2788,35 +2828,32 @@
                 return;
             }
             setListViewMode(false);
-            searchInput.readOnly = true;
+            if (searchInput.value.length === 0) {
+                searchInput.readOnly = true;
+            }
         });
 
-        // 搜索框区域与资源列表按钮的热区拆分和覆盖调度
+        // 默认状态蒙层热区点击：仅激活资源列表，绝不聚焦输入框、不弹键盘
+        if (searchMaskOverlay) {
+            searchMaskOverlay.addEventListener("click", (e) => {
+                e.stopPropagation();
+                if (searchInput.disabled) return;
+                ignoreNextClick = true;
+                searchInput.readOnly = true;
+                searchInput.blur();
+                setListViewMode(true);
+            });
+        }
+
+        // 搜索框内衬点击委托（处理用户点击到输入框边缘空白或图标时的激活行为）
         if (searchBoxInner) {
             searchBoxInner.addEventListener("click", (e) => {
                 if (searchInput.disabled) return;
-                
-                // 点击了缩回后的列表/操作按钮
-                if (e.target.closest("#listToggleBtn")) {
-                    return;
-                }
+                if (e.target.closest("#listToggleBtn") || e.target.closest("#searchMaskOverlay")) return;
 
                 if (state.isListView) {
-                    // 状态 1：资源列表已激活 -> 再次点击搜索框区域，关闭资源列表并返回页面顶端，激活输入并弹出键盘
-                    e.preventDefault();
-                    setListViewMode(false, false);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                    searchInput.readOnly = false;
-                    searchInput.focus();
-                } else {
-                    // 状态 0：默认未激活状态 -> 整个搜索框热区均作为资源列表按钮热区，仅激活资源列表
-                    if (document.activeElement !== searchInput && searchInput.value.length === 0 && !state.focusedModuleId) {
-                        e.preventDefault();
-                        searchInput.readOnly = true;
-                        searchInput.blur();
-                        ignoreNextClick = true;
-                        setListViewMode(true);
-                    } else if (searchInput.readOnly) {
+                    // 列表激活态下再次点击：关闭列表，聚焦输入框
+                    if (document.activeElement !== searchInput) {
                         searchInput.readOnly = false;
                         searchInput.focus();
                     }
@@ -2824,20 +2861,23 @@
             });
         }
 
-        searchInput.addEventListener("mousedown", (e) => {
-            if (!state.isListView && document.activeElement !== searchInput && searchInput.value.length === 0 && !state.focusedModuleId) {
-                e.preventDefault();
-            }
-        });
-
+        // 输入框 focus 核心逻辑：从列表态过渡到搜索态，回滚最顶端并呼出键盘
         searchInput.addEventListener("focus", () => {
-            if (!isSearchFloating()) {
-                floatSearchToTarget(true);
+            document.body.classList.add("has-search-focus");
+            if (state.isListView) {
+                setListViewMode(false, false);
+                const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+                window.scrollTo({ top: 0, behavior: isTouchDevice ? "auto" : "smooth" });
+            } else {
+                if (!isSearchFloating()) {
+                    floatSearchToTarget(true);
+                }
             }
         });
 
         searchInput.addEventListener("blur", () => {
-            if (!state.isListView && searchInput.value.length === 0 && !state.focusedModuleId) {
+            document.body.classList.remove("has-search-focus");
+            if (searchInput.value.length === 0 && !state.isListView && !state.focusedModuleId) {
                 searchInput.readOnly = true;
             }
         });
@@ -2853,11 +2893,12 @@
                 searchInput.readOnly = true;
                 searchInput.blur();
             } else if (hasText || state.focusedModuleId) {
-                // 存在搜索文本或单项定位：作为清除与重置按钮
+                // 存在搜索文本或定位：清空搜索并重置
                 state.focusedModuleId = null;
                 searchInput.value = "";
                 searchInput.readOnly = true;
                 searchInput.blur();
+                document.body.classList.remove("has-search-text", "has-search-focus");
                 setListViewMode(false);
                 
                 state.activeTab = "module";
@@ -3079,6 +3120,7 @@
 
         function filterModules() {
             const keyword = searchInput.value.trim().normalize("NFKC").toLowerCase();
+            document.body.classList.toggle("has-search-text", keyword.length > 0);
             updateRightActionButton();
 
             let result = [];
@@ -3103,10 +3145,12 @@
                 }
                 searchInput.readOnly = true;
                 searchInput.blur();
+                document.body.classList.remove("has-search-focus");
                 if (state.activeTab === targetTab && !state.focusedModuleId) return;
 
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                document.body.classList.remove("has-search-text");
                 updateRightActionButton();
 
                 state.activeTab = targetTab;
@@ -3134,6 +3178,7 @@
 
         searchInput.addEventListener("input", () => {
             state.focusedModuleId = null;
+            document.body.classList.toggle("has-search-text", searchInput.value.length > 0);
             if (state.isListView) {
                 setListViewMode(false, false);
             }
@@ -3155,6 +3200,7 @@
                 searchInput.value = "";
                 searchInput.readOnly = true;
                 searchInput.blur();
+                document.body.classList.remove("has-search-text", "has-search-focus");
                 setListViewMode(false);
                 filterModules();
                 updateRightActionButton();
