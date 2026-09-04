@@ -469,7 +469,6 @@
             color: var(--primary); background-color: var(--primary-soft); 
         }
         
-        /* 右上角功能按钮：沉浸式图标，仅保留 SVG，不使用玻璃、边框和阴影 */
         .theme-controls .immersive-icon {
             width: 36px;
             height: 36px;
@@ -1423,7 +1422,6 @@
             flex-shrink: 0;
         }
 
-        /* 竖向胶囊状字母快速定位导航条 */
         .alphabet-fast-index {
             position: absolute;
             right: 0;
@@ -1508,7 +1506,6 @@
             pointer-events: none;
         }
 
-        /* 触控滑动时的左侧大号悬浮气泡字母提示 */
         .alphabet-popup-bubble {
             position: absolute;
             right: 36px;
@@ -1854,15 +1851,12 @@
         </footer>
     </div>
 
-    <!-- 首字母列表展示区与动态定位条 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
             <div id="alphabetScrollArea" class="alphabet-scroll-area">
-                <!-- 动态渲染按 #, A-Z 分组的单列列表 -->
-            </div>
+                </div>
             <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航">
-                <!-- 动态渲染 #, A-Z 快速定位字母胶囊 -->
-            </div>
+                </div>
             <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
         </div>
     </div>
@@ -2367,7 +2361,11 @@
         
         window.addEventListener('scroll', updateSearchLayer, { passive: true });
 
+        // 点击返回顶部按钮：如果当前处于资源列表状态，则立即关闭列表并返回顶部
         backToTopBtn.addEventListener("click", () => {
+            if (state.isListView) {
+                setListViewMode(false, false);
+            }
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
@@ -2821,8 +2819,6 @@
 
         let listViewTransitionTimer = null;
         let listSyncRaf = null;
-        // 进入字母列表前的页面滚动位置。列表是一个临时覆盖视图，
-        // 退出时默认恢复到进入前的位置，而不是无条件回到页面顶部。
         let listViewReturnScrollY = 0;
 
         function syncAlphabetPositionDuringTransition(duration = 240) {
@@ -2846,8 +2842,6 @@
             cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
-                // 记录“呼出列表”这一瞬间的页面位置。
-                // 不再主动 scrollTo(0, 0)，避免产生“先回顶、再消隐”的多余动作。
                 listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
                 state.isListView = true;
                 state.focusedModuleId = null;
@@ -2881,8 +2875,6 @@
                     checkScrollLock();
                     scheduleCardLayerUpdate();
 
-                    // 正常退出列表：恢复进入前的位置。
-                    // 特殊导航（定位资源、切换分类等）可传 restoreScroll=false。
                     if (restoreScroll) {
                         const targetScrollY = Math.max(0, listViewReturnScrollY);
                         requestAnimationFrame(() => {
