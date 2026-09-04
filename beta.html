@@ -276,7 +276,6 @@
             flex-direction: column;
         }
 
-        /* 主页面与列表视图动画完全解耦独立 */
         .header, .status, .modules, .sentinel, .footer {
             transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
             will-change: opacity;
@@ -686,7 +685,7 @@
             border-radius: 22px; 
             box-shadow: var(--shadow-search); 
             padding: 6px; 
-            cursor: text;
+            cursor: pointer;
             -webkit-transform: translateZ(0); 
             transform: translateZ(0);
             transition: 
@@ -769,7 +768,12 @@
             color: var(--text-primary); font-size: 15px; font-weight: 400; vertical-align: middle;
             -webkit-appearance: none; appearance: none; border-radius: 0;
             z-index: 2;
+            cursor: pointer;
             text-shadow: none; 
+        }
+
+        .search:focus {
+            cursor: text;
         }
         
         .search::placeholder { color: transparent; }
@@ -1235,25 +1239,22 @@
             font-weight: 400 !important;
         }
 
-        /* 资源列表体块容器：左右与搜索框及主页面对齐，不受iOS虚拟键盘影响 */
         .alphabet-view-container {
             position: fixed;
             z-index: 999980;
-            display: none;
+            display: flex;
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
             will-change: opacity;
             box-sizing: border-box;
         }
 
-        body.is-list-view .alphabet-view-container {
-            display: flex;
-            pointer-events: auto;
-        }
-
-        body.is-list-view .alphabet-view-container.is-visible {
+        .alphabet-view-container.is-visible {
             opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .alphabet-content-box {
@@ -1759,7 +1760,7 @@
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
                     <div class="input-wrapper">
-                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
+                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled readonly>
                         
                         <div id="placeholderTrack" class="placeholder-track">
                             <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
@@ -2248,7 +2249,6 @@
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
-        // 吸顶既定阈值计算
         function getControlBarStickyScrollTop() {
             if (!controlBarEl) return 0;
             const style = window.getComputedStyle(controlBarEl);
@@ -2289,14 +2289,6 @@
             }
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
-
-        if (searchBoxInner) {
-            searchBoxInner.addEventListener("click", (e) => {
-                if (e.target !== listToggleBtn && !searchInput.disabled) {
-                    searchInput.focus();
-                }
-            });
-        }
 
         function updateTabIndicator(animated = true) {
             const activeTab = document.querySelector(".tab-item.active");
@@ -2462,6 +2454,8 @@
             setListViewMode(false, false);
 
             searchInput.value = mod.name;
+            searchInput.readOnly = true;
+            searchInput.blur();
             updateRightActionButton();
 
             if (state.activeTab !== mod.category) {
@@ -2682,17 +2676,12 @@
             }
         });
 
-        // 核心布局计算：左侧对齐搜索框，右侧留白与主页面一致，不受iOS键盘弹起影响
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !searchBoxInner || !pageContainer) return;
 
             const searchRect = searchBoxInner.getBoundingClientRect();
             const containerRect = pageContainer.getBoundingClientRect();
 
-            // 严格以视口静态高度为基准，彻底解绑并免疫 iOS 软键盘的动态缩放干扰
-            const standardViewportHeight = window.innerHeight;
-
-            // 搜索框吸顶后的固定顶部锚点：sticky top (12px) + control-bar padding (4px) + search-box height (44px) + margin (12px)
             const style = window.getComputedStyle(controlBarEl);
             const stickyTopVal = parseFloat(style.top) || 12;
             const topPos = Math.round(stickyTopVal + 4 + 44 + 12);
@@ -2701,7 +2690,6 @@
             const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
             
             if (isSingleCol) {
-                // 单列模式：避开底部固定的 TabBar
                 const tabBarWrapper = document.querySelector('.control-bar.is-single-column .tab-bar-wrapper');
                 if (tabBarWrapper) {
                     const tabH = tabBarWrapper.offsetHeight || 62;
@@ -2721,7 +2709,6 @@
 
         let listViewTransitionTimer = null;
 
-        // 控制列表激活、页面消隐与上浮机制
         function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
 
@@ -2738,7 +2725,6 @@
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                // 执行上浮到既定吸顶位置（平滑滚动）
                 if (!alreadyFloating) {
                     floatSearchToTarget(true);
                 }
@@ -2747,7 +2733,6 @@
                     renderAlphabetList();
                 }
 
-                // 立即校准体块对齐尺寸
                 updateAlphabetPosition();
 
                 requestAnimationFrame(() => {
@@ -2756,7 +2741,6 @@
                     }
                 });
 
-                // 延迟添加锁屏，保证 smooth scroll 完整完成而不被掐死
                 setTimeout(() => {
                     if (state.isListView) {
                         checkScrollLock();
@@ -2765,24 +2749,18 @@
             } else {
                 state.isListView = false;
                 alphabetViewContainer.classList.remove("is-visible");
+                document.body.classList.remove("is-list-view");
+                updateRightActionButton();
+                checkScrollLock();
+                scheduleCardLayerUpdate();
 
-                listViewTransitionTimer = setTimeout(() => {
-                    if (state.isListView) return;
-
-                    document.body.classList.remove("is-list-view");
-                    updateRightActionButton();
-                    checkScrollLock();
-                    scheduleCardLayerUpdate();
-
-                    // 若激活前尚未上浮，平滑滚回原有位置；若原本已处于上浮状态，保持原位
-                    if (restoreScroll && !state.wasFloatingBeforeActive) {
-                        const targetScrollY = Math.max(0, state.listViewReturnScrollY);
-                        requestAnimationFrame(() => {
-                            window.scrollTo({ top: targetScrollY, behavior: "smooth" });
-                            updateSearchLayer();
-                        });
-                    }
-                }, 200);
+                if (restoreScroll && !state.wasFloatingBeforeActive) {
+                    const targetScrollY = Math.max(0, state.listViewReturnScrollY);
+                    requestAnimationFrame(() => {
+                        window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+                        updateSearchLayer();
+                    });
+                }
             }
         }
 
@@ -2802,22 +2780,53 @@
                 return;
             }
             setListViewMode(false);
+            searchInput.readOnly = true;
         });
 
-        // 点击搜索框聚焦：统一执行上浮与呼出列表逻辑
-        searchInput.addEventListener("focus", (e) => {
-            e.stopPropagation();
-            if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
-                ignoreNextClick = true;
-                setListViewMode(true);
-            } else {
-                if (!isSearchFloating()) {
-                    floatSearchToTarget(true);
+        // 搜索框区域点击调度逻辑：
+        // 第一次点击：仅呼出资源列表，不激活输入框（不呼起虚拟键盘）
+        // 资源列表激活后再次点击：激活输入框并关闭资源列表
+        if (searchBoxInner) {
+            searchBoxInner.addEventListener("click", (e) => {
+                if (searchInput.disabled) return;
+                if (e.target.closest("#listToggleBtn")) return;
+
+                if (!state.isListView) {
+                    if (document.activeElement !== searchInput) {
+                        e.preventDefault();
+                        searchInput.readOnly = true;
+                        searchInput.blur();
+                        ignoreNextClick = true;
+                        setListViewMode(true);
+                    }
+                } else {
+                    e.preventDefault();
+                    setListViewMode(false, false);
+                    searchInput.readOnly = false;
+                    searchInput.focus();
                 }
+            });
+        }
+
+        searchInput.addEventListener("mousedown", (e) => {
+            if (!state.isListView && document.activeElement !== searchInput) {
+                e.preventDefault();
             }
         });
 
-        // 点击右侧列表/关闭按钮
+        searchInput.addEventListener("focus", () => {
+            if (!isSearchFloating()) {
+                floatSearchToTarget(true);
+            }
+        });
+
+        searchInput.addEventListener("blur", () => {
+            if (!state.isListView) {
+                searchInput.readOnly = true;
+            }
+        });
+
+        // 列表/清空操作按钮：非列表模式第一次点击仅激活资源列表，不激活输入
         listToggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
@@ -2825,6 +2834,8 @@
             if (state.isListView || hasText || state.focusedModuleId) {
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                searchInput.readOnly = true;
+                searchInput.blur();
                 setListViewMode(false);
                 
                 state.activeTab = "module";
@@ -2842,8 +2853,9 @@
                 updateRightActionButton();
             } else {
                 ignoreNextClick = true;
+                searchInput.readOnly = true;
+                searchInput.blur();
                 setListViewMode(true);
-                searchInput.focus();
             }
         });
 
@@ -3066,6 +3078,8 @@
                 if (state.isListView) {
                     setListViewMode(false, false);
                 }
+                searchInput.readOnly = true;
+                searchInput.blur();
                 if (state.activeTab === targetTab && !state.focusedModuleId) return;
 
                 state.focusedModuleId = null;
@@ -3098,7 +3112,7 @@
         searchInput.addEventListener("input", () => {
             state.focusedModuleId = null;
             if (state.isListView) {
-                setListViewMode(false);
+                setListViewMode(false, false);
             }
             clearTimeout(searchTimer);
             searchTimer = setTimeout(filterModules, 120);
@@ -3108,11 +3122,14 @@
             if (e.key === "/" && document.activeElement !== searchInput) {
                 if (searchInput.disabled) return;
                 e.preventDefault();
+                setListViewMode(false, false);
+                searchInput.readOnly = false;
                 searchInput.focus();
                 searchInput.select();
             } else if (e.key === "Escape") {
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                searchInput.readOnly = true;
                 searchInput.blur();
                 setListViewMode(false);
                 filterModules();
@@ -3122,6 +3139,9 @@
 
         function setSearchState(enabled) {
             searchInput.disabled = !enabled;
+            if (enabled) {
+                searchInput.readOnly = true;
+            }
             const langObj = I18N[state.currentLang];
             const text = enabled ? langObj.searchPlaceholderReady : langObj.searchPlaceholderWait;
             const mainP = document.getElementById("mainPlaceholder");
