@@ -352,12 +352,11 @@
             padding: 24px 0 18px; 
             max-height: 140px;
             overflow: visible;
-            will-change: max-height, opacity, transform;
+            will-change: max-height, opacity;
             transition: max-height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
                         opacity 0.16s ease,
                         padding 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        margin 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+                        margin 0.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         body.is-list-view .header {
@@ -367,7 +366,6 @@
             margin-top: 0 !important;
             margin-bottom: 0 !important;
             opacity: 0 !important;
-            transform: translateY(-16px);
             pointer-events: none;
             overflow: hidden !important;
         }
@@ -1278,12 +1276,10 @@
             bottom: max(90px, calc(env(safe-area-inset-bottom) + 76px));
             display: none;
             opacity: 0;
-            transform: translateY(6px);
             pointer-events: none;
             z-index: 999980;
-            transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
+            transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity;
         }
 
         body.is-list-view .alphabet-view-container {
@@ -1293,7 +1289,6 @@
 
         body.is-list-view .alphabet-view-container.is-visible {
             opacity: 1;
-            transform: translateY(0);
         }
 
         body.is-list-view .status,
@@ -2565,7 +2560,7 @@
 
         function focusSingleResource(mod) {
             state.focusedModuleId = mod.id;
-            setListViewMode(false);
+            setListViewMode(false, false);
 
             searchInput.value = mod.name;
             updateRightActionButton();
@@ -2825,6 +2820,9 @@
 
         let listViewTransitionTimer = null;
         let listSyncRaf = null;
+        // 进入字母列表前的页面滚动位置。列表是一个临时覆盖视图，
+        // 退出时默认恢复到进入前的位置，而不是无条件回到页面顶部。
+        let listViewReturnScrollY = 0;
 
         function syncAlphabetPositionDuringTransition(duration = 240) {
             const startTime = performance.now();
@@ -2840,18 +2838,19 @@
             listSyncRaf = requestAnimationFrame(step);
         }
 
-        function setListViewMode(enable) {
+        function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
-            state.isListView = enable;
 
             clearTimeout(listViewTransitionTimer);
             cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
+                // 记录“呼出列表”这一瞬间的页面位置。
+                // 不再主动 scrollTo(0, 0)，避免产生“先回顶、再消隐”的多余动作。
+                listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+                state.isListView = true;
                 state.focusedModuleId = null;
-                if (window.scrollY > 0) {
-                    window.scrollTo(0, 0);
-                }
+
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
@@ -2870,14 +2869,26 @@
 
                 checkScrollLock();
             } else {
+                state.isListView = false;
                 alphabetViewContainer.classList.remove("is-visible");
 
                 listViewTransitionTimer = setTimeout(() => {
                     if (state.isListView) return;
+
                     document.body.classList.remove("is-list-view");
                     updateRightActionButton();
                     checkScrollLock();
                     scheduleCardLayerUpdate();
+
+                    // 正常退出列表：恢复进入前的位置。
+                    // 特殊导航（定位资源、切换分类等）可传 restoreScroll=false。
+                    if (restoreScroll) {
+                        const targetScrollY = Math.max(0, listViewReturnScrollY);
+                        requestAnimationFrame(() => {
+                            window.scrollTo({ top: targetScrollY, behavior: "auto" });
+                            updateSearchLayer();
+                        });
+                    }
                 }, 180);
             }
         }
@@ -3136,7 +3147,7 @@
             tab.addEventListener("click", () => {
                 const targetTab = tab.getAttribute("data-tab");
                 if (state.isListView) {
-                    setListViewMode(false);
+                    setListViewMode(false, false);
                 }
                 if (state.activeTab === targetTab && !state.focusedModuleId) return;
 
