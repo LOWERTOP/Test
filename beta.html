@@ -694,7 +694,6 @@
                 background-color 0.35s ease;
         }
 
-        /* 列表激活态下，搜索框恢复为输入型文本光标 */
         body.is-list-view .search-box-inner {
             cursor: text;
         }
@@ -821,7 +820,6 @@
             transition: color 0.2s ease, opacity 0.2s ease; 
         }
 
-        /* 搜索框热区覆盖层：当列表未激活时覆盖在整个输入区域上方，充当资源列表按钮的热区 */
         .search-mask-overlay {
             position: absolute;
             top: 0;
@@ -835,7 +833,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 列表激活、聚焦或正在输入状态下，蒙层彻底隐藏，热区缩回右侧按钮 */
         body.is-list-view .search-mask-overlay,
         body.has-search-focus .search-mask-overlay,
         body.has-search-text .search-mask-overlay,
@@ -1803,7 +1800,6 @@
                     <span class="search-shortcut">/</span>
                     <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg></button>
                     
-                    <!-- 默认态全域热区蒙层：仅用于首次点击呼出列表，不触发任何输入/光标 -->
                     <div id="searchMaskOverlay" class="search-mask-overlay" title="首字母资源列表" aria-label="首字母资源列表"></div>
                 </div>
 
@@ -1849,7 +1845,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "202609050355"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2766,7 +2762,7 @@
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                // 核心解耦：列表激活后，输入框解除只读，准备接收用户的下一次直接触摸点击
+                // 提前解开只读，使下一次点击直接成为合法的编辑手势
                 searchInput.readOnly = false;
 
                 if (!alreadyFloating) {
@@ -2852,7 +2848,6 @@
                 if (e.target.closest("#listToggleBtn") || e.target.closest("#searchMaskOverlay")) return;
 
                 if (state.isListView) {
-                    // 列表激活态下再次点击：关闭列表，聚焦输入框
                     if (document.activeElement !== searchInput) {
                         searchInput.readOnly = false;
                         searchInput.focus();
@@ -2861,13 +2856,13 @@
             });
         }
 
-        // 输入框 focus 核心逻辑：从列表态过渡到搜索态，回滚最顶端并呼出键盘
+        // 输入框 focus 优化逻辑：在消隐状态下无缝瞬切重置页面滚动，避免冗长穿梭
         searchInput.addEventListener("focus", () => {
             document.body.classList.add("has-search-focus");
             if (state.isListView) {
                 setListViewMode(false, false);
-                const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-                window.scrollTo({ top: 0, behavior: isTouchDevice ? "auto" : "smooth" });
+                // 瞬间将不可见的底层滚动重置到顶部，视觉上搜索栏无任何跳动，键盘即刻弹出
+                window.scrollTo(0, 0);
             } else {
                 if (!isSearchFloating()) {
                     floatSearchToTarget(true);
@@ -2888,12 +2883,10 @@
             const hasText = searchInput.value.length > 0;
 
             if (state.isListView) {
-                // 列表激活时热区缩回按钮本体：点击直接关闭列表，不激活输入
                 setListViewMode(false);
                 searchInput.readOnly = true;
                 searchInput.blur();
             } else if (hasText || state.focusedModuleId) {
-                // 存在搜索文本或定位：清空搜索并重置
                 state.focusedModuleId = null;
                 searchInput.value = "";
                 searchInput.readOnly = true;
@@ -2915,7 +2908,6 @@
                 }
                 updateRightActionButton();
             } else {
-                // 待机状态：激活资源列表
                 ignoreNextClick = true;
                 searchInput.readOnly = true;
                 searchInput.blur();
@@ -3191,7 +3183,7 @@
                 if (searchInput.disabled) return;
                 e.preventDefault();
                 setListViewMode(false, false);
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                window.scrollTo(0, 0);
                 searchInput.readOnly = false;
                 searchInput.focus();
                 searchInput.select();
