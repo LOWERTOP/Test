@@ -57,32 +57,75 @@
         })();
     </script>
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 stop-color=%22%2306b6d4%22/><stop offset=%2250%25%22 stop-color=%22%233b82f6%22/><stop offset=%22100%25%22 stop-color=%22%238b5cf6%22/></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22url(%23g)%22 stroke=%22rgba(255,255,255,0.6)%22 stroke-width=%224%22/><text x=%2250%22 y=%2255%22 font-size=%2248%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🚀</text></svg>">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore.png">
+    <link rel="icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore_03.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore_01.png">
 
     <style>
-        /* =========================================================
-            1. 主题设计令牌 (Theme Tokens)
-        ========================================================= */
         :root, [data-theme="light"] {
             --layout-gap: 44px;
             --bg-page-solid: #f0f2f5;
+            
+            --glass-bg: linear-gradient(225deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.25) 40%, rgba(255, 255, 255, 0.02) 100%);
+            --glass-bg-hover: linear-gradient(225deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.35) 40%, rgba(255, 255, 255, 0.05) 100%);
+            
+            --glass-border-t: rgba(255, 255, 255, 0.85);
+            --glass-border-r: rgba(255, 255, 255, 0.75);
+            --glass-border-b: rgba(255, 255, 255, 0.6);
+            --glass-border-l: rgba(255, 255, 255, 0.85);
 
-            /* 浅色模式玻璃阴影单一控制数值 (0.0 ~ 0.2) */
-            --glass-shadow-strength: 0.05;
+            --noise-pattern: url("data:image/svg+xml,%3Csvg width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
 
-            --glass-ambient-shadow: 
-                0 0 16px 2px rgba(0, 0, 0, var(--glass-shadow-strength)), 
-                0 2px 8px 0 rgba(0, 0, 0, calc(var(--glass-shadow-strength) * 0.8));
-            --glass-ambient-shadow-hover: 
-                0 0 22px 3px rgba(0, 0, 0, calc(var(--glass-shadow-strength) * 1.4)), 
-                0 4px 12px 0 rgba(0, 0, 0, calc(var(--glass-shadow-strength) * 1.0));
+            --shadow-glass-ui: 
+                inset 3px 3px 10px 2px rgba(255, 255, 255, 0.45),
+                inset -3px -3px 8px -1px rgba(0, 0, 0, 0.08),
+                -2.5px 7px 4.5px -3px rgba(255, 255, 255, 0.33),
+                -1.3px 8px 6px -3.5px rgba(255, 255, 255, 0.3),
+                -3.5px 10px 7.5px -4px rgba(255, 255, 255, 0.25),
+                -1.8px 12px 9px -4px rgba(255, 255, 255, 0.17),
+                -1px 4px 6px rgba(0, 0, 0, 0.15),        
+                -8px 18px 22px -3px rgba(0, 0, 0, 0.12), 
+                -25px 45px 55px -5px rgba(0, 0, 0, 0.22); 
 
-            --liquid-bg: rgba(255, 255, 255, 0.45);
-            --liquid-sharp-1: rgba(255, 255, 255, 0.7);
-            --liquid-sharp-2: rgba(255, 255, 255, 0.4);
-            --liquid-reflect-1: rgba(255, 255, 255, 0.35);
-            --liquid-reflect-2: rgba(255, 255, 255, 0.15);
+            --shadow-tab-bar-bottom: 
+                inset 3px 3px 10px 2px rgba(255, 255, 255, 0.45),
+                inset -3px -3px 8px -1px rgba(0, 0, 0, 0.08),
+                -2.5px 7px 4.5px -3px rgba(255, 255, 255, 0.33),
+                -1.3px 8px 6px -3.5px rgba(255, 255, 255, 0.3),
+                -3.5px 10px 7.5px -4px rgba(255, 255, 255, 0.25),
+                -1.8px 12px 9px -4px rgba(255, 255, 255, 0.17);
+
+            --shadow-glass-ui-hover: 
+                inset 3.5px 3.5px 12px 3px rgba(255, 255, 255, 0.55),
+                inset -3px -3px 9px -1px rgba(0, 0, 0, 0.1),
+                -3px 8.5px 5px -3px rgba(255, 255, 255, 0.33),
+                -1.6px 9.5px 7px -3.5px rgba(255, 255, 255, 0.3),
+                -4.2px 12px 9px -4px rgba(255, 255, 255, 0.25),
+                -2.2px 14px 10px -4px rgba(255, 255, 255, 0.18),
+                -1.5px 6px 8px rgba(0, 0, 0, 0.15),
+                -10px 20px 25px -3px rgba(0, 0, 0, 0.12),
+                -30px 50px 60px -6px rgba(0, 0, 0, 0.25);
+
+            --shadow-search: 
+                inset 2.5px 2.5px 8px 1.5px rgba(255, 255, 255, 0.38),
+                inset -2.5px -2.5px 6px -1px rgba(0, 0, 0, 0.07),
+                -1.7px 4.7px 3px -2px rgba(255, 255, 255, 0.22),
+                -0.9px 5.3px 4px -2.3px rgba(255, 255, 255, 0.20),
+                -2.3px 6.7px 5px -2.7px rgba(255, 255, 255, 0.17),
+                -1.2px 8px 6px -2.7px rgba(255, 255, 255, 0.11),
+                -0.7px 2.7px 4px rgba(0, 0, 0, 0.10),        
+                -5.3px 12px 14.7px -2px rgba(0, 0, 0, 0.08), 
+                -16.7px 30px 36.7px -3.3px rgba(0, 0, 0, 0.15); 
+
+            --shadow-search-hover: 
+                inset 3px 3px 9px 2px rgba(255, 255, 255, 0.45),
+                inset -2.5px -2.5px 7px -1px rgba(0, 0, 0, 0.09),
+                -2px 5.7px 3.3px -2px rgba(255, 255, 255, 0.22),
+                -1.1px 6.3px 4.7px -2.3px rgba(255, 255, 255, 0.20),
+                -2.8px 8px 6px -2.7px rgba(255, 255, 255, 0.17),
+                -1.5px 9.3px 6.7px -2.7px rgba(255, 255, 255, 0.12),
+                -1px 4px 5.3px rgba(0, 0, 0, 0.10),
+                -6.7px 13.3px 16.7px -2px rgba(0, 0, 0, 0.08),
+                -20px 33.3px 40px -4px rgba(0, 0, 0, 0.17);
 
             --text-primary: #4a4f59;
             --text-secondary: #7e8596;
@@ -115,24 +158,39 @@
 
         [data-theme="dark"] {
             --bg-page-solid: #14161a;
+            
+            --glass-bg: none;
+            --glass-bg-hover: none;
+            --glass-border-t: transparent;
+            --glass-border-r: transparent;
+            --glass-border-b: transparent;
+            --glass-border-l: transparent;
 
-            /* 深色模式玻璃阴影单一控制数值 (0.15 ~ 0.5) */
-            --glass-shadow-strength: 0.35;
+            --noise-pattern: url("data:image/svg+xml,%3Csvg width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
 
-            --glass-ambient-shadow: 
-                0 0 16px 2px rgba(0, 0, 0, var(--glass-shadow-strength)), 
-                0 2px 8px 0 rgba(0, 0, 0, calc(var(--glass-shadow-strength) * 0.7));
-            --glass-ambient-shadow-hover: 
-                0 0 22px 3px rgba(0, 0, 0, calc(var(--glass-shadow-strength) * 1.3)), 
-                0 4px 12px 0 rgba(0, 0, 0, calc(var(--glass-shadow-strength) * 0.85));
+            --shadow-glass-ui: 
+                0 6px 20px rgba(0, 0, 0, 0.4),
+                0 2px 6px rgba(0, 0, 0, 0.25);
 
-            --liquid-bg: rgba(29, 32, 38, 0.72);
+            --shadow-tab-bar-bottom: none;
+
+            --shadow-glass-ui-hover: 
+                0 8px 24px rgba(0, 0, 0, 0.5),
+                0 3px 8px rgba(0, 0, 0, 0.3);
+
+            --shadow-search: 
+                0 4px 13.3px rgba(0, 0, 0, 0.27),
+                0 1.3px 4px rgba(0, 0, 0, 0.17);
+
+            --shadow-search-hover: 
+                0 5.3px 16px rgba(0, 0, 0, 0.33),
+                0 2px 5.3px rgba(0, 0, 0, 0.20);
 
             --text-primary: #dce1e8;
             --text-secondary: #939aa8;
             --text-tertiary: #6b7280;
 
-            --primary: #0891b2;
+            --primary: #0891b2; 
             --primary-hover: #06b6d4;
             --primary-soft: rgba(6, 182, 212, 0.2);
 
@@ -147,49 +205,6 @@
             --accent-mint-soft: rgba(139, 183, 196, 0.2);
             --accent-orange: #c4a991;
             --accent-orange-soft: rgba(196, 169, 145, 0.2);
-        }
-
-        /* =========================================================
-            2. 玻璃控件基础与外围阴影统一联动
-        ========================================================= */
-        .glass-element {
-            position: relative;
-            border-radius: var(--border-radius, 22px);
-            background: transparent !important;
-            border: none !important;
-            box-shadow: var(--glass-ambient-shadow);
-            isolation: isolate;
-            transition: box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-element::before,
-        .glass-element::after {
-            content: "";
-            position: absolute;
-            pointer-events: none;
-            border-radius: inherit;
-        }
-
-        .glass-element::before {
-            inset: 0;
-            z-index: -2;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            background: var(--liquid-bg);
-        }
-
-        .glass-element::after {
-            inset: 0;
-            z-index: -1;
-            box-shadow: 
-                inset 1px 1px 0px 0px var(--liquid-sharp-1), 
-                inset -1px -1px 0px 0px var(--liquid-sharp-2),
-                inset 2px 2px 6px 2px var(--liquid-reflect-1), 
-                inset -2px -2px 4px -1px var(--liquid-reflect-2);
-        }
-
-        [data-theme="dark"] .glass-element::after {
-            display: none !important;
         }
 
         html.theme-transitioning,
@@ -238,16 +253,13 @@
             padding-right: 16px;
             padding-bottom: var(--safe-pad-bottom);
             padding-left: 16px;
-            background-color: transparent;
+            background-color: var(--bg-page-solid);
+            background-image: none !important;
             color: var(--text-primary); 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif; 
             -webkit-font-smoothing: antialiased; 
             text-rendering: optimizeLegibility; 
-            transition: color 0.4s ease, padding-top 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
-
-        body.is-list-view {
-            padding-top: max(8px, env(safe-area-inset-top));
+            transition: color 0.4s ease; 
         }
 
         button, input { font: inherit; }
@@ -264,8 +276,41 @@
             flex-direction: column;
         }
 
+        .header, .status, .modules, .sentinel, .footer {
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+            will-change: opacity;
+        }
+
+        body.is-list-view .header,
+        body.is-list-view .status,
+        body.is-list-view .modules,
+        body.is-list-view .sentinel,
+        body.is-list-view .footer {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
+
+        .glass-element {
+            background-color: transparent;
+            background-image: var(--noise-pattern), var(--glass-bg);
+            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            border-top: 1px solid var(--glass-border-t);
+            border-left: 1px solid var(--glass-border-l);
+            border-right: 1px solid var(--glass-border-r);
+            border-bottom: 1px solid var(--glass-border-b);
+        }
+
+        [data-theme="dark"] .glass-element {
+            background-color: var(--bg-surface);
+            background-image: var(--noise-pattern);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--border-subtle);
+        }
+
         .pull-refresh-indicator {
-            --border-radius: var(--radius-pill);
             position: fixed;
             top: max(8px, env(safe-area-inset-top));
             left: 50%;
@@ -277,6 +322,8 @@
             gap: 7px;
             height: 32px;
             padding: 0 14px;
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow-glass-ui);
             color: var(--text-secondary);
             font-size: 12.5px;
             font-weight: 400;
@@ -298,23 +345,8 @@
 
         .header { 
             padding: 24px 0 18px; 
-            max-height: 160px;
+            max-height: 140px;
             overflow: visible;
-            transition: max-height 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-                        padding 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-                        margin 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-                        opacity 0.14s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        body.is-list-view .header {
-            max-height: 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin: 0 !important;
-            opacity: 0 !important;
-            transform: translateY(-24px) scale(0.96);
-            pointer-events: none;
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -326,6 +358,7 @@
             display: inline-flex; 
             align-items: flex-start;
             gap: 2px; 
+            text-shadow: none; 
         }
         .title a { 
             display: inline-flex; 
@@ -368,6 +401,8 @@
             letter-spacing: 0.3px;
             line-height: 1;
             border: none; 
+            box-shadow: none; 
+            text-shadow: none;
             transform: translateY(calc(3px - 20%)); 
             user-select: none;
             -webkit-user-select: none;
@@ -382,15 +417,17 @@
         .subtitle { 
             margin-top: 8px; color: var(--text-secondary); font-size: 14px; 
             line-height: 1.5; font-weight: 300; 
+            text-shadow: none; 
         }
         
-        .theme-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .theme-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 
         .theme-toggle { 
-            --border-radius: 50%;
             display: inline-flex; align-items: center; justify-content: center; 
             width: 44px; height: 44px; padding: 0; margin: 0; 
+            border-radius: 50%; 
             color: var(--text-secondary); cursor: pointer; 
+            box-shadow: var(--shadow-glass-ui); 
             transition: 
                 transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
@@ -398,22 +435,75 @@
                 color 0.2s ease;
         }
         .theme-toggle:hover { 
-            color: var(--text-primary); 
-            transform: translateY(-1px); 
-            box-shadow: var(--glass-ambient-shadow-hover);
+            background-image: var(--noise-pattern), var(--glass-bg-hover);
+            color: var(--text-primary); transform: translateY(-1px); 
+            box-shadow: var(--shadow-glass-ui-hover); 
+        }
+        [data-theme="dark"] .theme-toggle:hover {
+            background-image: var(--noise-pattern);
+            background-color: var(--border-subtle); 
         }
         .theme-toggle:active { transform: scale(0.92); }
         .theme-toggle.active { 
             color: var(--primary); background-color: var(--primary-soft); 
         }
         
-        .theme-toggle svg { 
-            display: block; width: 20px; height: 20px; pointer-events: none; stroke-width: 2; 
+        .theme-controls .immersive-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            margin: 0;
+            border: none !important;
+            border-radius: 50%;
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            color: var(--text-secondary);
+            transform: none;
+            transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .theme-controls .immersive-icon::before,
+        .theme-controls .immersive-icon::after {
+            display: none !important;
+            content: none !important;
+        }
+        .theme-controls .immersive-icon:hover {
+            border: none !important;
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+        .theme-controls .immersive-icon:active {
+            border: none !important;
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            transform: scale(0.9);
+        }
+        .theme-controls .immersive-icon.active {
+            background: transparent !important;
+            box-shadow: none !important;
+            color: var(--primary);
+        }
+        [data-theme="dark"] .theme-controls .immersive-icon {
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+        }
+        [data-theme="dark"] .theme-controls .immersive-icon:hover {
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            color: var(--text-primary);
         }
 
-        /* =========================================================
-            3. 搜索 + 分类控制栏
-        ========================================================= */
+        .theme-toggle svg { 
+            display: block; width: 20px; height: 20px; pointer-events: none; stroke-width: 2; 
+            filter: none; 
+        }
+
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
@@ -425,12 +515,10 @@
             width: 100%;
             margin-bottom: 16px;
             padding: 4px 0;
-            transition: top 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin-bottom 0.35s ease;
+            background-color: transparent;
+            transition: margin-bottom 0.35s ease;
         }
 
-        /* =========================================================
-            4. 分类标签页
-        ========================================================= */
         .tab-bar-wrapper {
             width: 100%;
             min-width: 0;
@@ -442,7 +530,6 @@
         }
 
         .tab-bar {
-            --border-radius: 22px;
             position: relative;
             width: 100%;
             height: 44px;
@@ -451,6 +538,10 @@
             justify-content: space-between;
             gap: 4px;
             padding: 5px;
+            border-radius: 22px;
+            box-shadow: var(--shadow-search);
+            overflow: hidden;
+            transition: box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tab-indicator {
@@ -484,6 +575,40 @@
             -webkit-user-select: none;
         }
 
+        .tab-item:not(.active)::before,
+        .button-secondary::before,
+        .alphabet-item-row::before {
+            content: "";
+            position: absolute;
+            inset: -4px -8px;
+            border-radius: 9999px;
+            background: radial-gradient(ellipse at center, rgba(6, 182, 212, 0.14) 0%, rgba(59, 130, 246, 0.10) 42%, rgba(139, 92, 246, 0.05) 68%, transparent 82%);
+            filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+
+        [data-theme="dark"] .tab-item:not(.active)::before,
+        [data-theme="dark"] .button-secondary::before,
+        [data-theme="dark"] .alphabet-item-row::before {
+            background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.17) 0%, rgba(59, 130, 246, 0.13) 42%, rgba(167, 139, 250, 0.08) 68%, transparent 82%);
+            filter: blur(10px);
+        }
+
+        .tab-item:not(.active):hover::before,
+        .tab-item:not(.active):active::before,
+        .tab-item:not(.active):focus-visible::before,
+        .button-secondary:hover::before,
+        .button-secondary:active::before,
+        .button-secondary:focus-visible::before,
+        .alphabet-item-row:hover::before,
+        .alphabet-item-row:active::before,
+        .alphabet-item-row:focus-visible::before {
+            opacity: 1;
+        }
+
         .tab-item {
             flex: 1 1 0;
             min-width: 0;
@@ -512,6 +637,7 @@
         .tab-item:not(.active) {
             background: transparent !important;
             color: var(--text-secondary);
+            box-shadow: none !important;
         }
 
         .tab-item:not(.active):hover,
@@ -519,6 +645,8 @@
         .tab-item:not(.active):focus-visible {
             color: #0891b2;
             background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
         [data-theme="dark"] .tab-item:not(.active):hover,
@@ -530,12 +658,10 @@
         .tab-item.active {
             color: #FFFFFF !important;
             background: transparent !important;
+            box-shadow: none !important;
             font-weight: 400 !important;
         }
 
-        /* =========================================================
-            5. 搜索框区域
-        ========================================================= */
         .search-wrapper { 
             position: relative;
             height: 44px;
@@ -549,7 +675,6 @@
         }
 
         .search-box-inner {
-            --border-radius: 22px;
             position: relative; 
             flex: 1 1 auto; 
             min-width: 0; 
@@ -557,28 +682,55 @@
             display: flex; 
             align-items: center; 
             gap: 8px; 
+            border-radius: 22px; 
+            box-shadow: var(--shadow-search); 
             padding: 6px; 
-            cursor: text;
+            cursor: pointer;
             -webkit-transform: translateZ(0); 
             transform: translateZ(0);
+            transition: 
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.35s ease,
+                background-color 0.35s ease;
+        }
+
+        body.is-list-view .search-box-inner {
+            cursor: text;
         }
 
         .search-box-inner:focus-within,
         body.is-list-view .search-box-inner {
-            box-shadow: var(--glass-ambient-shadow-hover);
+            background-image: var(--noise-pattern), var(--glass-bg-hover);
+            border-color: rgba(255,255,255,0.85); 
+            box-shadow: var(--shadow-search-hover); 
+        }
+        
+        [data-theme="dark"] .search-box-inner:focus-within,
+        [data-theme="dark"] body.is-list-view .search-box-inner {
+            background-image: var(--noise-pattern);
+            background-color: var(--border-subtle);
+            border-color: var(--text-tertiary); 
+            box-shadow: var(--shadow-search-hover);
         }
         
         .search-icon, .list-toggle-icon { 
             width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%;
-            background: transparent; border: 1px solid var(--border-subtle);
+            background: transparent; box-shadow: none; border: 1px solid var(--border-subtle);
             display: flex; align-items: center; justify-content: center;
-            font-size: 14px; color: var(--primary); 
+            color: var(--text-secondary); 
+            filter: none; 
             user-select: none;
             -webkit-user-select: none;
             line-height: 1;
         }
 
-        .search-icon { pointer-events: none; }
+        .search-icon { pointer-events: none; color: var(--text-secondary); }
+        .search-icon svg {
+            display: block;
+            width: 15px;
+            height: 15px;
+            pointer-events: none;
+        }
         
         .list-toggle-icon {
             cursor: pointer;
@@ -586,6 +738,8 @@
             outline: none;
             padding: 0;
             border-style: solid;
+            position: relative;
+            z-index: 15;
         }
         .list-toggle-icon svg {
             display: block;
@@ -604,6 +758,7 @@
         .list-toggle-icon.active {
             border-color: var(--primary);
             background-color: var(--primary-soft);
+            color: var(--primary);
         }
         
         .input-wrapper {
@@ -619,6 +774,13 @@
             color: var(--text-primary); font-size: 15px; font-weight: 400; vertical-align: middle;
             -webkit-appearance: none; appearance: none; border-radius: 0;
             z-index: 2;
+            cursor: pointer;
+            text-shadow: none; 
+        }
+
+        body.is-list-view .search,
+        .search:focus {
+            cursor: text;
         }
         
         .search::placeholder { color: transparent; }
@@ -635,6 +797,7 @@
             height: 32px; line-height: 32px;
             color: var(--text-tertiary); font-size: 15px; font-weight: 300;
             overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            text-shadow: none; 
         }
 
         .search:focus ~ .placeholder-track,
@@ -651,18 +814,40 @@
 
         .search-shortcut { 
             width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            background: transparent; border: none;
+            background: transparent; border: none; box-shadow: none;
             font-size: 12px; font-weight: 600; 
             color: var(--text-tertiary); pointer-events: none;
             transition: color 0.2s ease, opacity 0.2s ease; 
         }
 
+        .search-mask-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 48px;
+            bottom: 0;
+            border-radius: 22px;
+            z-index: 10;
+            cursor: pointer;
+            background: transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body.is-list-view .search-mask-overlay,
+        body.has-search-focus .search-mask-overlay,
+        body.has-search-text .search-mask-overlay,
+        .search-box-inner:focus-within .search-mask-overlay {
+            display: none !important;
+            pointer-events: none !important;
+        }
+
         .back-to-top-btn {
-            --border-radius: 50%;
             width: 0;
             height: 44px;
             padding: 0;
             margin-left: 0;
+            border-color: transparent !important;
+            box-shadow: none;
             opacity: 0;
             visibility: hidden;
             transform: scale(0.6);
@@ -673,8 +858,9 @@
                         margin-left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                         opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                         transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        visibility 0.35s ease;
+                        visibility 0.35s ease,
+                        box-shadow 0.35s ease,
+                        border-color 0.35s ease;
         }
         .back-to-top-btn.visible {
             width: 44px;
@@ -683,22 +869,31 @@
             visibility: visible;
             transform: scale(1);
             pointer-events: auto;
+            box-shadow: var(--shadow-search);
+            border-top-color: var(--glass-border-t) !important;
+            border-left-color: var(--glass-border-l) !important;
+            border-right-color: var(--glass-border-r) !important;
+            border-bottom-color: var(--glass-border-b) !important;
+        }
+        [data-theme="dark"] .back-to-top-btn.visible {
+            border-color: var(--border-subtle) !important;
         }
         .back-to-top-btn.visible:hover {
             transform: translateY(-1px);
-            box-shadow: var(--glass-ambient-shadow-hover);
+            box-shadow: var(--shadow-search-hover);
         }
         .back-to-top-btn.visible:active { transform: scale(0.92); }
 
         .status { 
             display: flex; align-items: center; justify-content: space-between; 
             min-height: 22px; margin: 0 4px 14px; color: var(--text-secondary); font-size: 13px; font-weight: 400; 
+            text-shadow: none; 
             transition: opacity 0.15s ease;
         }
         .status-left { display: flex; align-items: center; gap: 8px; }
-        .status-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--accent-mint); }
-        .status-dot.loading { background: var(--accent-orange); animation: statusPulse 1.2s infinite; }
-        .status-dot.error { background: #c8a3ab; }
+        .status-dot { width: 8px; height: 8px; flex: 0 0 8px; border-radius: 50%; background: var(--accent-mint); box-shadow: 0 0 0 3px var(--accent-mint-soft); }
+        .status-dot.loading { background: var(--accent-orange); box-shadow: 0 0 0 3px var(--accent-orange-soft); animation: statusPulse 1.2s infinite; }
+        .status-dot.error { background: #c8a3ab; box-shadow: 0 0 0 3px rgba(200, 163, 171, 0.2); }
         @keyframes statusPulse { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
         
         .modules { 
@@ -717,7 +912,6 @@
         }
 
         .module-card { 
-            --border-radius: var(--radius-card);
             position: relative; 
             padding: 28px; 
             height: auto;
@@ -725,10 +919,14 @@
             min-width: 0;
             display: flex;
             flex-direction: column;
+            border-radius: var(--radius-card); 
+            box-shadow: var(--shadow-glass-ui); 
+            overflow: hidden; 
             animation: cardFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             transition: 
-                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-image 0.4s ease;
             -webkit-transform: translateZ(0); transform: translateZ(0); 
         }
 
@@ -749,7 +947,12 @@
             .module-card:hover { 
                 z-index: 50000 !important;
                 transform: translateY(-2px);
-                box-shadow: var(--glass-ambient-shadow-hover);
+                background-image: var(--noise-pattern), var(--glass-bg-hover);
+                box-shadow: var(--shadow-glass-ui-hover); 
+            }
+            [data-theme="dark"] .module-card:hover {
+                background-image: var(--noise-pattern);
+                background-color: var(--bg-surface); 
             }
         }
 
@@ -758,6 +961,7 @@
         .module-icon { 
             width: 48px; height: 48px; flex: 0 0 48px; border-radius: 50%; 
             background: transparent; overflow: hidden; 
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12); 
             border: none; 
             -webkit-mask-image: -webkit-radial-gradient(white, black);
             mask-image: radial-gradient(white, black);
@@ -788,7 +992,8 @@
             word-break: break-word; 
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis; 
+            text-overflow: ellipsis;
+            text-shadow: none; 
         }
         
         .module-meta { 
@@ -827,6 +1032,7 @@
             height: 18px; 
             border-radius: 50%; 
             object-fit: cover; 
+            box-shadow: none; 
             flex-shrink: 0;
         }
         
@@ -837,6 +1043,7 @@
             line-height: 1.6; 
             font-weight: 300; 
             word-break: break-word; 
+            text-shadow: none; 
             flex: 1 1 auto;
         }
         
@@ -848,6 +1055,7 @@
             margin-top: 24px; 
             padding-top: 0; 
             border-top: none; 
+            box-shadow: none; 
             flex-shrink: 0;
         }
 
@@ -858,13 +1066,17 @@
             height: 44px; padding: 0 20px; border: 0; border-radius: 22px; 
             font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; 
             text-decoration: none; 
-            transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
+            transition: 
+                color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
         }
         
         .button-secondary { 
             background: transparent !important; 
             color: #0891b2; 
             border: none !important; 
+            box-shadow: none !important; 
+            text-shadow: none; 
             padding: 0 16px;
             overflow: visible;
             transition: 
@@ -881,6 +1093,7 @@
         .button-secondary:focus-visible { 
             background: transparent !important;
             border: none !important;
+            box-shadow: none !important;
             color: #0891b2;
         }
         [data-theme="dark"] .button-secondary:hover,
@@ -894,6 +1107,7 @@
             color: #FFFFFF; 
             border: none; 
             box-shadow: var(--primary-gradient-shadow); 
+            text-shadow: none; 
             transform: none !important; 
         }
         .button-primary:hover,
@@ -923,13 +1137,21 @@
             width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 50%;
             border: 1px solid var(--border-subtle); background: var(--bg-surface);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; opacity: 1; 
+            color: var(--primary);
+            opacity: 1; 
+            filter: none; 
+        }
+        .empty-icon svg {
+            width: 22px;
+            height: 22px;
+            display: block;
         }
         
         .loading-card { 
-            --border-radius: var(--radius-card);
             height: 180px; 
             min-width: 0;
+            border-radius: var(--radius-card); 
+            box-shadow: var(--shadow-glass-ui); 
             animation: skeletonPulse 1.4s infinite; 
         }
         @keyframes skeletonPulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.85; } }
@@ -946,25 +1168,24 @@
         }
         
         .toast { 
-            --border-radius: var(--radius-pill);
             position: fixed; 
             bottom: var(--toast-bottom); 
             left: 50%; 
             transform: translateX(-50%) translateY(100px); 
             z-index: 999999; 
             padding: 12px 26px; 
+            border-radius: var(--radius-pill); 
             color: var(--text-primary); 
             font-size: 13.5px; 
             font-weight: 450; 
+            box-shadow: var(--shadow-glass-ui); 
             opacity: 0; 
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; 
             pointer-events: none; 
+            text-shadow: none;
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* =========================================================
-            6. 单列布局与底栏规范
-        ========================================================= */
         .control-bar.is-single-column {
             display: block;
             position: sticky;
@@ -1009,13 +1230,15 @@
         }
 
         .control-bar.is-single-column .tab-bar {
-            --border-radius: 31px;
             pointer-events: auto;
             width: 100%;
             max-width: clamp(1080px, 95vw, 2560px);
             height: 62px;
             padding: 5px;
+            border-radius: 31px;
             gap: 4px;
+            box-shadow: var(--shadow-tab-bar-bottom);
+            overflow: hidden;
         }
 
         .control-bar.is-single-column .tab-item {
@@ -1034,50 +1257,32 @@
         .control-bar.is-single-column .tab-item:not(.active) {
             background: transparent !important;
             border: none !important;
+            box-shadow: none !important;
         }
 
         .control-bar.is-single-column .tab-item.active {
             color: #FFFFFF !important;
             background: transparent !important;
+            box-shadow: none !important;
             font-weight: 400 !important;
         }
 
-        /* =========================================================
-            7. 全局首字母字母表搜索视图与竖向胶囊索引栏
-        ========================================================= */
         .alphabet-view-container {
             position: fixed;
-            top: 100px;
-            bottom: 100px;
-            display: none;
-            opacity: 0;
-            transform: translateY(4px);
-            pointer-events: none;
             z-index: 999980;
-            transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: opacity, transform;
-        }
-
-        body.is-list-view .alphabet-view-container {
             display: flex;
-            pointer-events: auto;
-        }
-
-        body.is-list-view .alphabet-view-container.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        body.is-list-view .status,
-        body.is-list-view .modules,
-        body.is-list-view .sentinel,
-        body.is-list-view .footer {
-            opacity: 0 !important;
-            pointer-events: none !important;
+            opacity: 0;
             visibility: hidden;
-            transition: opacity 0.12s cubic-bezier(0.22, 1, 0.36, 1),
-                        visibility 0.12s linear;
+            pointer-events: none;
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+            will-change: opacity;
+            box-sizing: border-box;
+        }
+
+        .alphabet-view-container.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .alphabet-content-box {
@@ -1139,6 +1344,7 @@
             border-radius: 12px;
             background: transparent !important;
             border: none !important;
+            box-shadow: none !important;
             text-decoration: none;
             transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
@@ -1164,6 +1370,7 @@
             border-radius: 50%;
             overflow: hidden;
             background: transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .alphabet-item-icon img {
             width: 100%;
@@ -1199,58 +1406,75 @@
             flex-shrink: 0;
         }
 
-        /* 字母定位导航胶囊卡片：顶部对齐左侧列表上边缘，右侧对齐搜索框右边缘 */
         .alphabet-fast-index {
-            --border-radius: var(--radius-pill);
             position: absolute;
             right: 0;
             top: 0;
-            transform: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            width: 24px;
-            padding: 8px 0;
+            gap: 1px;
             user-select: none;
             -webkit-user-select: none;
             touch-action: none;
             z-index: 10;
+            width: 26px;
+            padding: 8px 0;
+            border-radius: 13px;
+            box-shadow: var(--shadow-search);
+            box-sizing: border-box;
+            background-color: transparent;
         }
 
-        /* 延伸至视口右边缘的不可视触控判定热区 */
-        .alphabet-fast-index::before {
+        .alphabet-fast-index::after {
             content: "";
             position: absolute;
-            top: -12px;
-            bottom: -12px;
-            left: -10px;
-            right: -24px;
-            pointer-events: auto;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: -100vw;
             background: transparent;
+            pointer-events: auto;
             z-index: -1;
         }
 
         .alphabet-fast-char {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            height: 14px;
-            font-size: 9.5px;
+            width: 20px;
+            height: 13.5px;
+            padding: 0;
+            font-size: 10px;
             font-weight: 600;
             color: var(--text-tertiary);
             cursor: pointer;
             transition: color 0.15s ease, transform 0.15s ease;
         }
 
+        .alphabet-fast-char::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: -100vw;
+            background: transparent;
+        }
+
         @media (orientation: portrait) {
             .alphabet-fast-index {
+                right: 0;
+                width: 24px;
                 padding: 6px 0;
+                border-radius: 12px;
             }
             .alphabet-fast-char {
-                height: 12.5px;
-                font-size: 9px;
+                width: 18px;
+                height: 12px;
+                font-size: 9.5px;
             }
         }
 
@@ -1267,36 +1491,44 @@
         }
 
         .alphabet-popup-bubble {
-            --border-radius: 50%;
             position: absolute;
             right: 36px;
             width: 44px;
             height: 44px;
+            border-radius: 50%;
             color: var(--text-primary);
             font-size: 20px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid transparent;
+            box-shadow: none;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
             transform: translateY(-50%) scale(0.6);
             transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                         transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        visibility 0.35s ease;
+                        visibility 0.35s ease,
+                        box-shadow 0.35s ease,
+                        border-color 0.35s ease;
             z-index: 100;
         }
         .alphabet-popup-bubble.visible {
             opacity: 1;
             visibility: visible;
             transform: translateY(-50%) scale(1);
+            box-shadow: var(--shadow-search);
+            border-top-color: var(--glass-border-t);
+            border-left-color: var(--glass-border-l);
+            border-right-color: var(--glass-border-r);
+            border-bottom-color: var(--glass-border-b);
+        }
+        [data-theme="dark"] .alphabet-popup-bubble.visible {
+            border-color: var(--border-subtle);
         }
 
-        /* =========================================================
-            8. 移动与触控设备约束
-        ========================================================= */
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
@@ -1311,7 +1543,31 @@
             .module-card:focus-within {
                 height: auto !important;
                 transform: none !important;
-                box-shadow: var(--glass-ambient-shadow) !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                transition: none !important;
+            }
+            [data-theme="dark"] .module-card,
+            [data-theme="dark"] .module-card:hover,
+            [data-theme="dark"] .module-card:active,
+            [data-theme="dark"] .module-card:focus,
+            [data-theme="dark"] .module-card:focus-within {
+                transform: none !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                background-image: var(--noise-pattern) !important;
+                background-color: var(--bg-surface) !important;
+            }
+
+            .tab-item:not(.active)::before,
+            .button-secondary::before,
+            .alphabet-item-row::before,
+            .tab-item:not(.active):hover::before,
+            .tab-item:not(.active):active::before,
+            .button-secondary:hover::before,
+            .button-secondary:active::before,
+            .alphabet-item-row:hover::before,
+            .alphabet-item-row:active::before {
+                display: none !important;
+                opacity: 0 !important;
                 transition: none !important;
             }
 
@@ -1323,6 +1579,7 @@
             .alphabet-item-row:focus-visible {
                 color: var(--text-secondary) !important;
                 background: transparent !important;
+                box-shadow: none !important;
             }
             .alphabet-item-row:hover,
             .alphabet-item-row:active,
@@ -1335,6 +1592,7 @@
             .button-secondary:active,
             .button-secondary:focus-visible {
                 transform: none !important;
+                box-shadow: none !important;
                 background: transparent !important;
                 color: #0891b2 !important;
             }
@@ -1353,6 +1611,11 @@
                 box-shadow: var(--primary-gradient-shadow) !important;
                 background: var(--primary-gradient) !important;
             }
+            [data-theme="dark"] .button-primary:hover,
+            [data-theme="dark"] .button-primary:active,
+            [data-theme="dark"] .button-primary:focus-visible {
+                box-shadow: var(--primary-gradient-shadow) !important;
+            }
 
             .module-icon,
             .module-icon:hover,
@@ -1367,8 +1630,20 @@
             .theme-toggle:hover,
             .theme-toggle:active {
                 transform: none !important;
-                box-shadow: var(--glass-ambient-shadow) !important;
+                box-shadow: var(--shadow-glass-ui) !important;
                 color: var(--text-secondary) !important;
+            }
+            .theme-controls .immersive-icon,
+            .theme-controls .immersive-icon:hover,
+            .theme-controls .immersive-icon:active {
+                background: transparent !important;
+                background-image: none !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .theme-controls .immersive-icon:hover,
+            .theme-controls .immersive-icon:active {
+                transform: none !important;
             }
             .theme-toggle.active {
                 color: var(--primary) !important;
@@ -1376,7 +1651,7 @@
             .back-to-top-btn.visible:hover,
             .back-to-top-btn.visible:active {
                 transform: scale(1) !important;
-                box-shadow: var(--glass-ambient-shadow) !important;
+                box-shadow: var(--shadow-search) !important;
             }
 
             .title a:hover {
@@ -1392,6 +1667,18 @@
             }
         }
 
+        html.is-mobile .tab-item:not(.active)::before,
+        html.is-mobile .button-secondary::before,
+        html.is-mobile .alphabet-item-row::before,
+        html.is-mobile .tab-item:not(.active):hover::before,
+        html.is-mobile .tab-item:not(.active):active::before,
+        html.is-mobile .button-secondary:hover::before,
+        html.is-mobile .button-secondary:active::before,
+        html.is-mobile .alphabet-item-row:hover::before,
+        html.is-mobile .alphabet-item-row:active::before {
+            display: none !important;
+            opacity: 0 !important;
+        }
         html.is-mobile .button-secondary:active,
         html.is-mobile .theme-toggle:hover,
         html.is-mobile .theme-toggle:active,
@@ -1424,7 +1711,7 @@
                 padding: 0 5px; 
                 transform: translateY(calc(2px - 50%)); 
             }
-            .module-card { padding: 22px; }
+            .module-card { padding: 22px; border-radius: var(--radius-card); }
             .module-description { flex: none; }
             .card-bottom { margin-top: 20px; padding-top: 0; }
             .search-shortcut { display: none; }
@@ -1440,15 +1727,6 @@
 </head>
 
 <body>
-    <svg id="liquid_glass_svg_defs" style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true" focusable="false">
-        <defs>
-            <filter id="liquid_glass_filter">
-                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-        </defs>
-    </svg>
-
     <div id="pullRefreshIndicator" class="pull-refresh-indicator glass-element">
         <span id="ptrIcon" class="ptr-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1464,20 +1742,20 @@
             <div class="header-top">
                 <div class="brand-wrapper">
                     <h1 class="title">
-                        <a href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener">
+                        <a href="https://github.com/LOWERTOP/ShadowStore" target="_blank" rel="noopener">
                             <span class="title-shadow">Shadow</span><span class="title-store">/Store</span>
                         </a>
                         <span id="tagPillBadge" class="tag-pill-badge">社区资源</span>
                     </h1>
                 </div>
                 <div class="theme-controls">
-                    <button id="themeToggle" class="theme-toggle glass-element" aria-label="切换主题模式"></button>
-                    <a id="githubStarBtn" class="theme-toggle glass-element" href="https://github.com/LOWERTOP/Shadowrocket-First" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star">
+                    <button id="themeToggle" class="theme-toggle immersive-icon" aria-label="切换主题模式"></button>
+                    <a id="githubStarBtn" class="theme-toggle immersive-icon" href="https://github.com/LOWERTOP/ShadowStore" target="_blank" rel="noopener" aria-label="访问 GitHub 仓库并点亮 Star" title="前往 GitHub 为仓库点亮 Star">
                         <svg viewBox="0 0 24 24" fill="currentColor" style="width: 20px; height: 20px;">
                             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                         </svg>
                     </a>
-                    <button id="langToggle" class="theme-toggle glass-element" aria-label="切换语言" title="切换语言">
+                    <button id="langToggle" class="theme-toggle immersive-icon" aria-label="切换语言" title="切换语言">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m5 8 6 6"/>
                             <path d="m4 14 6-6 2-3"/>
@@ -1506,11 +1784,11 @@
             </nav>
 
             <div class="search-wrapper">
-                <div class="search-box-inner glass-element" role="search">
-                    <div class="search-icon" aria-hidden="true">🔍</div>
+                <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
+                    <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
                     <div class="input-wrapper">
-                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
+                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled readonly>
                         
                         <div id="placeholderTrack" class="placeholder-track">
                             <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
@@ -1520,7 +1798,9 @@
                     </div>
 
                     <span class="search-shortcut">/</span>
-                    <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表">📋</button>
+                    <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg></button>
+                    
+                    <div id="searchMaskOverlay" class="search-mask-overlay" title="首字母资源列表" aria-label="首字母资源列表"></div>
                 </div>
 
                 <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
@@ -1554,7 +1834,6 @@
         </footer>
     </div>
 
-    <!-- 首字母列表展示区与动态定位条 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
             <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
@@ -1566,7 +1845,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "202609050406_alpha"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1580,14 +1859,9 @@
             zh: {
                 badgeCommunity: "社区资源",
                 subtitle: "Shadowrocket 开源社区资源聚合检索平台",
-                tabs: {
-                    module: "模块资源",
-                    config: "配置文件",
-                    manual: "使用手册",
-                    more: "更多资源"
-                },
+                tabs: { module: "模块资源", config: "配置文件", manual: "使用手册", more: "更多资源" },
                 searchPlaceholderWait: "请在加载完成后执行搜索...",
-                searchPlaceholderReady: "输入关键字全库搜索...",
+                searchPlaceholderReady: "输入关键字全局搜索...",
                 notice1: "相关资源均来源于开源社区",
                 notice2: "所有权利责任归原作者所有",
                 searchClearTitle: "清空搜索",
@@ -1600,7 +1874,7 @@
                 statusSynced: "已同步最新数据",
                 statusErrorCache: "在线同步异常，当前展示缓存数据",
                 statusErrorStatic: "在线资源同步失败，已展示核心入口",
-                countLabel: { module: "模块", config: "配置", manual: "手册", more: "资源", global: "资源" },
+                countLabel: { module: "模块", config: "配置", manual: "手册", more: "资源" },
                 countText: (count, label) => `${count} 个${label}`,
                 emptyText: (label) => `没有找到匹配的${label}`,
                 ptrContinue: "继续下拉将强制刷新本站",
@@ -1633,14 +1907,9 @@
             en: {
                 badgeCommunity: "Community",
                 subtitle: "Shadowrocket Open-Source Community Resource Aggregator",
-                tabs: {
-                    module: "Modules",
-                    config: "Configs",
-                    manual: "Manual",
-                    more: "More"
-                },
+                tabs: { module: "Modules", config: "Configs", manual: "Manual", more: "More" },
                 searchPlaceholderWait: "Please wait for loading to complete...",
-                searchPlaceholderReady: "Type keywords to search all...",
+                searchPlaceholderReady: "Type keywords to search globally...",
                 notice1: "All resources originate from open source",
                 notice2: "Rights & copyrights belong to authors",
                 searchClearTitle: "Clear search",
@@ -1653,7 +1922,7 @@
                 statusSynced: "Synced latest data",
                 statusErrorCache: "Sync failed, showing cached data",
                 statusErrorStatic: "Sync failed, showing core resources",
-                countLabel: { module: "Modules", config: "Configs", manual: "Manuals", more: "Resources", global: "Resources" },
+                countLabel: { module: "Modules", config: "Configs", manual: "Manuals", more: "Resources" },
                 countText: (count, label) => `${count} ${label}`,
                 emptyText: (label) => `No matching ${label.toLowerCase()} found`,
                 ptrContinue: "Pull down to force refresh",
@@ -1689,16 +1958,8 @@
             {
                 category: "config",
                 i18n: {
-                    zh: {
-                        name: "懒人配置",
-                        description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，是除默认配置外首推的配置文件。",
-                        primaryBtnText: "安装配置"
-                    },
-                    en: {
-                        name: "Lazy Config",
-                        description: "Out-of-the-box configuration with popular routing groups, well-balanced proxy rules, and detailed comments. Highly recommended.",
-                        primaryBtnText: "Install Config"
-                    }
+                    zh: { name: "懒人配置", description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，是除默认配置外首推的配置文件。", primaryBtnText: "安装配置" },
+                    en: { name: "Lazy Config", description: "Out-of-the-box configuration with popular routing groups, well-balanced proxy rules, and detailed comments. Highly recommended.", primaryBtnText: "Install Config" }
                 },
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -1713,16 +1974,8 @@
             {
                 category: "manual",
                 i18n: {
-                    zh: {
-                        name: "使用手册",
-                        description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。",
-                        primaryBtnText: "查阅手册"
-                    },
-                    en: {
-                        name: "User Manual",
-                        description: "Comprehensive guide and reference manual for Shadowrocket, covering protocols, routing rules, decryption, and advanced setups.",
-                        primaryBtnText: "View Manual"
-                    }
+                    zh: { name: "使用手册", description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。", primaryBtnText: "查阅手册" },
+                    en: { name: "User Manual", description: "Comprehensive guide and reference manual for Shadowrocket, covering protocols, routing rules, decryption, and advanced setups.", primaryBtnText: "View Manual" }
                 },
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -1737,16 +1990,8 @@
             {
                 category: "more",
                 i18n: {
-                    zh: {
-                        name: "配色与配置仓库",
-                        description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。",
-                        primaryBtnText: "访问仓库"
-                    },
-                    en: {
-                        name: "Theme & Config Repo",
-                        description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.",
-                        primaryBtnText: "Visit Repo"
-                    }
+                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
+                    en: { name: "Theme & Config Repo", description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.", primaryBtnText: "Visit Repo" }
                 },
                 icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -1762,8 +2007,9 @@
 
         const SYSTEM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-        const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
+        const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
         const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+        const LIST_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>`;
 
         const tagPillBadge = document.getElementById("tagPillBadge");
         const subtitleEl = document.getElementById("subtitle");
@@ -1776,7 +2022,8 @@
         const tabBarEl = document.querySelector(".tab-bar");
 
         const controlBarEl = document.getElementById("controlBar");
-        const searchBoxInner = document.querySelector('.search-box-inner');
+        const searchBoxInner = document.getElementById('searchBoxInner');
+        const searchMaskOverlay = document.getElementById('searchMaskOverlay');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
         const searchShortcut = document.querySelector(".search-shortcut");
@@ -1822,7 +2069,10 @@
             isListView: false,
             focusedModuleId: null,
             activeTab: "module",
-            statusKey: "statusSyncing"
+            statusKey: "statusSyncing",
+            isAlphabetRendered: false,
+            listViewReturnScrollY: 0,
+            wasFloatingBeforeActive: false
         };
 
         let searchTimer = null;
@@ -1831,6 +2081,42 @@
         let tabAnimTimer = null;
         let tabSwitchContentTimer = null;
         let lastCardWidthVal = 0;
+
+        let alphabetImgObserver = null;
+        function getAlphabetImgObserver() {
+            if (!alphabetImgObserver && ('IntersectionObserver' in window)) {
+                alphabetImgObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            const realSrc = img.dataset.src;
+                            if (realSrc) {
+                                img.src = realSrc;
+                                img.removeAttribute('data-src');
+                            }
+                            observer.unobserve(img);
+                        }
+                    });
+                }, {
+                    root: alphabetScrollArea,
+                    rootMargin: '100px 0px'
+                });
+            }
+            return alphabetImgObserver;
+        }
+
+        function scheduleAlphabetPreRender() {
+            const task = () => {
+                if (!state.isAlphabetRendered && state.allModules.length > 0) {
+                    renderAlphabetList();
+                }
+            };
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(task, { timeout: 2000 });
+            } else {
+                setTimeout(task, 600);
+            }
+        }
 
         function checkScrollLock() {
             const root = document.documentElement;
@@ -1884,17 +2170,9 @@
                 .map((item, idx) => {
                     const localized = item.i18n[lang] || item.i18n.zh;
                     const searchTokens = [
-                        localized.name,
-                        localized.description,
-                        item.author.name,
-                        item.sourceName,
-                        item.category,
-                        "shadowrocket",
-                        "手册", "manual",
-                        "教程", "guide",
-                        "仓库", "repo",
-                        "文档", "docs",
-                        "配置", "config"
+                        localized.name, localized.description, item.author.name,
+                        item.sourceName, item.category, "shadowrocket", "手册",
+                        "manual", "教程", "guide", "仓库", "repo", "文档", "docs", "配置", "config"
                     ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                     return {
@@ -1929,7 +2207,6 @@
                     const authorAvatar = safeURL(m.authorAvatar || m.author?.avatar || "");
                     const sourceName = m.sourceName || "开源仓库";
                     const sourceURL = safeURL(m.sourceURL || "");
-                    
                     const customInstall = safeInstallURL(m.installURL || "");
                     const fallbackInstall = rawURL ? `shadowrocket://install?url=${encodeURIComponent(rawURL)}` : "";
                     const installURL = customInstall || fallbackInstall;
@@ -1943,13 +2220,7 @@
                     }
 
                     const searchTokens = [
-                        m.name,
-                        m.description,
-                        authorName,
-                        m.author?.username,
-                        sourceName,
-                        category,
-                        m._searchKeywords
+                        m.name, m.description, authorName, m.author?.username, sourceName, category, m._searchKeywords
                     ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                     return {
@@ -1979,9 +2250,7 @@
             clearTimeout(toastTimer);
             toast.textContent = text;
             toast.classList.add("show");
-            toastTimer = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 2000);
+            toastTimer = setTimeout(() => { toast.classList.remove("show"); }, 2000);
         }
 
         async function copyToClipboard(text) {
@@ -2007,8 +2276,30 @@
         function createIOSAppIcon(name) {
             const cleanName = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const char = Array.from(cleanName)[0] || (state.currentLang === "en" ? "M" : "模");
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="100" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="128" text-anchor="middle" dominant-baseline="central" alignment-baseline="central" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+        }
+
+        function getControlBarStickyScrollTop() {
+            if (!controlBarEl) return 0;
+            const style = window.getComputedStyle(controlBarEl);
+            const topSticky = parseFloat(style.top) || 12;
+            const elementTop = controlBarEl.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop || 0);
+            return Math.max(0, elementTop - topSticky);
+        }
+
+        function isSearchFloating() {
+            const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+            const threshold = getControlBarStickyScrollTop();
+            return currentScrollY >= (threshold - 4);
+        }
+
+        function floatSearchToTarget(smooth = true) {
+            const targetTop = getControlBarStickyScrollTop();
+            window.scrollTo({
+                top: targetTop,
+                behavior: smooth ? "smooth" : "auto"
+            });
         }
 
         let backToTopVisible = false;
@@ -2024,24 +2315,21 @@
         window.addEventListener('scroll', updateSearchLayer, { passive: true });
 
         backToTopBtn.addEventListener("click", () => {
+            if (state.isListView) {
+                setListViewMode(false, false);
+            }
+            searchInput.blur();
+            if (searchInput.value.length === 0) {
+                searchInput.readOnly = true;
+            }
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
-
-        if (searchBoxInner) {
-            searchBoxInner.addEventListener("click", (e) => {
-                if (e.target !== listToggleBtn && !searchInput.disabled) {
-                    searchInput.focus();
-                }
-            });
-        }
 
         function updateTabIndicator(animated = true) {
             const activeTab = document.querySelector(".tab-item.active");
             if (!activeTab || !tabIndicator) return;
 
-            if (!animated && isTabAnimating) {
-                return;
-            }
+            if (!animated && isTabAnimating) return;
 
             if (!animated) {
                 tabIndicator.style.transition = 'none';
@@ -2142,32 +2430,15 @@
 
         if (typeof ResizeObserver !== "undefined") {
             if (modulesContainer) {
-                const gridResizeObserver = new ResizeObserver(() => {
-                    scheduleCardLayerUpdate();
-                });
-                gridResizeObserver.observe(modulesContainer);
+                new ResizeObserver(() => scheduleCardLayerUpdate()).observe(modulesContainer);
             }
             if (tabBarEl) {
-                const tabBarObserver = new ResizeObserver(() => {
-                    if (!isTabAnimating) {
-                        updateTabIndicator(false);
-                    }
-                });
-                tabBarObserver.observe(tabBarEl);
-            }
-            if (searchBoxInner) {
-                const searchBoxObserver = new ResizeObserver(() => {
-                    if (state.isListView) {
-                        updateAlphabetPosition();
-                    }
-                });
-                searchBoxObserver.observe(searchBoxInner);
+                new ResizeObserver(() => {
+                    if (!isTabAnimating) updateTabIndicator(false);
+                }).observe(tabBarEl);
             }
         }
 
-        /* =========================================================
-            首字母列表与快速选择功能实现
-        ========================================================= */
         function getItemInitialLetter(name) {
             const clean = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const first = clean.charAt(0);
@@ -2205,7 +2476,7 @@
                 listToggleBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
                 if (searchShortcut) searchShortcut.style.display = "none";
             } else {
-                listToggleBtn.textContent = "📋";
+                listToggleBtn.innerHTML = LIST_SVG;
                 listToggleBtn.classList.remove("active");
                 listToggleBtn.setAttribute("title", "首字母资源列表");
                 listToggleBtn.setAttribute("aria-label", "首字母资源列表");
@@ -2215,9 +2486,13 @@
 
         function focusSingleResource(mod) {
             state.focusedModuleId = mod.id;
-            setListViewMode(false);
+            setListViewMode(false, false);
 
             searchInput.value = mod.name;
+            searchInput.readOnly = true;
+            searchInput.blur();
+            document.body.classList.remove("has-search-focus");
+            document.body.classList.add("has-search-text");
             updateRightActionButton();
 
             if (state.activeTab !== mod.category) {
@@ -2256,6 +2531,8 @@
             alphabetScrollArea.innerHTML = "";
             alphabetFastIndex.innerHTML = "";
 
+            const observer = getAlphabetImgObserver();
+
             let sourceList = state.allModules;
             const sorted = [...sourceList].sort((a, b) => {
                 const letterA = getItemInitialLetter(a.name);
@@ -2289,7 +2566,7 @@
                 if (groups[letter] && groups[letter].length > 0) {
                     const groupContainer = document.createElement("div");
                     groupContainer.className = "alphabet-group";
-                    groupContainer.id = `alphabet-group-${letter === "#" ? "hash" : letter}`;
+                    groupContainer.id = `alphabet-group-${letter === '#' ? 'hash' : letter}`;
 
                     const headerEl = document.createElement("div");
                     headerEl.className = "alphabet-letter-header";
@@ -2306,7 +2583,7 @@
                         row.setAttribute("tabindex", "0");
                         
                         const fallbackIcon = createIOSAppIcon(mod.name);
-                        const iconSrc = mod.icon || fallbackIcon;
+                        const hasRemoteIcon = Boolean(mod.icon);
 
                         let catName = "模块";
                         if (mod.category === "config") catName = "配置";
@@ -2318,18 +2595,26 @@
 
                         row.innerHTML = `
                             <div class="alphabet-item-icon">
-                                <img src="${escapeHTML(iconSrc)}" alt="" decoding="async">
+                                <img src="${escapeHTML(fallbackIcon)}" ${hasRemoteIcon ? `data-src="${escapeHTML(mod.icon)}"` : ''} alt="" decoding="async">
                             </div>
                             <span class="alphabet-item-name">${escapeHTML(mod.name)}</span>
                             <span class="alphabet-item-type">${escapeHTML(catName)}</span>
                         `;
 
+                        const imgEl = row.querySelector("img");
+                        if (hasRemoteIcon) {
+                            if (observer) {
+                                observer.observe(imgEl);
+                            } else {
+                                imgEl.src = mod.icon;
+                            }
+                            bindImageError(imgEl, fallbackIcon);
+                        }
+
                         row.addEventListener("click", (e) => {
                             e.preventDefault();
                             focusSingleResource(mod);
                         });
-
-                        bindImageError(row.querySelector("img"), fallbackIcon);
 
                         listEl.appendChild(row);
                     });
@@ -2340,35 +2625,31 @@
             });
 
             alphabetScrollArea.appendChild(fragment);
+            state.isAlphabetRendered = true;
             updateAlphabetPosition();
         }
 
         function scrollToAlphabetLetter(letter) {
-            const targetEl = document.getElementById(`alphabet-group-${letter === "#" ? "hash" : letter}`);
+            const targetId = letter === '#' ? 'alphabet-group-hash' : `alphabet-group-${letter}`;
+            const targetEl = document.getElementById(targetId);
             if (targetEl && alphabetScrollArea) {
-                const targetOffset = targetEl.offsetTop;
-                alphabetScrollArea.scrollTop = targetOffset - 6;
+                alphabetScrollArea.scrollTop = targetEl.offsetTop;
             }
         }
 
         let isTouchingIndex = false;
 
         function updateFastIndexSelection(clientX, clientY) {
-            const target = document.elementFromPoint(clientX, clientY);
+            const indexRect = alphabetFastIndex.getBoundingClientRect();
+            let target = document.elementFromPoint(clientX, clientY);
             let charEl = target ? target.closest(".alphabet-fast-char") : null;
 
-            if (!charEl && alphabetFastIndex) {
-                const rect = alphabetFastIndex.getBoundingClientRect();
-                if (clientY >= rect.top && clientY <= rect.bottom) {
-                    const chars = alphabetFastIndex.querySelectorAll(".alphabet-fast-char");
-                    if (chars.length > 0) {
-                        const itemHeight = rect.height / chars.length;
-                        const index = Math.floor((clientY - rect.top) / itemHeight);
-                        if (index >= 0 && index < chars.length) {
-                            charEl = chars[index];
-                        }
-                    }
-                }
+            if (!charEl && clientX >= indexRect.left) {
+                const chars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
+                charEl = chars.find(el => {
+                    const r = el.getBoundingClientRect();
+                    return clientY >= r.top && clientY <= r.bottom;
+                });
             }
             
             if (charEl && !charEl.classList.contains("disabled")) {
@@ -2433,80 +2714,161 @@
         });
 
         function updateAlphabetPosition() {
-            if (!alphabetViewContainer || !searchBoxInner) return;
+            if (!alphabetViewContainer || !searchBoxInner || !pageContainer) return;
 
             const searchRect = searchBoxInner.getBoundingClientRect();
+            const containerRect = pageContainer.getBoundingClientRect();
+
+            const style = window.getComputedStyle(controlBarEl);
+            const stickyTopVal = parseFloat(style.top) || 12;
+            const topPos = Math.round(stickyTopVal + 4 + 44 + 12);
+
+            let bottomPos = 24;
+            const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
             
-            alphabetViewContainer.style.top = `100px`;
-            alphabetViewContainer.style.bottom = `100px`;
+            if (isSingleCol) {
+                const tabBarWrapper = document.querySelector('.control-bar.is-single-column .tab-bar-wrapper');
+                if (tabBarWrapper) {
+                    const tabH = tabBarWrapper.offsetHeight || 62;
+                    bottomPos = Math.round(tabH + 28);
+                } else {
+                    bottomPos = 90;
+                }
+            } else {
+                bottomPos = 24;
+            }
+
+            alphabetViewContainer.style.top = `${topPos}px`;
+            alphabetViewContainer.style.bottom = `${bottomPos}px`;
             alphabetViewContainer.style.left = `${searchRect.left}px`;
-            alphabetViewContainer.style.width = `${searchRect.width}px`;
+            alphabetViewContainer.style.width = `${containerRect.right - searchRect.left}px`;
         }
 
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', updateAlphabetPosition);
-            window.visualViewport.addEventListener('scroll', updateAlphabetPosition);
-        }
-
-        const LIST_VIEW_MAIN_FADE_MS = 120;
-        const LIST_VIEW_FADE_MS = 200;
         let listViewTransitionTimer = null;
 
-        function setListViewMode(enable) {
+        function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
-            state.isListView = enable;
 
             clearTimeout(listViewTransitionTimer);
 
             if (enable) {
+                const alreadyFloating = isSearchFloating();
+                state.wasFloatingBeforeActive = alreadyFloating;
+                state.listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+
+                state.isListView = true;
                 state.focusedModuleId = null;
-                window.scrollTo({ top: 0, behavior: "smooth" });
+
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                renderAlphabetList();
+                searchInput.readOnly = false;
+
+                if (!alreadyFloating) {
+                    floatSearchToTarget(true);
+                }
+
+                if (!state.isAlphabetRendered) {
+                    renderAlphabetList();
+                }
+
                 updateAlphabetPosition();
-                alphabetViewContainer.classList.remove("is-visible");
 
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (!state.isListView) return;
-                        listViewTransitionTimer = setTimeout(() => {
-                            if (!state.isListView) return;
-                            alphabetViewContainer.classList.add("is-visible");
-                        }, LIST_VIEW_MAIN_FADE_MS);
-                    });
+                    if (state.isListView) {
+                        alphabetViewContainer.classList.add("is-visible");
+                    }
                 });
 
-                checkScrollLock();
+                setTimeout(() => {
+                    if (state.isListView) {
+                        checkScrollLock();
+                    }
+                }, 350);
             } else {
+                state.isListView = false;
                 alphabetViewContainer.classList.remove("is-visible");
+                document.body.classList.remove("is-list-view");
+                updateRightActionButton();
+                checkScrollLock();
+                scheduleCardLayerUpdate();
 
-                listViewTransitionTimer = setTimeout(() => {
-                    if (state.isListView) return;
-                    document.body.classList.remove("is-list-view");
-                    updateRightActionButton();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                    checkScrollLock();
-                    scheduleCardLayerUpdate();
-                }, LIST_VIEW_FADE_MS);
+                if (searchInput.value.length === 0 && document.activeElement !== searchInput) {
+                    searchInput.readOnly = true;
+                }
+
+                if (restoreScroll && !state.wasFloatingBeforeActive) {
+                    const targetScrollY = Math.max(0, state.listViewReturnScrollY);
+                    requestAnimationFrame(() => {
+                        window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+                        updateSearchLayer();
+                    });
+                }
             }
         }
 
+        let ignoreNextClick = false;
+
         document.addEventListener("click", (e) => {
             if (!state.isListView) return;
+            if (ignoreNextClick) {
+                ignoreNextClick = false;
+                return;
+            }
             if (e.target.closest("#alphabetViewContainer") || 
                 e.target.closest("#controlBar") || 
+                e.target.closest(".search-box-inner") ||
                 e.target.closest("#toast") || 
                 e.target.closest("#pullRefreshIndicator")) {
                 return;
             }
             setListViewMode(false);
+            if (searchInput.value.length === 0) {
+                searchInput.readOnly = true;
+            }
         });
 
-        searchInput.addEventListener("focus", () => {
-            if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
+        if (searchMaskOverlay) {
+            searchMaskOverlay.addEventListener("click", (e) => {
+                e.stopPropagation();
+                if (searchInput.disabled) return;
+                ignoreNextClick = true;
+                searchInput.readOnly = true;
+                searchInput.blur();
                 setListViewMode(true);
+            });
+        }
+
+        if (searchBoxInner) {
+            searchBoxInner.addEventListener("click", (e) => {
+                if (searchInput.disabled) return;
+                if (e.target.closest("#listToggleBtn") || e.target.closest("#searchMaskOverlay")) return;
+
+                if (state.isListView) {
+                    if (document.activeElement !== searchInput) {
+                        searchInput.readOnly = false;
+                        searchInput.focus();
+                    }
+                }
+            });
+        }
+
+        searchInput.addEventListener("focus", () => {
+            document.body.classList.add("has-search-focus");
+            if (state.isListView) {
+                setListViewMode(false, false);
+                window.scrollTo(0, 0);
+            } else {
+                if (!isSearchFloating()) {
+                    floatSearchToTarget(true);
+                }
+            }
+        });
+
+        searchInput.addEventListener("blur", () => {
+            document.body.classList.remove("has-search-focus");
+            if (searchInput.value.length === 0 && !state.isListView && !state.focusedModuleId) {
+                searchInput.readOnly = true;
             }
         });
 
@@ -2514,18 +2876,36 @@
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
 
-            if (state.isListView || hasText || state.focusedModuleId) {
+            if (state.isListView) {
+                setListViewMode(false);
+                searchInput.readOnly = true;
+                searchInput.blur();
+            } else if (hasText || state.focusedModuleId) {
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                searchInput.readOnly = true;
+                searchInput.blur();
+                document.body.classList.remove("has-search-text", "has-search-focus");
                 setListViewMode(false);
+                
+                state.activeTab = "module";
+                tabItems.forEach(t => {
+                    const isActive = t.getAttribute("data-tab") === "module";
+                    t.classList.toggle("active", isActive);
+                    t.setAttribute("aria-selected", isActive ? "true" : "false");
+                });
+                updateTabIndicator(true);
+
                 filterModules();
                 if (state.statusKey && I18N[state.currentLang][state.statusKey]) {
                     statusText.textContent = I18N[state.currentLang][state.statusKey];
                 }
                 updateRightActionButton();
             } else {
+                ignoreNextClick = true;
+                searchInput.readOnly = true;
+                searchInput.blur();
                 setListViewMode(true);
-                searchInput.focus();
             }
         });
 
@@ -2577,7 +2957,6 @@
             const fallbackIcon = createIOSAppIcon(module.name);
             const icon = module.icon || fallbackIcon;
             const authorHTML = renderAuthor(module);
-            
             const isRepo = Boolean(module.isRepoCard);
 
             const directOpenURL = module.rawURL || module.sourceURL || "";
@@ -2697,19 +3076,17 @@
             checkScrollLock();
         }
 
-        function renderFilteredList(list, isGlobalSearch = false) {
+        function renderFilteredList(list, customLabel = null) {
             state.filteredModules = list;
             state.currentlyRendered = 0;
             modulesContainer.innerHTML = "";
 
             const langObj = I18N[state.currentLang];
-            const currentLabel = isGlobalSearch 
-                ? (langObj.countLabel.global || langObj.countLabel.more)
-                : (langObj.countLabel[state.activeTab] || langObj.countLabel.more);
+            const currentLabel = customLabel || langObj.countLabel[state.activeTab] || langObj.countLabel.more;
 
             if (!state.filteredModules.length) {
                 sentinel.style.display = "none";
-                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div>${escapeHTML(langObj.emptyText(currentLabel))}</div>`;
+                modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>${escapeHTML(langObj.emptyText(currentLabel))}</div>`;
                 countText.textContent = langObj.countText(0, currentLabel);
                 scheduleCardLayerUpdate();
                 checkScrollLock();
@@ -2729,17 +3106,20 @@
 
         function filterModules() {
             const keyword = searchInput.value.trim().normalize("NFKC").toLowerCase();
+            document.body.classList.toggle("has-search-text", keyword.length > 0);
             updateRightActionButton();
 
             let result = [];
+            const langObj = I18N[state.currentLang];
+
             if (keyword) {
-                // 搜索始终使用全局搜索（检索全库所有分类）
                 result = state.allModules.filter(m => m._searchText && m._searchText.includes(keyword));
-                renderFilteredList(result, true);
+                const searchCountLabel = langObj.countLabel.more;
+                renderFilteredList(result, searchCountLabel);
             } else {
-                // 无关键字时恢复展示当前标签页分类
                 result = state.allModules.filter(m => (m.category || "module") === state.activeTab);
-                renderFilteredList(result, false);
+                const currentLabel = langObj.countLabel[state.activeTab] || langObj.countLabel.more;
+                renderFilteredList(result, currentLabel);
             }
         }
 
@@ -2747,12 +3127,16 @@
             tab.addEventListener("click", () => {
                 const targetTab = tab.getAttribute("data-tab");
                 if (state.isListView) {
-                    setListViewMode(false);
+                    setListViewMode(false, false);
                 }
-                if (state.activeTab === targetTab && !state.focusedModuleId && searchInput.value.trim() === "") return;
+                searchInput.readOnly = true;
+                searchInput.blur();
+                document.body.classList.remove("has-search-focus");
+                if (state.activeTab === targetTab && !state.focusedModuleId) return;
 
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                document.body.classList.remove("has-search-text");
                 updateRightActionButton();
 
                 state.activeTab = targetTab;
@@ -2764,9 +3148,7 @@
 
                 isTabAnimating = true;
                 clearTimeout(tabAnimTimer);
-                tabAnimTimer = setTimeout(() => {
-                    isTabAnimating = false;
-                }, 460);
+                tabAnimTimer = setTimeout(() => { isTabAnimating = false; }, 460);
 
                 updateTabIndicator(true);
 
@@ -2782,8 +3164,9 @@
 
         searchInput.addEventListener("input", () => {
             state.focusedModuleId = null;
+            document.body.classList.toggle("has-search-text", searchInput.value.length > 0);
             if (state.isListView) {
-                setListViewMode(false);
+                setListViewMode(false, false);
             }
             clearTimeout(searchTimer);
             searchTimer = setTimeout(filterModules, 120);
@@ -2793,12 +3176,17 @@
             if (e.key === "/" && document.activeElement !== searchInput) {
                 if (searchInput.disabled) return;
                 e.preventDefault();
+                setListViewMode(false, false);
+                window.scrollTo(0, 0);
+                searchInput.readOnly = false;
                 searchInput.focus();
                 searchInput.select();
             } else if (e.key === "Escape") {
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                searchInput.readOnly = true;
                 searchInput.blur();
+                document.body.classList.remove("has-search-text", "has-search-focus");
                 setListViewMode(false);
                 filterModules();
                 updateRightActionButton();
@@ -2807,6 +3195,9 @@
 
         function setSearchState(enabled) {
             searchInput.disabled = !enabled;
+            if (enabled) {
+                searchInput.readOnly = true;
+            }
             const langObj = I18N[state.currentLang];
             const text = enabled ? langObj.searchPlaceholderReady : langObj.searchPlaceholderWait;
             const mainP = document.getElementById("mainPlaceholder");
@@ -2871,11 +3262,8 @@
             startNoticeLoop();
 
             document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    stopNoticeLoop();
-                } else {
-                    startNoticeLoop();
-                }
+                if (document.hidden) stopNoticeLoop();
+                else startNoticeLoop();
             });
         }
 
@@ -3029,8 +3417,10 @@
             const dynamicItems = normalizeModules(state.rawNetworkData);
             state.allModules = [...staticItems, ...dynamicItems];
 
+            state.isAlphabetRendered = false;
             state.allModules.forEach(m => { m._domElement = null; });
             filterModules();
+            scheduleAlphabetPreRender();
 
             requestAnimationFrame(() => updateTabIndicator(false));
         }
@@ -3251,9 +3641,11 @@
                         const normalized = normalizeModules(parsed);
                         if (normalized.length > 0) {
                             state.allModules = [...staticItems, ...normalized];
+                            state.isAlphabetRendered = false;
                             filterModules();
                             setSearchState(true);
                             hasRenderedCache = true;
+                            scheduleAlphabetPreRender();
 
                             if (isCacheFresh) {
                                 state.statusKey = "statusReady";
@@ -3275,8 +3667,10 @@
 
             if (!hasRenderedCache && state.allModules.length === 0) {
                 state.allModules = staticItems;
+                state.isAlphabetRendered = false;
                 filterModules();
                 setSearchState(false);
+                scheduleAlphabetPreRender();
                 state.statusKey = "statusFetchingStatic";
                 statusText.textContent = langObj.statusFetchingStatic;
                 statusDot.className = "status-dot loading";
@@ -3296,8 +3690,10 @@
                 if (!normalized.length) throw new Error("未解析到有效资源数据");
 
                 state.allModules = [...staticItems, ...normalized];
+                state.isAlphabetRendered = false;
                 filterModules();
                 setSearchState(true);
+                scheduleAlphabetPreRender();
 
                 try {
                     localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(data));
