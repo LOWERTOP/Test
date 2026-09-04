@@ -277,6 +277,7 @@
             transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        /* 列表激活态：保留原始布局占位，仅透明化与禁用交互，杜绝高度坍塌导致的视口跳动 */
         body.is-list-view .container > *:not(#controlBar) {
             opacity: 0 !important;
             pointer-events: none !important;
@@ -1145,7 +1146,7 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* 仅在单列模式下沉到底部，不受列表激活态干扰 */
+        /* 仅在单列模式下沉到底部，严格与列表激活态解耦 */
         .control-bar.is-single-column {
             display: block;
             position: sticky;
@@ -1806,7 +1807,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609050211"; 
+        const CACHE_VERSION = "202609050221"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2240,16 +2241,17 @@
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
-        // 获取当前搜索框吸顶（上浮）时页面对应的滚动目标高度
+        // 计算搜索框吸顶（上浮停止）所对应的真实绝对滚动阈值
         function getControlBarStickyScrollTop() {
             if (!controlBarEl) return 0;
             const style = window.getComputedStyle(controlBarEl);
             const topSticky = parseFloat(style.top) || 12;
-            const elementTop = controlBarEl.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop || 0);
+            const currentY = window.scrollY || document.documentElement.scrollTop || 0;
+            const elementTop = controlBarEl.getBoundingClientRect().top + currentY;
             return Math.max(0, elementTop - topSticky);
         }
 
-        // 判断当前搜索框是否已经处于上浮吸顶状态
+        // 判断搜索框是否已经上浮到既定吸顶位置
         function isSearchFloating() {
             const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
             const threshold = getControlBarStickyScrollTop();
@@ -2287,7 +2289,7 @@
         if (searchBoxInner) {
             searchBoxInner.addEventListener("click", (e) => {
                 if (e.target !== listToggleBtn && !searchInput.disabled) {
-                    searchInput.focus();
+                    searchInput.focus({ preventScroll: true });
                 }
             });
         }
@@ -2734,7 +2736,7 @@
             listSyncRaf = requestAnimationFrame(step);
         }
 
-        // 统一控制首字母列表激活与搜索框上浮交互
+        // 统一控制首字母列表模式切换与平滑滚动吸顶/还原
         function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
 
@@ -2752,7 +2754,7 @@
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                // 规则 1：无论搜索框处于什么位置，激活时都直接上浮到既定吸顶位置
+                // 交互逻辑：若未吸顶，激活时平滑上浮到既定吸顶位置；若已在吸顶位置，跳过位移
                 if (!alreadyFloating) {
                     floatSearchToTarget(true);
                 }
@@ -2783,7 +2785,7 @@
                     checkScrollLock();
                     scheduleCardLayerUpdate();
 
-                    // 规则 1：取消后，若激活前尚未上浮，恢复激活前位置；若原本已处于上浮状态，则保持原样
+                    // 交互逻辑：取消后，若激活前未吸顶，平滑滚回原位；若激活前已吸顶，则保持原样
                     if (restoreScroll && !state.wasFloatingBeforeActive) {
                         const targetScrollY = Math.max(0, state.listViewReturnScrollY);
                         requestAnimationFrame(() => {
@@ -2813,7 +2815,7 @@
             setListViewMode(false);
         });
 
-        // 点击搜索框聚焦：上浮到既定位置并呼出列表
+        // 搜索框点击聚焦处理：防止 iOS 原生软键盘唤起时的强制滚动撕裂
         searchInput.addEventListener("focus", (e) => {
             e.stopPropagation();
             if (!isSearchFloating()) {
@@ -2828,7 +2830,7 @@
             }
         });
 
-        // 点击右侧资源列表按钮
+        // 列表切换按钮处理
         listToggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
@@ -2854,7 +2856,7 @@
             } else {
                 ignoreNextClick = true;
                 setListViewMode(true);
-                searchInput.focus();
+                searchInput.focus({ preventScroll: true });
                 requestAnimationFrame(() => {
                     updateAlphabetPosition();
                 });
@@ -3122,7 +3124,7 @@
             if (e.key === "/" && document.activeElement !== searchInput) {
                 if (searchInput.disabled) return;
                 e.preventDefault();
-                searchInput.focus();
+                searchInput.focus({ preventScroll: true });
                 searchInput.select();
             } else if (e.key === "Escape") {
                 state.focusedModuleId = null;
