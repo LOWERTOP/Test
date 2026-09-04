@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=overlays-content">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -277,11 +277,11 @@
             transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 列表激活态：保留原始布局占位，仅透明化与禁用交互，杜绝高度坍塌导致的视口跳动 */
+        /* 列表激活态：保留原始布局占位，仅隐藏内容，严禁 display:none 导致高度塌陷 */
         body.is-list-view .container > *:not(#controlBar) {
             opacity: 0 !important;
             pointer-events: none !important;
-            visibility: hidden;
+            visibility: hidden !important;
         }
 
         .glass-element {
@@ -1228,6 +1228,7 @@
             font-weight: 400 !important;
         }
 
+        /* 字母列表视图：锁定视口绝对定位，解绑 visualViewport 避免键盘弹起挤压 */
         .alphabet-view-container {
             position: fixed;
             top: calc(max(16px, env(safe-area-inset-top)) + 72px);
@@ -1807,7 +1808,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609050221"; 
+        const CACHE_VERSION = "20260904"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2241,7 +2242,7 @@
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
-        // 计算搜索框吸顶（上浮停止）所对应的真实绝对滚动阈值
+        // 计算搜索框吸顶（上浮停止）所对应的真实滚动阈值
         function getControlBarStickyScrollTop() {
             if (!controlBarEl) return 0;
             const style = window.getComputedStyle(controlBarEl);
@@ -2251,7 +2252,7 @@
             return Math.max(0, elementTop - topSticky);
         }
 
-        // 判断搜索框是否已经上浮到既定吸顶位置
+        // 判断搜索框是否已经处于吸顶上浮状态
         function isSearchFloating() {
             const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
             const threshold = getControlBarStickyScrollTop();
@@ -2289,7 +2290,7 @@
         if (searchBoxInner) {
             searchBoxInner.addEventListener("click", (e) => {
                 if (e.target !== listToggleBtn && !searchInput.disabled) {
-                    searchInput.focus({ preventScroll: true });
+                    handleSearchTrigger();
                 }
             });
         }
@@ -2684,12 +2685,13 @@
             }
         });
 
+        // 仅根据物理视口与控制栏真实布局计算位置，切断与 visualViewport 的绑定，彻底解决软键盘挤压列表问题
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !searchBoxInner || !pageContainer) return;
 
             const searchRect = searchBoxInner.getBoundingClientRect();
             const containerRect = pageContainer.getBoundingClientRect();
-            const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+            const windowH = window.innerHeight;
 
             const topPos = Math.round(searchRect.bottom + 16);
 
@@ -2699,24 +2701,19 @@
             
             if (isSingleCol && tabBarWrapper) {
                 const tabRect = tabBarWrapper.getBoundingClientRect();
-                if (tabRect.top > 0 && tabRect.top < viewportHeight) {
-                    bottomPos = Math.round(viewportHeight - tabRect.top + 8);
+                if (tabRect.top > 0 && tabRect.top < windowH) {
+                    bottomPos = Math.round(windowH - tabRect.top + 8);
                 } else {
                     bottomPos = 84;
                 }
             } else {
-                bottomPos = Math.max(20, Math.round(viewportHeight * 0.04));
+                bottomPos = Math.max(20, Math.round(windowH * 0.04));
             }
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
             alphabetViewContainer.style.left = `${searchRect.left}px`;
             alphabetViewContainer.style.width = `${containerRect.right - searchRect.left}px`;
-        }
-
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', updateAlphabetPosition);
-            window.visualViewport.addEventListener('scroll', updateAlphabetPosition);
         }
 
         let listViewTransitionTimer = null;
@@ -2736,7 +2733,7 @@
             listSyncRaf = requestAnimationFrame(step);
         }
 
-        // 统一控制首字母列表模式切换与平滑滚动吸顶/还原
+        // 统一控制首字母列表模式切换与滚动平滑吸顶/还原
         function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
 
@@ -2754,7 +2751,7 @@
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                // 交互逻辑：若未吸顶，激活时平滑上浮到既定吸顶位置；若已在吸顶位置，跳过位移
+                // 交互逻辑：若未吸顶，激活时平滑上浮到吸顶位置；若已吸顶，绝对不触发任何位移
                 if (!alreadyFloating) {
                     floatSearchToTarget(true);
                 }
@@ -2785,7 +2782,7 @@
                     checkScrollLock();
                     scheduleCardLayerUpdate();
 
-                    // 交互逻辑：取消后，若激活前未吸顶，平滑滚回原位；若激活前已吸顶，则保持原样
+                    // 取消后，若激活前尚未吸顶，平滑滚回原位；若激活前已吸顶，保持原位
                     if (restoreScroll && !state.wasFloatingBeforeActive) {
                         const targetScrollY = Math.max(0, state.listViewReturnScrollY);
                         requestAnimationFrame(() => {
@@ -2794,6 +2791,21 @@
                         });
                     }
                 }, 180);
+            }
+        }
+
+        // 针对移动设备上搜索触发的统一协调器：解决 iOS 上浮与键盘弹出的时序竞争
+        function handleSearchTrigger() {
+            const alreadyFloating = isSearchFloating();
+            if (!alreadyFloating) {
+                floatSearchToTarget(true);
+                setListViewMode(true);
+                setTimeout(() => {
+                    searchInput.focus({ preventScroll: true });
+                }, 260);
+            } else {
+                setListViewMode(true);
+                searchInput.focus({ preventScroll: true });
             }
         }
 
@@ -2815,7 +2827,7 @@
             setListViewMode(false);
         });
 
-        // 搜索框点击聚焦处理：防止 iOS 原生软键盘唤起时的强制滚动撕裂
+        // 搜索框点击聚焦时：杜绝软键盘与 window.scrollTo 动画冲突
         searchInput.addEventListener("focus", (e) => {
             e.stopPropagation();
             if (!isSearchFloating()) {
@@ -2855,8 +2867,7 @@
                 updateRightActionButton();
             } else {
                 ignoreNextClick = true;
-                setListViewMode(true);
-                searchInput.focus({ preventScroll: true });
+                handleSearchTrigger();
                 requestAnimationFrame(() => {
                     updateAlphabetPosition();
                 });
@@ -3124,7 +3135,7 @@
             if (e.key === "/" && document.activeElement !== searchInput) {
                 if (searchInput.disabled) return;
                 e.preventDefault();
-                searchInput.focus({ preventScroll: true });
+                handleSearchTrigger();
                 searchInput.select();
             } else if (e.key === "Escape") {
                 state.focusedModuleId = null;
