@@ -694,6 +694,11 @@
                 background-color 0.35s ease;
         }
 
+        /* 列表激活态下，搜索框本体恢复为输入型热区视觉 */
+        body.is-list-view .search-box-inner {
+            cursor: text;
+        }
+
         .search-box-inner:focus-within,
         body.is-list-view .search-box-inner {
             background-image: var(--noise-pattern), var(--glass-bg-hover);
@@ -734,6 +739,8 @@
             outline: none;
             padding: 0;
             border-style: solid;
+            position: relative;
+            z-index: 5;
         }
         .list-toggle-icon svg {
             display: block;
@@ -772,6 +779,7 @@
             text-shadow: none; 
         }
 
+        body.is-list-view .search,
         .search:focus {
             cursor: text;
         }
@@ -1756,7 +1764,7 @@
             </nav>
 
             <div class="search-wrapper">
-                <div class="search-box-inner glass-element" role="search">
+                <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
                     <div class="input-wrapper">
@@ -1992,7 +2000,7 @@
         const tabBarEl = document.querySelector(".tab-bar");
 
         const controlBarEl = document.getElementById("controlBar");
-        const searchBoxInner = document.querySelector('.search-box-inner');
+        const searchBoxInner = document.getElementById('searchBoxInner');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
         const searchShortcut = document.querySelector(".search-shortcut");
@@ -2783,33 +2791,41 @@
             searchInput.readOnly = true;
         });
 
-        // 搜索框区域点击调度逻辑：
-        // 第一次点击：仅呼出资源列表，不激活输入框（不呼起虚拟键盘）
-        // 资源列表激活后再次点击：激活输入框并关闭资源列表
+        // 搜索框区域与资源列表按钮的热区拆分和覆盖调度
         if (searchBoxInner) {
             searchBoxInner.addEventListener("click", (e) => {
                 if (searchInput.disabled) return;
-                if (e.target.closest("#listToggleBtn")) return;
+                
+                // 点击了缩回后的列表/操作按钮
+                if (e.target.closest("#listToggleBtn")) {
+                    return;
+                }
 
-                if (!state.isListView) {
-                    if (document.activeElement !== searchInput) {
+                if (state.isListView) {
+                    // 状态 1：资源列表已激活 -> 再次点击搜索框区域，关闭资源列表并返回页面顶端，激活输入并弹出键盘
+                    e.preventDefault();
+                    setListViewMode(false, false);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    searchInput.readOnly = false;
+                    searchInput.focus();
+                } else {
+                    // 状态 0：默认未激活状态 -> 整个搜索框热区均作为资源列表按钮热区，仅激活资源列表
+                    if (document.activeElement !== searchInput && searchInput.value.length === 0 && !state.focusedModuleId) {
                         e.preventDefault();
                         searchInput.readOnly = true;
                         searchInput.blur();
                         ignoreNextClick = true;
                         setListViewMode(true);
+                    } else if (searchInput.readOnly) {
+                        searchInput.readOnly = false;
+                        searchInput.focus();
                     }
-                } else {
-                    e.preventDefault();
-                    setListViewMode(false, false);
-                    searchInput.readOnly = false;
-                    searchInput.focus();
                 }
             });
         }
 
         searchInput.addEventListener("mousedown", (e) => {
-            if (!state.isListView && document.activeElement !== searchInput) {
+            if (!state.isListView && document.activeElement !== searchInput && searchInput.value.length === 0 && !state.focusedModuleId) {
                 e.preventDefault();
             }
         });
@@ -2821,17 +2837,23 @@
         });
 
         searchInput.addEventListener("blur", () => {
-            if (!state.isListView) {
+            if (!state.isListView && searchInput.value.length === 0 && !state.focusedModuleId) {
                 searchInput.readOnly = true;
             }
         });
 
-        // 列表/清空操作按钮：非列表模式第一次点击仅激活资源列表，不激活输入
+        // 右侧操作按钮独立逻辑
         listToggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
 
-            if (state.isListView || hasText || state.focusedModuleId) {
+            if (state.isListView) {
+                // 列表激活时热区缩回按钮本体：点击直接关闭列表，不激活输入
+                setListViewMode(false);
+                searchInput.readOnly = true;
+                searchInput.blur();
+            } else if (hasText || state.focusedModuleId) {
+                // 存在搜索文本或单项定位：作为清除与重置按钮
                 state.focusedModuleId = null;
                 searchInput.value = "";
                 searchInput.readOnly = true;
@@ -2852,6 +2874,7 @@
                 }
                 updateRightActionButton();
             } else {
+                // 待机状态：激活资源列表
                 ignoreNextClick = true;
                 searchInput.readOnly = true;
                 searchInput.blur();
@@ -3123,6 +3146,7 @@
                 if (searchInput.disabled) return;
                 e.preventDefault();
                 setListViewMode(false, false);
+                window.scrollTo({ top: 0, behavior: "smooth" });
                 searchInput.readOnly = false;
                 searchInput.focus();
                 searchInput.select();
