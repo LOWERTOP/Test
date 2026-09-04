@@ -206,7 +206,7 @@
             --text-secondary: #939aa8;
             --text-tertiary: #6b7280;
 
-            --primary: #0891b2;
+            --primary: #0891b2; 
             --primary-hover: #06b6d4;
             --primary-soft: rgba(6, 182, 212, 0.2);
 
@@ -275,11 +275,11 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif; 
             -webkit-font-smoothing: antialiased; 
             text-rendering: optimizeLegibility; 
-            transition: color 0.4s ease, padding-top 0.35s cubic-bezier(0.16, 1, 0.3, 1); 
+            transition: color 0.4s ease; 
         }
 
         body.is-list-view {
-            padding-top: max(8px, env(safe-area-inset-top));
+            padding-top: max(16px, env(safe-area-inset-top));
         }
 
         button, input { font: inherit; }
@@ -350,23 +350,26 @@
 
         .header { 
             padding: 24px 0 18px; 
-            max-height: 160px;
+            max-height: 140px;
             overflow: visible;
-            transition: max-height 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-                        padding 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-                        margin 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-                        opacity 0.14s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.16s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: max-height, opacity, transform;
+            transition: max-height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+                        opacity 0.16s ease,
+                        padding 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+                        margin 0.2s cubic-bezier(0.25, 1, 0.5, 1),
+                        transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         body.is-list-view .header {
             max-height: 0 !important;
             padding-top: 0 !important;
             padding-bottom: 0 !important;
-            margin: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
             opacity: 0 !important;
-            transform: translateY(-24px) scale(0.96);
+            transform: translateY(-16px);
             pointer-events: none;
+            overflow: hidden !important;
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -1206,15 +1209,15 @@
         ========================================================= */
         .alphabet-view-container {
             position: fixed;
-            top: 100px;
-            bottom: 100px;
+            top: calc(max(16px, env(safe-area-inset-top)) + 72px);
+            bottom: max(90px, calc(env(safe-area-inset-bottom) + 76px));
             display: none;
             opacity: 0;
-            transform: translateY(4px);
+            transform: translateY(6px);
             pointer-events: none;
             z-index: 999980;
-            transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
-                        transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity, transform;
         }
 
@@ -1382,7 +1385,6 @@
             background-color: transparent;
         }
 
-        /* 利用伪元素向右延展热区至视口右边缘，透明不可见且完全支持事件捕捉 */
         .alphabet-fast-index::after {
             content: "";
             position: absolute;
@@ -1410,7 +1412,6 @@
             transition: color 0.15s ease, transform 0.15s ease;
         }
 
-        /* 为每个字母条项同样向右扩展独立判断层 */
         .alphabet-fast-char::after {
             content: "";
             position: absolute;
@@ -1797,7 +1798,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260903"; 
+        const CACHE_VERSION = "20260904"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1993,7 +1994,7 @@
 
         const SYSTEM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-        const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
+        const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
         const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
         const tagPillBadge = document.getElementById("tagPillBadge");
@@ -2054,7 +2055,8 @@
             isListView: false,
             focusedModuleId: null,
             activeTab: "module",
-            statusKey: "statusSyncing"
+            statusKey: "statusSyncing",
+            isAlphabetRendered: false
         };
 
         let searchTimer = null;
@@ -2063,6 +2065,42 @@
         let tabAnimTimer = null;
         let tabSwitchContentTimer = null;
         let lastCardWidthVal = 0;
+
+        let alphabetImgObserver = null;
+        function getAlphabetImgObserver() {
+            if (!alphabetImgObserver && ('IntersectionObserver' in window)) {
+                alphabetImgObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            const realSrc = img.dataset.src;
+                            if (realSrc) {
+                                img.src = realSrc;
+                                img.removeAttribute('data-src');
+                            }
+                            observer.unobserve(img);
+                        }
+                    });
+                }, {
+                    root: alphabetScrollArea,
+                    rootMargin: '100px 0px'
+                });
+            }
+            return alphabetImgObserver;
+        }
+
+        function scheduleAlphabetPreRender() {
+            const task = () => {
+                if (!state.isAlphabetRendered && state.allModules.length > 0) {
+                    renderAlphabetList();
+                }
+            };
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(task, { timeout: 2000 });
+            } else {
+                setTimeout(task, 600);
+            }
+        }
 
         function checkScrollLock() {
             const root = document.documentElement;
@@ -2239,7 +2277,7 @@
         function createIOSAppIcon(name) {
             const cleanName = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const char = Array.from(cleanName)[0] || (state.currentLang === "en" ? "M" : "模");
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="100" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="128" text-anchor="middle" dominant-baseline="central" alignment-baseline="central" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
@@ -2489,6 +2527,8 @@
             alphabetScrollArea.innerHTML = "";
             alphabetFastIndex.innerHTML = "";
 
+            const observer = getAlphabetImgObserver();
+
             let sourceList = state.allModules;
             const sorted = [...sourceList].sort((a, b) => {
                 const letterA = getItemInitialLetter(a.name);
@@ -2539,7 +2579,7 @@
                         row.setAttribute("tabindex", "0");
                         
                         const fallbackIcon = createIOSAppIcon(mod.name);
-                        const iconSrc = mod.icon || fallbackIcon;
+                        const hasRemoteIcon = Boolean(mod.icon);
 
                         let catName = "模块";
                         if (mod.category === "config") catName = "配置";
@@ -2551,18 +2591,26 @@
 
                         row.innerHTML = `
                             <div class="alphabet-item-icon">
-                                <img src="${escapeHTML(iconSrc)}" alt="" decoding="async">
+                                <img src="${escapeHTML(fallbackIcon)}" ${hasRemoteIcon ? `data-src="${escapeHTML(mod.icon)}"` : ''} alt="" decoding="async">
                             </div>
                             <span class="alphabet-item-name">${escapeHTML(mod.name)}</span>
                             <span class="alphabet-item-type">${escapeHTML(catName)}</span>
                         `;
 
+                        const imgEl = row.querySelector("img");
+                        if (hasRemoteIcon) {
+                            if (observer) {
+                                observer.observe(imgEl);
+                            } else {
+                                imgEl.src = mod.icon;
+                            }
+                            bindImageError(imgEl, fallbackIcon);
+                        }
+
                         row.addEventListener("click", (e) => {
                             e.preventDefault();
                             focusSingleResource(mod);
                         });
-
-                        bindImageError(row.querySelector("img"), fallbackIcon);
 
                         listEl.appendChild(row);
                     });
@@ -2573,6 +2621,7 @@
             });
 
             alphabetScrollArea.appendChild(fragment);
+            state.isAlphabetRendered = true;
             updateAlphabetPosition();
         }
 
@@ -2665,9 +2714,27 @@
             if (!alphabetViewContainer || !searchBoxInner) return;
 
             const searchRect = searchBoxInner.getBoundingClientRect();
+            const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+
+            const topPos = Math.round(searchRect.bottom + 20);
+
+            let bottomPos = 20;
+            const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
+            const tabBarWrapper = document.querySelector('.control-bar.is-single-column .tab-bar-wrapper');
             
-            alphabetViewContainer.style.top = `100px`;
-            alphabetViewContainer.style.bottom = `100px`;
+            if (isSingleCol && tabBarWrapper) {
+                const tabRect = tabBarWrapper.getBoundingClientRect();
+                if (tabRect.top > 0 && tabRect.top < viewportHeight) {
+                    bottomPos = Math.round(viewportHeight - tabRect.top + 8);
+                } else {
+                    bottomPos = 84;
+                }
+            } else {
+                bottomPos = Math.max(20, Math.round(viewportHeight * 0.04));
+            }
+
+            alphabetViewContainer.style.top = `${topPos}px`;
+            alphabetViewContainer.style.bottom = `${bottomPos}px`;
             alphabetViewContainer.style.left = `${searchRect.left}px`;
             alphabetViewContainer.style.width = `${searchRect.width}px`;
         }
@@ -2677,34 +2744,49 @@
             window.visualViewport.addEventListener('scroll', updateAlphabetPosition);
         }
 
-        const LIST_VIEW_MAIN_FADE_MS = 120;
-        const LIST_VIEW_FADE_MS = 200;
         let listViewTransitionTimer = null;
+        let listSyncRaf = null;
+
+        function syncAlphabetPositionDuringTransition(duration = 240) {
+            const startTime = performance.now();
+            function step(now) {
+                updateAlphabetPosition();
+                if (now - startTime < duration && state.isListView) {
+                    listSyncRaf = requestAnimationFrame(step);
+                } else {
+                    updateAlphabetPosition();
+                }
+            }
+            cancelAnimationFrame(listSyncRaf);
+            listSyncRaf = requestAnimationFrame(step);
+        }
 
         function setListViewMode(enable) {
             if (state.isListView === enable) return;
             state.isListView = enable;
 
             clearTimeout(listViewTransitionTimer);
+            cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
                 state.focusedModuleId = null;
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                if (window.scrollY > 0) {
+                    window.scrollTo(0, 0);
+                }
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                renderAlphabetList();
+                if (!state.isAlphabetRendered) {
+                    renderAlphabetList();
+                }
+
                 updateAlphabetPosition();
-                alphabetViewContainer.classList.remove("is-visible");
+                syncAlphabetPositionDuringTransition(240);
 
                 requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (!state.isListView) return;
-                        listViewTransitionTimer = setTimeout(() => {
-                            if (!state.isListView) return;
-                            alphabetViewContainer.classList.add("is-visible");
-                        }, LIST_VIEW_MAIN_FADE_MS);
-                    });
+                    if (state.isListView) {
+                        alphabetViewContainer.classList.add("is-visible");
+                    }
                 });
 
                 checkScrollLock();
@@ -2715,10 +2797,9 @@
                     if (state.isListView) return;
                     document.body.classList.remove("is-list-view");
                     updateRightActionButton();
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                     checkScrollLock();
                     scheduleCardLayerUpdate();
-                }, LIST_VIEW_FADE_MS);
+                }, 180);
             }
         }
 
@@ -3258,8 +3339,10 @@
             const dynamicItems = normalizeModules(state.rawNetworkData);
             state.allModules = [...staticItems, ...dynamicItems];
 
+            state.isAlphabetRendered = false;
             state.allModules.forEach(m => { m._domElement = null; });
             filterModules();
+            scheduleAlphabetPreRender();
 
             requestAnimationFrame(() => updateTabIndicator(false));
         }
@@ -3480,9 +3563,11 @@
                         const normalized = normalizeModules(parsed);
                         if (normalized.length > 0) {
                             state.allModules = [...staticItems, ...normalized];
+                            state.isAlphabetRendered = false;
                             filterModules();
                             setSearchState(true);
                             hasRenderedCache = true;
+                            scheduleAlphabetPreRender();
 
                             if (isCacheFresh) {
                                 state.statusKey = "statusReady";
@@ -3504,8 +3589,10 @@
 
             if (!hasRenderedCache && state.allModules.length === 0) {
                 state.allModules = staticItems;
+                state.isAlphabetRendered = false;
                 filterModules();
                 setSearchState(false);
+                scheduleAlphabetPreRender();
                 state.statusKey = "statusFetchingStatic";
                 statusText.textContent = langObj.statusFetchingStatic;
                 statusDot.className = "status-dot loading";
@@ -3525,8 +3612,10 @@
                 if (!normalized.length) throw new Error("未解析到有效资源数据");
 
                 state.allModules = [...staticItems, ...normalized];
+                state.isAlphabetRendered = false;
                 filterModules();
                 setSearchState(true);
+                scheduleAlphabetPreRender();
 
                 try {
                     localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify(data));
