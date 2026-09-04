@@ -2361,7 +2361,6 @@
         
         window.addEventListener('scroll', updateSearchLayer, { passive: true });
 
-        // 点击返回顶部按钮：如果当前处于资源列表状态，则立即关闭列表并返回顶部
         backToTopBtn.addEventListener("click", () => {
             if (state.isListView) {
                 setListViewMode(false, false);
