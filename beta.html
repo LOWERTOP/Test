@@ -368,7 +368,7 @@
             opacity: 0 !important;
             pointer-events: none;
             overflow: hidden !important;
-            transition: none !important; /* 修复：在列表视图下禁用标题栏过渡，防止搜索栏产生上下滑动/位移 */
+            transition: none !important;
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -1865,7 +1865,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "202609050100"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2886,10 +2886,18 @@
             }
         }
 
+        /* 修复：使用标识符防抖，确保点击输入框聚焦触发列表时不被后续的点击事件立即关闭 */
+        let ignoreNextClick = false;
+
         document.addEventListener("click", (e) => {
             if (!state.isListView) return;
+            if (ignoreNextClick) {
+                ignoreNextClick = false;
+                return;
+            }
             if (e.target.closest("#alphabetViewContainer") || 
                 e.target.closest("#controlBar") || 
+                e.target.closest(".search-box-inner") ||
                 e.target.closest("#toast") || 
                 e.target.closest("#pullRefreshIndicator")) {
                 return;
@@ -2897,8 +2905,10 @@
             setListViewMode(false);
         });
 
-        searchInput.addEventListener("focus", () => {
+        searchInput.addEventListener("focus", (e) => {
+            e.stopPropagation();
             if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
+                ignoreNextClick = true;
                 setListViewMode(true);
             }
         });
@@ -2911,12 +2921,22 @@
                 state.focusedModuleId = null;
                 searchInput.value = "";
                 setListViewMode(false);
+                
+                state.activeTab = "module";
+                tabItems.forEach(t => {
+                    const isActive = t.getAttribute("data-tab") === "module";
+                    t.classList.toggle("active", isActive);
+                    t.setAttribute("aria-selected", isActive ? "true" : "false");
+                });
+                updateTabIndicator(true);
+
                 filterModules();
                 if (state.statusKey && I18N[state.currentLang][state.statusKey]) {
                     statusText.textContent = I18N[state.currentLang][state.statusKey];
                 }
                 updateRightActionButton();
             } else {
+                ignoreNextClick = true;
                 setListViewMode(true);
                 searchInput.focus();
             }
