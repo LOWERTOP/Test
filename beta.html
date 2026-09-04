@@ -274,13 +274,22 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        body.is-list-view .container > *:not(#controlBar) {
+        /* 主页面与列表视图动画完全解耦独立 */
+        .header, .status, .modules, .sentinel, .footer {
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+            will-change: opacity;
+        }
+
+        body.is-list-view .header,
+        body.is-list-view .status,
+        body.is-list-view .modules,
+        body.is-list-view .sentinel,
+        body.is-list-view .footer {
             opacity: 0 !important;
             pointer-events: none !important;
-            visibility: hidden;
+            visibility: hidden !important;
         }
 
         .glass-element {
@@ -1145,7 +1154,6 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* 仅在单列模式下沉到底部，不受列表激活态干扰 */
         .control-bar.is-single-column {
             display: block;
             position: sticky;
@@ -1227,16 +1235,16 @@
             font-weight: 400 !important;
         }
 
+        /* 资源列表体块容器：左右与搜索框及主页面对齐，不受iOS虚拟键盘影响 */
         .alphabet-view-container {
             position: fixed;
-            top: calc(max(16px, env(safe-area-inset-top)) + 72px);
-            bottom: max(90px, calc(env(safe-area-inset-bottom) + 76px));
+            z-index: 999980;
             display: none;
             opacity: 0;
             pointer-events: none;
-            z-index: 999980;
-            transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity;
+            box-sizing: border-box;
         }
 
         body.is-list-view .alphabet-view-container {
@@ -1806,7 +1814,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609050250"; 
+        const CACHE_VERSION = "20260904"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2240,7 +2248,7 @@
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
-        // 获取当前搜索框吸顶（上浮）时页面对应的滚动目标高度
+        // 吸顶既定阈值计算
         function getControlBarStickyScrollTop() {
             if (!controlBarEl) return 0;
             const style = window.getComputedStyle(controlBarEl);
@@ -2249,14 +2257,12 @@
             return Math.max(0, elementTop - topSticky);
         }
 
-        // 判断当前搜索框是否已经处于上浮吸顶状态
         function isSearchFloating() {
             const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
             const threshold = getControlBarStickyScrollTop();
-            return currentScrollY >= (threshold - 2);
+            return currentScrollY >= (threshold - 4);
         }
 
-        // 平滑上浮搜索框到吸顶停止位置
         function floatSearchToTarget(smooth = true) {
             const targetTop = getControlBarStickyScrollTop();
             window.scrollTo({
@@ -2324,7 +2330,6 @@
             return template ? template.trim().split(/\s+/).length : 1;
         }
 
-        // 标签栏上下位置的变化仅受是否是单列列表影响
         function updateControlBarLayout() {
             const bar = document.getElementById("controlBar");
             if (!bar || !modulesContainer) return;
@@ -2404,11 +2409,6 @@
                 new ResizeObserver(() => {
                     if (!isTabAnimating) updateTabIndicator(false);
                 }).observe(tabBarEl);
-            }
-            if (searchBoxInner) {
-                new ResizeObserver(() => {
-                    if (state.isListView) updateAlphabetPosition();
-                }).observe(searchBoxInner);
             }
         }
 
@@ -2682,28 +2682,35 @@
             }
         });
 
+        // 核心布局计算：左侧对齐搜索框，右侧留白与主页面一致，不受iOS键盘弹起影响
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !searchBoxInner || !pageContainer) return;
 
             const searchRect = searchBoxInner.getBoundingClientRect();
             const containerRect = pageContainer.getBoundingClientRect();
-            const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
-            const topPos = Math.round(searchRect.bottom + 16);
+            // 严格以视口静态高度为基准，彻底解绑并免疫 iOS 软键盘的动态缩放干扰
+            const standardViewportHeight = window.innerHeight;
 
-            let bottomPos = 20;
+            // 搜索框吸顶后的固定顶部锚点：sticky top (12px) + control-bar padding (4px) + search-box height (44px) + margin (12px)
+            const style = window.getComputedStyle(controlBarEl);
+            const stickyTopVal = parseFloat(style.top) || 12;
+            const topPos = Math.round(stickyTopVal + 4 + 44 + 12);
+
+            let bottomPos = 24;
             const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
-            const tabBarWrapper = document.querySelector('.control-bar.is-single-column .tab-bar-wrapper');
             
-            if (isSingleCol && tabBarWrapper) {
-                const tabRect = tabBarWrapper.getBoundingClientRect();
-                if (tabRect.top > 0 && tabRect.top < viewportHeight) {
-                    bottomPos = Math.round(viewportHeight - tabRect.top + 8);
+            if (isSingleCol) {
+                // 单列模式：避开底部固定的 TabBar
+                const tabBarWrapper = document.querySelector('.control-bar.is-single-column .tab-bar-wrapper');
+                if (tabBarWrapper) {
+                    const tabH = tabBarWrapper.offsetHeight || 62;
+                    bottomPos = Math.round(tabH + 28);
                 } else {
-                    bottomPos = 84;
+                    bottomPos = 90;
                 }
             } else {
-                bottomPos = Math.max(20, Math.round(viewportHeight * 0.04));
+                bottomPos = 24;
             }
 
             alphabetViewContainer.style.top = `${topPos}px`;
@@ -2712,34 +2719,13 @@
             alphabetViewContainer.style.width = `${containerRect.right - searchRect.left}px`;
         }
 
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', updateAlphabetPosition);
-            window.visualViewport.addEventListener('scroll', updateAlphabetPosition);
-        }
-
         let listViewTransitionTimer = null;
-        let listSyncRaf = null;
 
-        function syncAlphabetPositionDuringTransition(duration = 240) {
-            const startTime = performance.now();
-            function step(now) {
-                updateAlphabetPosition();
-                if (now - startTime < duration && state.isListView) {
-                    listSyncRaf = requestAnimationFrame(step);
-                } else {
-                    updateAlphabetPosition();
-                }
-            }
-            cancelAnimationFrame(listSyncRaf);
-            listSyncRaf = requestAnimationFrame(step);
-        }
-
-        // 统一控制首字母列表激活与搜索框上浮交互
+        // 控制列表激活、页面消隐与上浮机制
         function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
 
             clearTimeout(listViewTransitionTimer);
-            cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
                 const alreadyFloating = isSearchFloating();
@@ -2752,7 +2738,7 @@
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
 
-                // 规则 1：无论搜索框处于什么位置，激活时都直接上浮到既定吸顶位置
+                // 执行上浮到既定吸顶位置（平滑滚动）
                 if (!alreadyFloating) {
                     floatSearchToTarget(true);
                 }
@@ -2761,8 +2747,8 @@
                     renderAlphabetList();
                 }
 
+                // 立即校准体块对齐尺寸
                 updateAlphabetPosition();
-                syncAlphabetPositionDuringTransition(240);
 
                 requestAnimationFrame(() => {
                     if (state.isListView) {
@@ -2770,7 +2756,12 @@
                     }
                 });
 
-                checkScrollLock();
+                // 延迟添加锁屏，保证 smooth scroll 完整完成而不被掐死
+                setTimeout(() => {
+                    if (state.isListView) {
+                        checkScrollLock();
+                    }
+                }, 350);
             } else {
                 state.isListView = false;
                 alphabetViewContainer.classList.remove("is-visible");
@@ -2783,7 +2774,7 @@
                     checkScrollLock();
                     scheduleCardLayerUpdate();
 
-                    // 规则 1：取消后，若激活前尚未上浮，恢复激活前位置；若原本已处于上浮状态，则保持原样
+                    // 若激活前尚未上浮，平滑滚回原有位置；若原本已处于上浮状态，保持原位
                     if (restoreScroll && !state.wasFloatingBeforeActive) {
                         const targetScrollY = Math.max(0, state.listViewReturnScrollY);
                         requestAnimationFrame(() => {
@@ -2791,7 +2782,7 @@
                             updateSearchLayer();
                         });
                     }
-                }, 180);
+                }, 200);
             }
         }
 
@@ -2813,22 +2804,20 @@
             setListViewMode(false);
         });
 
-        // 点击搜索框聚焦：上浮到既定位置并呼出列表
+        // 点击搜索框聚焦：统一执行上浮与呼出列表逻辑
         searchInput.addEventListener("focus", (e) => {
             e.stopPropagation();
-            if (!isSearchFloating()) {
-                floatSearchToTarget(true);
-            }
             if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
                 ignoreNextClick = true;
                 setListViewMode(true);
-                requestAnimationFrame(() => {
-                    updateAlphabetPosition();
-                });
+            } else {
+                if (!isSearchFloating()) {
+                    floatSearchToTarget(true);
+                }
             }
         });
 
-        // 点击右侧资源列表按钮
+        // 点击右侧列表/关闭按钮
         listToggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
@@ -2855,9 +2844,6 @@
                 ignoreNextClick = true;
                 setListViewMode(true);
                 searchInput.focus();
-                requestAnimationFrame(() => {
-                    updateAlphabetPosition();
-                });
             }
         });
 
