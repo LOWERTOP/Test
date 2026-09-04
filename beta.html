@@ -61,9 +61,6 @@
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore_01.png">
 
     <style>
-        /* =========================================================
-            1. 浅色主题设计令牌 (Light Theme Tokens)
-        ========================================================= */
         :root, [data-theme="light"] {
             --layout-gap: 44px;
             --bg-page-solid: #f0f2f5;
@@ -164,9 +161,6 @@
             --toast-bottom: max(93px, calc(env(safe-area-inset-bottom) + 59px));
         }
 
-        /* =========================================================
-            2. 暗色主题设计令牌 (Dark Theme Tokens)
-        ========================================================= */
         [data-theme="dark"] {
             --bg-page-solid: #14161a;
             
@@ -469,7 +463,6 @@
             color: var(--primary); background-color: var(--primary-soft); 
         }
         
-        /* 右上角功能按钮：沉浸式图标，仅保留 SVG，不使用玻璃、边框和阴影 */
         .theme-controls .immersive-icon {
             width: 36px;
             height: 36px;
@@ -1268,12 +1261,14 @@
         }
 
         /* =========================================================
-            7. 全局首字母字母表搜索视图 (胶囊柱与对齐规范)
+            7. 全局首字母字母表搜索视图 (左缘绑定搜索框，右缘保持固定数值)
         ========================================================= */
         .alphabet-view-container {
             position: fixed;
             top: calc(max(16px, env(safe-area-inset-top)) + 72px);
             bottom: max(90px, calc(env(safe-area-inset-bottom) + 76px));
+            right: max(16px, env(safe-area-inset-right));
+            left: 16px;
             display: none;
             opacity: 0;
             pointer-events: none;
@@ -1423,7 +1418,6 @@
             flex-shrink: 0;
         }
 
-        /* 竖向胶囊状字母快速定位导航条 */
         .alphabet-fast-index {
             position: absolute;
             right: 0;
@@ -1508,7 +1502,6 @@
             pointer-events: none;
         }
 
-        /* 触控滑动时的左侧大号悬浮气泡字母提示 */
         .alphabet-popup-bubble {
             position: absolute;
             right: 36px;
@@ -1548,9 +1541,6 @@
             border-color: var(--border-subtle);
         }
 
-        /* =========================================================
-            8. 移动与触控设备约束
-        ========================================================= */
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
@@ -1857,12 +1847,8 @@
     <!-- 首字母列表展示区与动态定位条 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
-            <div id="alphabetScrollArea" class="alphabet-scroll-area">
-                <!-- 动态渲染按 #, A-Z 分组的单列列表 -->
-            </div>
-            <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航">
-                <!-- 动态渲染 #, A-Z 快速定位字母胶囊 -->
-            </div>
+            <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
+            <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航"></div>
             <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
         </div>
     </div>
@@ -2509,9 +2495,6 @@
             }
         }
 
-        /* =========================================================
-            首字母列表与快速选择功能实现
-        ========================================================= */
         function getItemInitialLetter(name) {
             const clean = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const first = clean.charAt(0);
@@ -2784,6 +2767,7 @@
             }
         });
 
+        /* 左侧与搜索框左边缘位置绑定，右侧保持固定距离 */
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !searchBoxInner) return;
 
@@ -2810,7 +2794,8 @@
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
             alphabetViewContainer.style.left = `${searchRect.left}px`;
-            alphabetViewContainer.style.width = `${searchRect.width}px`;
+            alphabetViewContainer.style.right = `max(16px, env(safe-area-inset-right))`;
+            alphabetViewContainer.style.width = 'auto';
         }
 
         if (window.visualViewport) {
@@ -2820,9 +2805,23 @@
 
         let listViewTransitionTimer = null;
         let listSyncRaf = null;
-        // 进入字母列表前的页面滚动位置。列表是一个临时覆盖视图，
-        // 退出时默认恢复到进入前的位置，而不是无条件回到页面顶部。
+        
+        let wasStuckAtTopWhenOpened = false;
         let listViewReturnScrollY = 0;
+
+        function isControlBarStuck() {
+            if (!controlBarEl) return true;
+            const rect = controlBarEl.getBoundingClientRect();
+            const style = window.getComputedStyle(controlBarEl);
+            const stickyTop = parseFloat(style.top) || 12;
+            return (rect.top - stickyTop) <= 2;
+        }
+
+        function getHeaderHeight() {
+            const header = document.querySelector('.header');
+            if (!header) return 0;
+            return header.offsetHeight;
+        }
 
         function syncAlphabetPositionDuringTransition(duration = 240) {
             const startTime = performance.now();
@@ -2845,11 +2844,15 @@
             cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
-                // 记录“呼出列表”这一瞬间的页面位置。
-                // 不再主动 scrollTo(0, 0)，避免产生“先回顶、再消隐”的多余动作。
                 listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+                wasStuckAtTopWhenOpened = isControlBarStuck();
+
                 state.isListView = true;
                 state.focusedModuleId = null;
+
+                if (!wasStuckAtTopWhenOpened) {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                }
 
                 document.body.classList.add("is-list-view");
                 updateRightActionButton();
@@ -2859,7 +2862,7 @@
                 }
 
                 updateAlphabetPosition();
-                syncAlphabetPositionDuringTransition(240);
+                syncAlphabetPositionDuringTransition(260);
 
                 requestAnimationFrame(() => {
                     if (state.isListView) {
@@ -2880,15 +2883,16 @@
                     checkScrollLock();
                     scheduleCardLayerUpdate();
 
-                    // 正常退出列表：恢复进入前的位置。
-                    // 特殊导航（定位资源、切换分类等）可传 restoreScroll=false。
-                    if (restoreScroll) {
+                    if (!wasStuckAtTopWhenOpened) {
+                        const headerH = getHeaderHeight();
+                        const targetScroll = Math.max(120, headerH);
+                        window.scrollTo({ top: targetScroll, behavior: "auto" });
+                    } else if (restoreScroll) {
                         const targetScrollY = Math.max(0, listViewReturnScrollY);
-                        requestAnimationFrame(() => {
-                            window.scrollTo({ top: targetScrollY, behavior: "auto" });
-                            updateSearchLayer();
-                        });
+                        window.scrollTo({ top: targetScrollY, behavior: "auto" });
                     }
+                    
+                    updateSearchLayer();
                 }, 180);
             }
         }
