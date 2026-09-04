@@ -58,7 +58,7 @@
     </script>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22g%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 stop-color=%22%2306b6d4%22/><stop offset=%2250%25%22 stop-color=%22%233b82f6%22/><stop offset=%22100%25%22 stop-color=%22%238b5cf6%22/></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2246%22 fill=%22url(%23g)%22 stroke=%22rgba(255,255,255,0.6)%22 stroke-width=%224%22/><text x=%2250%22 y=%2255%22 font-size=%2248%22 text-anchor=%22middle%22 dominant-baseline=%22central%22>🚀</text></svg>">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/Shadowrocket.png">
 
     <style>
         /* =========================================================
@@ -206,7 +206,7 @@
             --text-secondary: #939aa8;
             --text-tertiary: #6b7280;
 
-            --primary: #0891b2;
+            --primary: #0891b2; 
             --primary-hover: #06b6d4;
             --primary-soft: rgba(6, 182, 212, 0.2);
 
@@ -350,8 +350,8 @@
 
         .header { 
             padding: 24px 0 18px; 
-            max-height: 110px;
-            overflow: hidden;
+            max-height: 140px;
+            overflow: visible;
             will-change: max-height, opacity, transform;
             transition: max-height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
                         opacity 0.16s ease,
@@ -369,6 +369,7 @@
             opacity: 0 !important;
             transform: translateY(-16px);
             pointer-events: none;
+            overflow: hidden !important;
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -2276,7 +2277,7 @@
         function createIOSAppIcon(name) {
             const cleanName = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const char = Array.from(cleanName)[0] || (state.currentLang === "en" ? "M" : "模");
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="100" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="128" cy="128" r="128" fill="url(#g)"/><text x="128" y="128" text-anchor="middle" dominant-baseline="central" alignment-baseline="central" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,SF Pro Text,sans-serif" font-size="110" font-weight="700">${escapeHTML(char)}</text></svg>`;
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
@@ -2715,7 +2716,6 @@
             const searchRect = searchBoxInner.getBoundingClientRect();
             const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
-            // 加大顶部间距为 20px，保证视觉通透不拥挤
             const topPos = Math.round(searchRect.bottom + 20);
 
             let bottomPos = 20;
