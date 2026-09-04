@@ -2,7 +2,7 @@
 
 <div align="center">
 
- **汇聚开源力量 · 坚持原链引用 · 打造开放丰富的第三方资源导航平台**
+ **汇聚开源力量 · 坚持原链引用 · 打造丰富的开放资源导航平台**
 
 [🌐 在线访问](https://shadowstore.dpdns.org) · [💡 建议反馈](https://github.com/LOWERTOP/Shadowrocket-First/issues)
 
