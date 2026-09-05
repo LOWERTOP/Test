@@ -61,9 +61,6 @@
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/main/img/ShadowStore_01.png">
 
     <style>
-        /* =========================================================
-            1. 浅色主题设计令牌 (Light Theme Tokens)
-        ========================================================= */
         :root, [data-theme="light"] {
             --layout-gap: 44px;
             --bg-page-solid: #f0f2f5;
@@ -77,11 +74,6 @@
             --glass-border-l: rgba(255, 255, 255, 0.85);
 
             --noise-pattern: url("data:image/svg+xml,%3Csvg width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
-
-            --content-shadow-lg: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.18));
-            --text-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.18);
-            --content-shadow-sm: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
-            --text-shadow-sm: 0 6px 12px rgba(0, 0, 0, 0.15);
 
             --shadow-glass-ui: 
                 inset 3px 3px 10px 2px rgba(255, 255, 255, 0.45),
@@ -140,11 +132,9 @@
             --text-tertiary: #a1a9ba;
 
             --primary: #0891b2; 
-            --primary-hover: #0e7490;
             --primary-soft: rgba(6, 182, 212, 0.15);
 
             --primary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
-            --primary-gradient-hover: linear-gradient(135deg, #0891b2 0%, #2563eb 50%, #7c3aed 100%);
             --primary-gradient-shadow: 0 4px 14px rgba(59, 130, 246, 0.08);
             
             --bg-surface: #e6eaf0;
@@ -164,12 +154,8 @@
             --toast-bottom: max(93px, calc(env(safe-area-inset-bottom) + 59px));
         }
 
-        /* =========================================================
-            2. 暗色主题设计令牌 (Dark Theme Tokens)
-        ========================================================= */
         [data-theme="dark"] {
             --bg-page-solid: #14161a;
-            
             --glass-bg: none;
             --glass-bg-hover: none;
             --glass-border-t: transparent;
@@ -179,39 +165,20 @@
 
             --noise-pattern: url("data:image/svg+xml,%3Csvg width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
 
-            --content-shadow-lg: none;
-            --text-shadow-lg: none;
-            --content-shadow-sm: none;
-            --text-shadow-sm: none;
-
-            --shadow-glass-ui: 
-                0 6px 20px rgba(0, 0, 0, 0.4),
-                0 2px 6px rgba(0, 0, 0, 0.25);
-
+            --shadow-glass-ui: 0 6px 20px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.25);
             --shadow-tab-bar-bottom: none;
-
-            --shadow-glass-ui-hover: 
-                0 8px 24px rgba(0, 0, 0, 0.5),
-                0 3px 8px rgba(0, 0, 0, 0.3);
-
-            --shadow-search: 
-                0 4px 13.3px rgba(0, 0, 0, 0.27),
-                0 1.3px 4px rgba(0, 0, 0, 0.17);
-
-            --shadow-search-hover: 
-                0 5.3px 16px rgba(0, 0, 0, 0.33),
-                0 2px 5.3px rgba(0, 0, 0, 0.20);
+            --shadow-glass-ui-hover: 0 8px 24px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3);
+            --shadow-search: 0 4px 13.3px rgba(0, 0, 0, 0.27), 0 1.3px 4px rgba(0, 0, 0, 0.17);
+            --shadow-search-hover: 0 5.3px 16px rgba(0, 0, 0, 0.33), 0 2px 5.3px rgba(0, 0, 0, 0.20);
 
             --text-primary: #dce1e8;
             --text-secondary: #939aa8;
             --text-tertiary: #6b7280;
 
             --primary: #0891b2; 
-            --primary-hover: #06b6d4;
             --primary-soft: rgba(6, 182, 212, 0.2);
 
             --primary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
-            --primary-gradient-hover: linear-gradient(135deg, #22d3ee 0%, #60a5fa 50%, #a78bfa 100%);
             --primary-gradient-shadow: 0 4px 16px rgba(59, 130, 246, 0.11);
 
             --bg-surface: #1d2026;
@@ -269,17 +236,13 @@
             padding-right: 16px;
             padding-bottom: var(--safe-pad-bottom);
             padding-left: 16px;
-            background-color: transparent;
+            background-color: var(--bg-page-solid);
             background-image: none !important;
             color: var(--text-primary); 
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif; 
             -webkit-font-smoothing: antialiased; 
             text-rendering: optimizeLegibility; 
             transition: color 0.4s ease; 
-        }
-
-        body.is-list-view {
-            padding-top: max(16px, env(safe-area-inset-top));
         }
 
         button, input { font: inherit; }
@@ -294,6 +257,21 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+        }
+
+        .header, .status, .modules, .sentinel, .footer {
+            transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
+            will-change: opacity;
+        }
+
+        body.is-list-view .header,
+        body.is-list-view .status,
+        body.is-list-view .modules,
+        body.is-list-view .sentinel,
+        body.is-list-view .footer {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
         }
 
         .glass-element {
@@ -348,28 +326,11 @@
         .ptr-icon svg { width: 100%; height: 100%; }
         .ptr-icon.rotate { transform: rotate(180deg); }
 
+        /* 容器 1：大标题栏 */
         .header { 
             padding: 24px 0 18px; 
             max-height: 140px;
             overflow: visible;
-            will-change: max-height, opacity, transform;
-            transition: max-height 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        opacity 0.16s ease,
-                        padding 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        margin 0.2s cubic-bezier(0.25, 1, 0.5, 1),
-                        transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        body.is-list-view .header {
-            max-height: 0 !important;
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            opacity: 0 !important;
-            transform: translateY(-16px);
-            pointer-events: none;
-            overflow: hidden !important;
         }
 
         .header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -471,7 +432,6 @@
             color: var(--primary); background-color: var(--primary-soft); 
         }
         
-        /* 右上角功能按钮：沉浸式图标，仅保留 SVG，不使用玻璃、边框和阴影 */
         .theme-controls .immersive-icon {
             width: 36px;
             height: 36px;
@@ -528,26 +488,23 @@
             filter: none; 
         }
 
-        /* =========================================================
-            3. 搜索 + 分类控制栏 (宽屏吸顶)
-        ========================================================= */
+        /* 容器 2：搜索栏、状态及衍生弹窗面板：第二列固定为 var(--card-width)，确保右边缘与主卡片对齐 */
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
             z-index: 999990;
             display: grid;
-            grid-template-columns: var(--card-width, 380px) minmax(0, 1fr);
+            grid-template-columns: var(--card-width, 380px) var(--card-width, 380px);
             gap: var(--layout-gap, 44px);
             align-items: center;
             width: 100%;
             margin-bottom: 16px;
             padding: 4px 0;
-            transition: top 0.35s cubic-bezier(0.16, 1, 0.3, 1), margin-bottom 0.35s ease;
+            background-color: transparent;
+            transition: margin-bottom 0.35s ease;
         }
 
-        /* =========================================================
-            4. 分类标签页与统一的悬停动效复用
-        ========================================================= */
+        /* 容器 3：标签栏 */
         .tab-bar-wrapper {
             width: 100%;
             min-width: 0;
@@ -691,9 +648,6 @@
             font-weight: 400 !important;
         }
 
-        /* =========================================================
-            5. 搜索框区域
-        ========================================================= */
         .search-wrapper { 
             position: relative;
             height: 44px;
@@ -706,6 +660,77 @@
             width: 100%;
         }
 
+        /* 独立的资源列表按钮（放在左侧，固定间距 8px）：已移除青色边框和青色遮罩 */
+        .standalone-list-btn {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            box-shadow: var(--shadow-glass-ui);
+            border-top-color: var(--glass-border-t);
+            border-left-color: var(--glass-border-l);
+            border-right-color: var(--glass-border-r);
+            border-bottom-color: var(--glass-border-b);
+            transition: 
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.3s ease,
+                color 0.2s ease,
+                border-color 0.35s ease;
+            outline: none;
+            padding: 0;
+            z-index: 999996;
+        }
+        [data-theme="dark"] .standalone-list-btn {
+            border: 1px solid var(--border-subtle);
+        }
+        .standalone-list-btn svg {
+            display: block;
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+        }
+
+        .standalone-list-btn .close-icon {
+            display: none;
+        }
+
+        .standalone-list-btn.active .list-icon {
+            display: none;
+        }
+
+        .standalone-list-btn.active .close-icon {
+            display: block;
+        }
+        .standalone-list-btn:hover {
+            background-image: var(--noise-pattern), var(--glass-bg-hover);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-glass-ui-hover);
+        }
+        [data-theme="dark"] .standalone-list-btn:hover {
+            background-image: var(--noise-pattern);
+            background-color: var(--border-subtle);
+            color: var(--text-primary);
+        }
+        .standalone-list-btn:active {
+            transform: scale(0.92);
+        }
+        /* 激活状态不再变为青色边框和青色背景，保持默认毛玻璃及图标高亮或原色 */
+        .standalone-list-btn.active {
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .standalone-list-btn.active {
+            color: var(--text-primary);
+        }
+
+        /* 搜索框自适应大小，无返回按钮时右侧与主卡片边缘对齐，有返回按钮时自动收缩且间距严格保持 8px */
         .search-box-inner {
             position: relative; 
             flex: 1 1 auto; 
@@ -726,22 +751,20 @@
                 background-color 0.35s ease;
         }
 
-        .search-box-inner:focus-within,
-        body.is-list-view .search-box-inner {
+        .search-box-inner:focus-within {
             background-image: var(--noise-pattern), var(--glass-bg-hover);
             border-color: rgba(255,255,255,0.85); 
             box-shadow: var(--shadow-search-hover); 
         }
         
-        [data-theme="dark"] .search-box-inner:focus-within,
-        [data-theme="dark"] body.is-list-view .search-box-inner {
+        [data-theme="dark"] .search-box-inner:focus-within {
             background-image: var(--noise-pattern);
             background-color: var(--border-subtle);
             border-color: var(--text-tertiary); 
             box-shadow: var(--shadow-search-hover);
         }
         
-        .search-icon, .list-toggle-icon { 
+        .search-icon, .search-clear-btn { 
             width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%;
             background: transparent; box-shadow: none; border: 1px solid var(--border-subtle);
             display: flex; align-items: center; justify-content: center;
@@ -760,31 +783,34 @@
             pointer-events: none;
         }
         
-        .list-toggle-icon {
+        .search-clear-btn {
             cursor: pointer;
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
             outline: none;
             padding: 0;
             border-style: solid;
+            position: relative;
+            z-index: 15;
+            display: none;
         }
-        .list-toggle-icon svg {
+        .search-clear-btn svg {
             display: block;
             width: 15px;
             height: 15px;
             pointer-events: none;
         }
-        .list-toggle-icon:hover {
+        .search-clear-btn:hover {
             border-color: var(--primary);
             background-color: var(--primary-soft);
             transform: scale(1.05);
+            color: var(--primary);
         }
-        .list-toggle-icon:active {
+        .search-clear-btn:active {
             transform: scale(0.92);
         }
-        .list-toggle-icon.active {
-            border-color: var(--primary);
-            background-color: var(--primary-soft);
-            color: var(--primary);
+
+        body.has-search-text .search-clear-btn {
+            display: flex;
         }
         
         .input-wrapper {
@@ -800,6 +826,7 @@
             color: var(--text-primary); font-size: 15px; font-weight: 400; vertical-align: middle;
             -webkit-appearance: none; appearance: none; border-radius: 0;
             z-index: 2;
+            cursor: text;
             text-shadow: none; 
         }
         
@@ -821,8 +848,7 @@
         }
 
         .search:focus ~ .placeholder-track,
-        .search:not(:placeholder-shown) ~ .placeholder-track,
-        body.is-list-view .placeholder-track {
+        .search:not(:placeholder-shown) ~ .placeholder-track {
             opacity: 0;
             transition: opacity 0.2s ease;
         }
@@ -840,6 +866,11 @@
             transition: color 0.2s ease, opacity 0.2s ease; 
         }
 
+        body.has-search-text .search-shortcut {
+            display: none;
+        }
+
+        /* 返回顶端按钮：显现时右侧间距与左侧资源列表按钮间距保持完美的 8px 对称一致 */
         .back-to-top-btn {
             width: 0;
             height: 44px;
@@ -863,7 +894,7 @@
         }
         .back-to-top-btn.visible {
             width: 44px;
-            margin-left: 10px;
+            margin-left: 8px;
             opacity: 1;
             visibility: visible;
             transform: scale(1);
@@ -1171,7 +1202,7 @@
             bottom: var(--toast-bottom); 
             left: 50%; 
             transform: translateX(-50%) translateY(100px); 
-            z-index: 999999; 
+            z-index: 9999999; 
             padding: 12px 26px; 
             border-radius: var(--radius-pill); 
             color: var(--text-primary); 
@@ -1185,9 +1216,6 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* =========================================================
-            6. 单列布局与底栏规范
-        ========================================================= */
         .control-bar.is-single-column {
             display: block;
             position: sticky;
@@ -1210,9 +1238,18 @@
             pointer-events: none;
         }
 
+        .control-bar.is-single-column .standalone-list-btn,
         .control-bar.is-single-column .search-box-inner,
         .control-bar.is-single-column .back-to-top-btn {
             pointer-events: auto;
+        }
+
+        /* 标签栏在竖屏模式且激活列表时的隐藏逻辑 */
+        body.is-list-view .control-bar.is-single-column .tab-bar-wrapper {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
 
         .control-bar.is-single-column .tab-bar-wrapper {
@@ -1229,6 +1266,7 @@
             justify-content: center;
             pointer-events: none;
             z-index: 999999;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
         }
 
         .control-bar.is-single-column .tab-bar {
@@ -1269,42 +1307,24 @@
             font-weight: 400 !important;
         }
 
-        /* =========================================================
-            7. 全局首字母字母表搜索视图 (胶囊柱与对齐规范)
-        ========================================================= */
+        /* 资源列表与字母列表区域 */
         .alphabet-view-container {
             position: fixed;
-            top: calc(max(16px, env(safe-area-inset-top)) + 72px);
-            bottom: max(90px, calc(env(safe-area-inset-bottom) + 76px));
-            display: none;
-            opacity: 0;
-            transform: translateY(6px);
-            pointer-events: none;
-            z-index: 999980;
-            transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: opacity, transform;
-        }
-
-        body.is-list-view .alphabet-view-container {
+            z-index: 999999;
             display: flex;
-            pointer-events: auto;
-        }
-
-        body.is-list-view .alphabet-view-container.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        body.is-list-view .status,
-        body.is-list-view .modules,
-        body.is-list-view .sentinel,
-        body.is-list-view .footer {
-            opacity: 0 !important;
-            pointer-events: none !important;
+            opacity: 0;
             visibility: hidden;
-            transition: opacity 0.12s cubic-bezier(0.22, 1, 0.36, 1),
-                        visibility 0.12s linear;
+            pointer-events: none;
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
+            will-change: opacity;
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        .alphabet-view-container.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .alphabet-content-box {
@@ -1314,21 +1334,58 @@
             display: flex;
             padding: 0;
             margin: 0;
+            gap: 8px; 
+            background: transparent;
+            pointer-events: none;
+        }
+
+        /* 资源列表卡片（左侧）：左边缘始终实时与独立资源列表按钮左边缘对齐 */
+        .alphabet-main-card {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 28px;
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-glass-ui);
+            background-color: transparent;
+            background-image: var(--noise-pattern), var(--glass-bg);
+            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            border-top: 1px solid var(--glass-border-t);
+            border-left: 1px solid var(--glass-border-l);
+            border-right: 1px solid var(--glass-border-r);
+            border-bottom: 1px solid var(--glass-border-b);
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .alphabet-main-card {
+            background-color: var(--bg-surface);
+            background-image: var(--noise-pattern);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--border-subtle);
         }
 
         .alphabet-scroll-area {
+            position: relative;
             flex: 1;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            padding-top: 4px;
             padding-left: 0;
-            padding-right: 36px;
+            padding-right: 16px;
             padding-bottom: 24px;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 24px, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 24px, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
         }
         .alphabet-scroll-area::-webkit-scrollbar {
             display: none;
@@ -1343,13 +1400,34 @@
         }
 
         .alphabet-letter-header {
+            width: 32px;
+            height: 32px;
+            flex: 0 0 32px;
+            margin-left: 8px;
+            margin-top: 8px;
+            margin-bottom: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 13.5px;
             font-weight: 700;
+            border: 1px solid var(--primary);
+            background-color: var(--primary-soft);
             color: var(--primary);
-            padding: 10px 0 6px 0;
-            letter-spacing: 0.5px;
+            box-shadow: none;
+            cursor: default;
             user-select: none;
             -webkit-user-select: none;
+            box-sizing: border-box;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        [data-theme="dark"] .alphabet-letter-header {
+            border: 1px solid var(--primary);
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            box-shadow: none;
         }
 
         .alphabet-item-list {
@@ -1418,48 +1496,53 @@
         }
 
         .alphabet-item-type {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 400;
             color: var(--text-tertiary);
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: var(--bg-surface);
+            padding: 0;
+            border-radius: 0;
+            background: transparent !important;
             white-space: nowrap;
             flex-shrink: 0;
         }
 
-        /* 竖向胶囊状字母快速定位导航条 */
+        /* 字母列表卡片（右侧） */
         .alphabet-fast-index {
-            position: absolute;
-            right: 0;
-            top: 0;
+            position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            gap: 1px;
+            justify-content: space-between;
+            width: 44px;
+            min-width: 44px;
+            max-width: 44px;
+            flex: 0 0 44px;
+            height: 100%;
+            padding: 8px 0;
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-glass-ui);
+            box-sizing: border-box;
+            background-color: transparent;
+            background-image: var(--noise-pattern), var(--glass-bg);
+            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            border-top: 1px solid var(--glass-border-t);
+            border-left: 1px solid var(--glass-border-l);
+            border-right: 1px solid var(--glass-border-r);
+            border-bottom: 1px solid var(--glass-border-b);
             user-select: none;
             -webkit-user-select: none;
             touch-action: none;
-            z-index: 10;
-            width: 26px;
-            padding: 8px 0;
-            border-radius: 13px;
-            box-shadow: var(--shadow-search);
-            box-sizing: border-box;
-            background-color: transparent;
+            pointer-events: auto;
         }
 
-        .alphabet-fast-index::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: -100vw;
-            background: transparent;
-            pointer-events: auto;
-            z-index: -1;
+        [data-theme="dark"] .alphabet-fast-index {
+            background-color: var(--bg-surface);
+            background-image: var(--noise-pattern);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--border-subtle);
         }
 
         .alphabet-fast-char {
@@ -1467,37 +1550,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 20px;
-            height: 13.5px;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
             padding: 0;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-tertiary);
             cursor: pointer;
             transition: color 0.15s ease, transform 0.15s ease;
-        }
-
-        .alphabet-fast-char::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: -100vw;
-            background: transparent;
+            white-space: nowrap;
         }
 
         @media (orientation: portrait) {
             .alphabet-fast-index {
-                right: 0;
-                width: 24px;
+                width: 44px;
+                min-width: 44px;
+                max-width: 44px;
+                flex: 0 0 44px;
                 padding: 6px 0;
-                border-radius: 12px;
             }
             .alphabet-fast-char {
-                width: 18px;
-                height: 12px;
-                font-size: 9.5px;
+                font-size: 10px;
             }
         }
 
@@ -1513,49 +1587,52 @@
             pointer-events: none;
         }
 
-        /* 触控滑动时的左侧大号悬浮气泡字母提示 */
+        /* 滑动字母提示：轻量青色描边 + 放大字母，避免毛玻璃合成造成跟手延迟 */
         .alphabet-popup-bubble {
             position: absolute;
-            right: 36px;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            color: var(--text-primary);
-            font-size: 20px;
-            font-weight: 600;
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid transparent;
-            box-shadow: none;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transform: translateY(-50%) scale(0.6);
-            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        visibility 0.35s ease,
-                        box-shadow 0.35s ease,
-                        border-color 0.35s ease;
-            z-index: 100;
+            transform: translate3d(0, -50%, 0);
+            transition: opacity 0.12s ease, visibility 0.12s ease;
+            z-index: 999999;
+            box-shadow: none !important;
+            background: var(--primary-soft) !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--primary) !important;
+            will-change: top, opacity;
         }
+
         .alphabet-popup-bubble.visible {
             opacity: 1;
             visibility: visible;
-            transform: translateY(-50%) scale(1);
-            box-shadow: var(--shadow-search);
-            border-top-color: var(--glass-border-t);
-            border-left-color: var(--glass-border-l);
-            border-right-color: var(--glass-border-r);
-            border-bottom-color: var(--glass-border-b);
-        }
-        [data-theme="dark"] .alphabet-popup-bubble.visible {
-            border-color: var(--border-subtle);
+            transform: translate3d(0, -50%, 0);
+            box-shadow: none !important;
         }
 
-        /* =========================================================
-            8. 移动与触控设备约束
-        ========================================================= */
+        [data-theme="dark"] .alphabet-popup-bubble,
+        [data-theme="dark"] .alphabet-popup-bubble.visible {
+            background: var(--primary-soft) !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--primary) !important;
+            color: var(--primary);
+            box-shadow: none !important;
+        }
+
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
             .modules { 
                 grid-template-columns: 1fr; 
@@ -1654,6 +1731,18 @@
                 -webkit-tap-highlight-color: transparent !important;
             }
 
+            /* 移动端资源列表按钮与返回按钮保持完全稳定：触摸时不缩放、不切换阴影，避免 iOS 合成层闪烁 */
+            .standalone-list-btn,
+            .standalone-list-btn:hover,
+            .standalone-list-btn:active,
+            .standalone-list-btn:focus,
+            .standalone-list-btn:focus-visible {
+                transform: none !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                transition: none !important;
+                -webkit-tap-highlight-color: transparent !important;
+            }
+
             .theme-toggle:hover,
             .theme-toggle:active {
                 transform: none !important;
@@ -1725,6 +1814,16 @@
             transform: none !important;
             opacity: 1 !important;
             transition: none !important;
+        }
+        html.is-mobile .standalone-list-btn,
+        html.is-mobile .standalone-list-btn:hover,
+        html.is-mobile .standalone-list-btn:active,
+        html.is-mobile .standalone-list-btn:focus,
+        html.is-mobile .standalone-list-btn:focus-visible {
+            transform: none !important;
+            box-shadow: var(--shadow-glass-ui) !important;
+            transition: none !important;
+            -webkit-tap-highlight-color: transparent !important;
         }
 
         @media (max-width: 600px) {
@@ -1811,11 +1910,16 @@
             </nav>
 
             <div class="search-wrapper">
-                <div class="search-box-inner glass-element" role="search">
+                <button id="standaloneListBtn" class="standalone-list-btn glass-element" type="button" aria-label="资源列表" title="资源列表">
+                    <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
+                    <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+
+                <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
                     <div class="input-wrapper">
-                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled>
+                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块">
                         
                         <div id="placeholderTrack" class="placeholder-track">
                             <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
@@ -1825,7 +1929,9 @@
                     </div>
 
                     <span class="search-shortcut">/</span>
-                    <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg></button>
+                    <button id="searchClearBtn" class="search-clear-btn" type="button" aria-label="清空搜索" title="清空搜索">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
 
                 <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
@@ -1859,23 +1965,21 @@
         </footer>
     </div>
 
-    <!-- 首字母列表展示区与动态定位条 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
-            <div id="alphabetScrollArea" class="alphabet-scroll-area">
-                <!-- 动态渲染按 #, A-Z 分组的单列列表 -->
+            <div class="alphabet-main-card">
+                <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
             </div>
-            <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航">
-                <!-- 动态渲染 #, A-Z 快速定位字母胶囊 -->
+            <div id="alphabetFastIndex" class="alphabet-fast-index" aria-label="字母快速定位导航">
+                <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
             </div>
-            <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
         </div>
     </div>
     
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "202609051800"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1889,17 +1993,12 @@
             zh: {
                 badgeCommunity: "社区资源",
                 subtitle: "Shadowrocket 开源社区资源聚合检索平台",
-                tabs: {
-                    module: "模块资源",
-                    config: "配置文件",
-                    manual: "使用手册",
-                    more: "更多资源"
-                },
+                tabs: { module: "模块资源", config: "配置文件", manual: "使用手册", more: "更多资源" },
                 searchPlaceholderWait: "请在加载完成后执行搜索...",
                 searchPlaceholderReady: "输入关键字全局搜索...",
                 notice1: "相关资源均来源于开源社区",
                 notice2: "所有权利责任归原作者所有",
-                searchClearTitle: "清空搜索",
+                searchClearTitle: "关闭列表",
                 backToTopTitle: "返回顶部",
                 searchInputAria: "搜索资源",
                 statusSyncing: "正在同步资源索引...",
@@ -1942,12 +2041,7 @@
             en: {
                 badgeCommunity: "Community",
                 subtitle: "Shadowrocket Open-Source Community Resource Aggregator",
-                tabs: {
-                    module: "Modules",
-                    config: "Configs",
-                    manual: "Manual",
-                    more: "More"
-                },
+                tabs: { module: "Modules", config: "Configs", manual: "Manual", more: "More" },
                 searchPlaceholderWait: "Please wait for loading to complete...",
                 searchPlaceholderReady: "Type keywords to search globally...",
                 notice1: "All resources originate from open source",
@@ -1998,16 +2092,8 @@
             {
                 category: "config",
                 i18n: {
-                    zh: {
-                        name: "懒人配置",
-                        description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，是除默认配置外首推的配置文件。",
-                        primaryBtnText: "安装配置"
-                    },
-                    en: {
-                        name: "Lazy Config",
-                        description: "Out-of-the-box configuration with popular routing groups, well-balanced proxy rules, and detailed comments. Highly recommended.",
-                        primaryBtnText: "Install Config"
-                    }
+                    zh: { name: "懒人配置", description: "懒人配置是开箱即用的配置文件，设有常用的分流代理分组，其他设置也经过了精心调整，同时还备注了详尽的注释说明，是除默认配置外首推的配置文件。", primaryBtnText: "安装配置" },
+                    en: { name: "Lazy Config", description: "Out-of-the-box configuration with popular routing groups, well-balanced proxy rules, and detailed comments. Highly recommended.", primaryBtnText: "Install Config" }
                 },
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -2022,16 +2108,8 @@
             {
                 category: "manual",
                 i18n: {
-                    zh: {
-                        name: "使用手册",
-                        description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。",
-                        primaryBtnText: "查阅手册"
-                    },
-                    en: {
-                        name: "User Manual",
-                        description: "Comprehensive guide and reference manual for Shadowrocket, covering protocols, routing rules, decryption, and advanced setups.",
-                        primaryBtnText: "View Manual"
-                    }
+                    zh: { name: "使用手册", description: "Shadowrocket 使用手册与进阶配置指南，系统收录了协议配置、规则分流、解密等全方位软件设置说明与知识词条。", primaryBtnText: "查阅手册" },
+                    en: { name: "User Manual", description: "Comprehensive guide and reference manual for Shadowrocket, covering protocols, routing rules, decryption, and advanced setups.", primaryBtnText: "View Manual" }
                 },
                 icon: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/refs/heads/main/img/Shadowrocket.png",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -2046,16 +2124,8 @@
             {
                 category: "more",
                 i18n: {
-                    zh: {
-                        name: "配色与配置仓库",
-                        description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。",
-                        primaryBtnText: "访问仓库"
-                    },
-                    en: {
-                        name: "Theme & Config Repo",
-                        description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.",
-                        primaryBtnText: "Visit Repo"
-                    }
+                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
+                    en: { name: "Theme & Config Repo", description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.", primaryBtnText: "Visit Repo" }
                 },
                 icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
                 author: { name: "LOWERTOP", url: "https://github.com/LOWERTOP", username: "LOWERTOP" },
@@ -2073,7 +2143,6 @@
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
         const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-        const SEARCH_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>`;
         const LIST_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>`;
 
         const tagPillBadge = document.getElementById("tagPillBadge");
@@ -2087,12 +2156,12 @@
         const tabBarEl = document.querySelector(".tab-bar");
 
         const controlBarEl = document.getElementById("controlBar");
-        const searchWrapperEl = document.querySelector('.search-wrapper');
-        const searchBoxInner = document.querySelector('.search-box-inner');
+        const searchBoxInner = document.getElementById('searchBoxInner');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
         const searchShortcut = document.querySelector(".search-shortcut");
-        const listToggleBtn = document.getElementById("listToggleBtn");
+        const standaloneListBtn = document.getElementById("standaloneListBtn");
+        const searchClearBtn = document.getElementById("searchClearBtn");
         const statusText = document.getElementById("statusText");
         const statusDot = document.getElementById("statusDot");
         const countText = document.getElementById("countText");
@@ -2135,7 +2204,9 @@
             focusedModuleId: null,
             activeTab: "module",
             statusKey: "statusSyncing",
-            isAlphabetRendered: false
+            isAlphabetRendered: false,
+            listViewReturnScrollY: 0,
+            wasFloatingBeforeActive: false
         };
 
         let searchTimer = null;
@@ -2233,17 +2304,9 @@
                 .map((item, idx) => {
                     const localized = item.i18n[lang] || item.i18n.zh;
                     const searchTokens = [
-                        localized.name,
-                        localized.description,
-                        item.author.name,
-                        item.sourceName,
-                        item.category,
-                        "shadowrocket",
-                        "手册", "manual",
-                        "教程", "guide",
-                        "仓库", "repo",
-                        "文档", "docs",
-                        "配置", "config"
+                        localized.name, localized.description, item.author.name,
+                        item.sourceName, item.category, "shadowrocket", "手册",
+                        "manual", "教程", "guide", "仓库", "repo", "文档", "docs", "配置", "config"
                     ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                     return {
@@ -2278,7 +2341,6 @@
                     const authorAvatar = safeURL(m.authorAvatar || m.author?.avatar || "");
                     const sourceName = m.sourceName || "开源仓库";
                     const sourceURL = safeURL(m.sourceURL || "");
-                    
                     const customInstall = safeInstallURL(m.installURL || "");
                     const fallbackInstall = rawURL ? `shadowrocket://install?url=${encodeURIComponent(rawURL)}` : "";
                     const installURL = customInstall || fallbackInstall;
@@ -2292,13 +2354,7 @@
                     }
 
                     const searchTokens = [
-                        m.name,
-                        m.description,
-                        authorName,
-                        m.author?.username,
-                        sourceName,
-                        category,
-                        m._searchKeywords
+                        m.name, m.description, authorName, m.author?.username, sourceName, category, m._searchKeywords
                     ].filter(Boolean).join(" ").normalize("NFKC").toLowerCase();
 
                     return {
@@ -2328,9 +2384,7 @@
             clearTimeout(toastTimer);
             toast.textContent = text;
             toast.classList.add("show");
-            toastTimer = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 2000);
+            toastTimer = setTimeout(() => { toast.classList.remove("show"); }, 2000);
         }
 
         async function copyToClipboard(text) {
@@ -2360,6 +2414,35 @@
             return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
         }
 
+        function getControlBarStickyScrollTop() {
+            if (!controlBarEl) return 0;
+            const style = window.getComputedStyle(controlBarEl);
+            const topSticky = parseFloat(style.top) || 12;
+            const elementTop = controlBarEl.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop || 0);
+            return Math.max(0, elementTop - topSticky);
+        }
+
+        function isSearchFloating() {
+            const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+            const threshold = getControlBarStickyScrollTop();
+            return currentScrollY >= (threshold - 4);
+        }
+
+        function floatSearchToTarget(smooth = true) {
+            const targetTop = getControlBarStickyScrollTop();
+            if (targetTop <= 0) return;
+
+            const neededHeight = window.innerHeight + targetTop + 50;
+            if (document.body.scrollHeight < neededHeight) {
+                document.body.style.minHeight = `${neededHeight}px`;
+            }
+
+            window.scrollTo({
+                top: targetTop,
+                behavior: smooth ? "smooth" : "auto"
+            });
+        }
+
         let backToTopVisible = false;
         function updateSearchLayer() {
             if (!backToTopBtn) return;
@@ -2373,24 +2456,18 @@
         window.addEventListener('scroll', updateSearchLayer, { passive: true });
 
         backToTopBtn.addEventListener("click", () => {
+            if (state.isListView) {
+                setListViewMode(false, false);
+            }
+            searchInput.blur();
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
-
-        if (searchBoxInner) {
-            searchBoxInner.addEventListener("click", (e) => {
-                if (e.target !== listToggleBtn && !searchInput.disabled) {
-                    searchInput.focus();
-                }
-            });
-        }
 
         function updateTabIndicator(animated = true) {
             const activeTab = document.querySelector(".tab-item.active");
             if (!activeTab || !tabIndicator) return;
 
-            if (!animated && isTabAnimating) {
-                return;
-            }
+            if (!animated && isTabAnimating) return;
 
             if (!animated) {
                 tabIndicator.style.transition = 'none';
@@ -2491,32 +2568,15 @@
 
         if (typeof ResizeObserver !== "undefined") {
             if (modulesContainer) {
-                const gridResizeObserver = new ResizeObserver(() => {
-                    scheduleCardLayerUpdate();
-                });
-                gridResizeObserver.observe(modulesContainer);
+                new ResizeObserver(() => scheduleCardLayerUpdate()).observe(modulesContainer);
             }
             if (tabBarEl) {
-                const tabBarObserver = new ResizeObserver(() => {
-                    if (!isTabAnimating) {
-                        updateTabIndicator(false);
-                    }
-                });
-                tabBarObserver.observe(tabBarEl);
-            }
-            if (searchBoxInner) {
-                const searchBoxObserver = new ResizeObserver(() => {
-                    if (state.isListView) {
-                        updateAlphabetPosition();
-                    }
-                });
-                searchBoxObserver.observe(searchBoxInner);
+                new ResizeObserver(() => {
+                    if (!isTabAnimating) updateTabIndicator(false);
+                }).observe(tabBarEl);
             }
         }
 
-        /* =========================================================
-            首字母列表与快速选择功能实现
-        ========================================================= */
         function getItemInitialLetter(name) {
             const clean = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
             const first = clean.charAt(0);
@@ -2525,7 +2585,6 @@
             
             if (/^[\u4e00-\u9fa5]$/.test(first)) {
                 try {
-                    const py = first.localeCompare("z", "zh-Hans-CN-u-co-pinyin");
                     const zhLetters = [
                         { l: "A", c: "啊" }, { l: "B", c: "芭" }, { l: "C", c: "擦" }, { l: "D", c: "搭" },
                         { l: "E", c: "蛾" }, { l: "F", c: "发" }, { l: "G", c: "噶" }, { l: "H", c: "哈" },
@@ -2544,31 +2603,31 @@
             return "#";
         }
 
-        function updateRightActionButton() {
+        function updateStandaloneButtonState() {
             const hasText = searchInput.value.length > 0;
-            const shouldShowClose = state.isListView || hasText || state.focusedModuleId;
+            const shouldActive = state.isListView || state.focusedModuleId;
 
-            if (shouldShowClose) {
-                listToggleBtn.innerHTML = CLOSE_SVG;
-                listToggleBtn.classList.add("active");
-                listToggleBtn.setAttribute("title", I18N[state.currentLang].searchClearTitle);
-                listToggleBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
-                if (searchShortcut) searchShortcut.style.display = "none";
+            if (shouldActive) {
+                standaloneListBtn.classList.add("active");
+                standaloneListBtn.setAttribute("title", I18N[state.currentLang].searchClearTitle);
+                standaloneListBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
             } else {
-                listToggleBtn.innerHTML = LIST_SVG;
-                listToggleBtn.classList.remove("active");
-                listToggleBtn.setAttribute("title", "首字母资源列表");
-                listToggleBtn.setAttribute("aria-label", "首字母资源列表");
-                if (searchShortcut) searchShortcut.style.display = "";
+                standaloneListBtn.classList.remove("active");
+                standaloneListBtn.setAttribute("title", "资源列表");
+                standaloneListBtn.setAttribute("aria-label", "资源列表");
             }
+            document.body.classList.toggle("has-search-text", hasText);
         }
 
         function focusSingleResource(mod) {
             state.focusedModuleId = mod.id;
-            setListViewMode(false);
+            setListViewMode(false, false);
 
             searchInput.value = mod.name;
-            updateRightActionButton();
+            searchInput.blur();
+            document.body.classList.remove("has-search-focus");
+            document.body.classList.add("has-search-text");
+            updateStandaloneButtonState();
 
             if (state.activeTab !== mod.category) {
                 state.activeTab = mod.category;
@@ -2604,7 +2663,12 @@
         function renderAlphabetList() {
             if (!alphabetScrollArea || !alphabetFastIndex) return;
             alphabetScrollArea.innerHTML = "";
-            alphabetFastIndex.innerHTML = "";
+            
+            Array.from(alphabetFastIndex.children).forEach(child => {
+                if (child !== alphabetPopupBubble) {
+                    alphabetFastIndex.removeChild(child);
+                }
+            });
 
             const observer = getAlphabetImgObserver();
 
@@ -2700,7 +2764,13 @@
             });
 
             alphabetScrollArea.appendChild(fragment);
+            if (alphabetPopupBubble) {
+                alphabetFastIndex.appendChild(alphabetPopupBubble);
+            }
             state.isAlphabetRendered = true;
+            fastIndexChars = [];
+            fastIndexCharHeight = 0;
+            prepareFastIndexGeometry();
             updateAlphabetPosition();
         }
 
@@ -2708,70 +2778,121 @@
             const targetId = letter === '#' ? 'alphabet-group-hash' : `alphabet-group-${letter}`;
             const targetEl = document.getElementById(targetId);
             if (targetEl && alphabetScrollArea) {
-                const targetOffset = targetEl.offsetTop;
-                alphabetScrollArea.scrollTop = targetOffset;
+                alphabetScrollArea.scrollTop = targetEl.offsetTop;
             }
         }
 
         let isTouchingIndex = false;
+        let fastIndexChars = [];
+        let fastIndexCharHeight = 0;
+        let fastIndexTop = 0;
+        let fastIndexRightOffset = 0;
+        let lastSelectedLetter = null;
+
+        function prepareFastIndexGeometry() {
+            if (!alphabetFastIndex) return false;
+
+            fastIndexChars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
+            if (!fastIndexChars.length) return false;
+
+            const firstRect = fastIndexChars[0].getBoundingClientRect();
+            const indexRect = alphabetFastIndex.getBoundingClientRect();
+            const contentRect = alphabetFastIndex.parentElement
+                ? alphabetFastIndex.parentElement.getBoundingClientRect()
+                : indexRect;
+
+            fastIndexTop = firstRect.top;
+            fastIndexCharHeight = firstRect.height || (indexRect.height / fastIndexChars.length);
+            fastIndexRightOffset = (contentRect.right - indexRect.left) + 10;
+
+            return fastIndexCharHeight > 0;
+        }
 
         function updateFastIndexSelection(clientX, clientY) {
-            const indexRect = alphabetFastIndex.getBoundingClientRect();
-            let target = document.elementFromPoint(clientX, clientY);
-            let charEl = target ? target.closest(".alphabet-fast-char") : null;
+            if (!alphabetFastIndex) return;
 
-            if (!charEl && clientX >= indexRect.left) {
-                const chars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
-                charEl = chars.find(el => {
-                    const r = el.getBoundingClientRect();
-                    return clientY >= r.top && clientY <= r.bottom;
-                });
+            if (!fastIndexChars.length || !fastIndexCharHeight) {
+                if (!prepareFastIndexGeometry()) return;
             }
-            
-            if (charEl && !charEl.classList.contains("disabled")) {
-                const letter = charEl.dataset.letter;
-                if (letter) {
-                    scrollToAlphabetLetter(letter);
-                    document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
-                    charEl.classList.add("active");
 
-                    if (alphabetPopupBubble) {
-                        alphabetPopupBubble.textContent = letter;
-                        const containerRect = alphabetViewContainer.getBoundingClientRect();
-                        let relativeY = clientY - containerRect.top;
-                        relativeY = Math.max(35, Math.min(relativeY, containerRect.height - 35));
-                        alphabetPopupBubble.style.top = `${relativeY}px`;
-                        alphabetPopupBubble.classList.add("visible");
-                    }
+            /* 所有字母使用 flex:1，直接按等高区域计算索引，避免 touchmove 时遍历 27 个元素并反复触发布局 */
+            let index = Math.floor((clientY - fastIndexTop) / fastIndexCharHeight);
+            index = Math.max(0, Math.min(index, fastIndexChars.length - 1));
+
+            const charEl = fastIndexChars[index];
+            if (!charEl || charEl.classList.contains("disabled")) return;
+
+            const letter = charEl.dataset.letter;
+            if (!letter) return;
+
+            /* 只有真正切换字母时才滚动列表和切换 active */
+            if (letter !== lastSelectedLetter) {
+                lastSelectedLetter = letter;
+                scrollToAlphabetLetter(letter);
+
+                const previous = alphabetFastIndex.querySelector(".alphabet-fast-char.active");
+                if (previous && previous !== charEl) {
+                    previous.classList.remove("active");
                 }
+                charEl.classList.add("active");
             }
+
+            if (alphabetPopupBubble) {
+                const indexRect = alphabetFastIndex.getBoundingClientRect();
+                let relativeY = clientY - indexRect.top;
+                const bubbleHalfH = 24;
+
+                relativeY = Math.max(
+                    bubbleHalfH,
+                    Math.min(relativeY, indexRect.height - bubbleHalfH)
+                );
+
+                alphabetPopupBubble.textContent = letter;
+                alphabetPopupBubble.style.top = `${relativeY}px`;
+                alphabetPopupBubble.style.right = `${fastIndexRightOffset}px`;
+                alphabetPopupBubble.classList.add("visible");
+            }
+        }
+
+        function hideFastIndexSelection() {
+            if (!isTouchingIndex) return;
+
+            isTouchingIndex = false;
+            lastSelectedLetter = null;
+
+            if (alphabetPopupBubble) {
+                alphabetPopupBubble.classList.remove("visible");
+            }
+
+            const active = alphabetFastIndex.querySelector(".alphabet-fast-char.active");
+            if (active) active.classList.remove("active");
         }
 
         alphabetFastIndex.addEventListener("touchstart", (e) => {
             isTouchingIndex = true;
+            lastSelectedLetter = null;
+            prepareFastIndexGeometry();
             e.preventDefault();
+
             const touch = e.touches[0];
             updateFastIndexSelection(touch.clientX, touch.clientY);
         }, { passive: false });
 
         alphabetFastIndex.addEventListener("touchmove", (e) => {
-            if (isTouchingIndex) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                updateFastIndexSelection(touch.clientX, touch.clientY);
-            }
+            if (!isTouchingIndex) return;
+
+            e.preventDefault();
+            const touch = e.touches[0];
+            updateFastIndexSelection(touch.clientX, touch.clientY);
         }, { passive: false });
 
-        window.addEventListener("touchend", () => {
-            if (isTouchingIndex) {
-                isTouchingIndex = false;
-                if (alphabetPopupBubble) alphabetPopupBubble.classList.remove("visible");
-                document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
-            }
-        });
+        window.addEventListener("touchend", hideFastIndexSelection, { passive: true });
+        window.addEventListener("touchcancel", hideFastIndexSelection, { passive: true });
 
         alphabetFastIndex.addEventListener("mousedown", (e) => {
             isTouchingIndex = true;
+            lastSelectedLetter = null;
+            prepareFastIndexGeometry();
             updateFastIndexSelection(e.clientX, e.clientY);
         });
 
@@ -2781,111 +2902,107 @@
             }
         });
 
-        window.addEventListener("mouseup", () => {
-            if (isTouchingIndex) {
-                isTouchingIndex = false;
-                if (alphabetPopupBubble) alphabetPopupBubble.classList.remove("visible");
-                document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
-            }
-        });
+        window.addEventListener("mouseup", hideFastIndexSelection);
 
         function updateAlphabetPosition() {
-            if (!alphabetViewContainer || !searchBoxInner) return;
+            if (!alphabetViewContainer || !standaloneListBtn || !pageContainer) return;
 
-            const searchRect = searchBoxInner.getBoundingClientRect();
-            const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+            const btnRect = standaloneListBtn.getBoundingClientRect();
+            const containerRect = pageContainer.getBoundingClientRect();
 
-            const topPos = Math.round(searchRect.bottom + 20);
+            const style = window.getComputedStyle(controlBarEl);
+            const stickyTopVal = parseFloat(style.top) || 12;
+            const topPos = Math.round(stickyTopVal + 4 + 44 + 12);
 
-            let bottomPos = 20;
+            let bottomPos = 16;
             const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
-            const tabBarWrapper = document.querySelector('.control-bar.is-single-column .tab-bar-wrapper');
             
-            if (isSingleCol && tabBarWrapper) {
-                const tabRect = tabBarWrapper.getBoundingClientRect();
-                if (tabRect.top > 0 && tabRect.top < viewportHeight) {
-                    bottomPos = Math.round(viewportHeight - tabRect.top + 8);
-                } else {
-                    bottomPos = 84;
-                }
+            if (isSingleCol) {
+                const bottomOffsetVal = parseFloat(window.getComputedStyle(document.documentElement).getPropertyValue('--bottom-offset')) || 16;
+                bottomPos = Math.round(bottomOffsetVal);
             } else {
-                bottomPos = Math.max(20, Math.round(viewportHeight * 0.04));
+                bottomPos = 24;
             }
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
-            alphabetViewContainer.style.left = `${searchRect.left}px`;
-            alphabetViewContainer.style.width = `${searchRect.width}px`;
-        }
+            // 左边缘始终实时与资源列表按钮的左边缘对齐
+            alphabetViewContainer.style.left = `${btnRect.left}px`;
+            alphabetViewContainer.style.width = `${containerRect.right - btnRect.left}px`;
 
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', updateAlphabetPosition);
-            window.visualViewport.addEventListener('scroll', updateAlphabetPosition);
+            /* 容器尺寸或位置改变后，下次触摸重新测量 */
+            fastIndexChars = [];
+            fastIndexCharHeight = 0;
         }
 
         let listViewTransitionTimer = null;
-        let listSyncRaf = null;
 
-        function syncAlphabetPositionDuringTransition(duration = 240) {
-            const startTime = performance.now();
-            function step(now) {
-                updateAlphabetPosition();
-                if (now - startTime < duration && state.isListView) {
-                    listSyncRaf = requestAnimationFrame(step);
-                } else {
-                    updateAlphabetPosition();
-                }
-            }
-            cancelAnimationFrame(listSyncRaf);
-            listSyncRaf = requestAnimationFrame(step);
-        }
-
-        function setListViewMode(enable) {
+        function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
-            state.isListView = enable;
 
             clearTimeout(listViewTransitionTimer);
-            cancelAnimationFrame(listSyncRaf);
 
             if (enable) {
+                state.wasFloatingBeforeActive = isSearchFloating();
+                state.listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+
+                state.isListView = true;
                 state.focusedModuleId = null;
-                if (window.scrollY > 0) {
-                    window.scrollTo(0, 0);
-                }
+
                 document.body.classList.add("is-list-view");
-                updateRightActionButton();
+                updateStandaloneButtonState();
+
+                floatSearchToTarget(true);
 
                 if (!state.isAlphabetRendered) {
                     renderAlphabetList();
                 }
 
                 updateAlphabetPosition();
-                syncAlphabetPositionDuringTransition(240);
 
-                requestAnimationFrame(() => {
+                listViewTransitionTimer = setTimeout(() => {
                     if (state.isListView) {
                         alphabetViewContainer.classList.add("is-visible");
                     }
-                });
+                }, 320);
 
-                checkScrollLock();
+                setTimeout(() => {
+                    if (state.isListView) {
+                        checkScrollLock();
+                    }
+                }, 450);
             } else {
+                state.isListView = false;
                 alphabetViewContainer.classList.remove("is-visible");
+                document.body.classList.remove("is-list-view");
+                updateStandaloneButtonState();
+                
+                document.body.style.minHeight = "";
+                
+                checkScrollLock();
+                scheduleCardLayerUpdate();
 
-                listViewTransitionTimer = setTimeout(() => {
-                    if (state.isListView) return;
-                    document.body.classList.remove("is-list-view");
-                    updateRightActionButton();
-                    checkScrollLock();
-                    scheduleCardLayerUpdate();
-                }, 180);
+                if (restoreScroll && !state.wasFloatingBeforeActive) {
+                    const targetScrollY = Math.max(0, state.listViewReturnScrollY);
+                    requestAnimationFrame(() => {
+                        window.scrollTo({ top: targetScrollY, behavior: "smooth" });
+                        updateSearchLayer();
+                    });
+                }
             }
         }
 
+        let ignoreNextClick = false;
+
         document.addEventListener("click", (e) => {
             if (!state.isListView) return;
+            if (ignoreNextClick) {
+                ignoreNextClick = false;
+                return;
+            }
             if (e.target.closest("#alphabetViewContainer") || 
                 e.target.closest("#controlBar") || 
+                e.target.closest("#standaloneListBtn") ||
                 e.target.closest("#toast") || 
                 e.target.closest("#pullRefreshIndicator")) {
                 return;
@@ -2893,29 +3010,67 @@
             setListViewMode(false);
         });
 
-        searchInput.addEventListener("focus", () => {
-            if (searchInput.value.trim().length === 0 && !state.focusedModuleId) {
-                setListViewMode(true);
-            }
-        });
-
-        listToggleBtn.addEventListener("click", (e) => {
+        standaloneListBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
 
-            if (state.isListView || hasText || state.focusedModuleId) {
+            if (state.isListView) {
+                setListViewMode(false);
+            } else if (hasText || state.focusedModuleId) {
                 state.focusedModuleId = null;
                 searchInput.value = "";
+                searchInput.blur();
+                document.body.classList.remove("has-search-focus");
                 setListViewMode(false);
+                
+                state.activeTab = "module";
+                tabItems.forEach(t => {
+                    const isActive = t.getAttribute("data-tab") === "module";
+                    t.classList.toggle("active", isActive);
+                    t.setAttribute("aria-selected", isActive ? "true" : "false");
+                });
+                updateTabIndicator(true);
+
                 filterModules();
                 if (state.statusKey && I18N[state.currentLang][state.statusKey]) {
                     statusText.textContent = I18N[state.currentLang][state.statusKey];
                 }
-                updateRightActionButton();
+                updateStandaloneButtonState();
             } else {
+                ignoreNextClick = true;
+                searchInput.blur();
                 setListViewMode(true);
+            }
+        });
+
+        searchClearBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            searchInput.value = "";
+            document.body.classList.remove("has-search-text");
+            filterModules();
+            updateStandaloneButtonState();
+            searchInput.focus();
+        });
+
+        searchBoxInner.addEventListener("click", (e) => {
+            if (e.target.closest("#searchClearBtn")) return;
+            if (document.activeElement !== searchInput) {
                 searchInput.focus();
             }
+        });
+
+        searchInput.addEventListener("focus", () => {
+            document.body.classList.add("has-search-focus");
+            if (state.isListView) {
+                setListViewMode(false, false);
+                window.scrollTo(0, 0);
+            } else {
+                floatSearchToTarget(true);
+            }
+        });
+
+        searchInput.addEventListener("blur", () => {
+            document.body.classList.remove("has-search-focus");
         });
 
         function renderAuthor(module) {
@@ -2966,7 +3121,6 @@
             const fallbackIcon = createIOSAppIcon(module.name);
             const icon = module.icon || fallbackIcon;
             const authorHTML = renderAuthor(module);
-            
             const isRepo = Boolean(module.isRepoCard);
 
             const directOpenURL = module.rawURL || module.sourceURL || "";
@@ -3116,7 +3270,8 @@
 
         function filterModules() {
             const keyword = searchInput.value.trim().normalize("NFKC").toLowerCase();
-            updateRightActionButton();
+            document.body.classList.toggle("has-search-text", keyword.length > 0);
+            updateStandaloneButtonState();
 
             let result = [];
             const langObj = I18N[state.currentLang];
@@ -3136,13 +3291,16 @@
             tab.addEventListener("click", () => {
                 const targetTab = tab.getAttribute("data-tab");
                 if (state.isListView) {
-                    setListViewMode(false);
+                    setListViewMode(false, false);
                 }
+                searchInput.blur();
+                document.body.classList.remove("has-search-focus");
                 if (state.activeTab === targetTab && !state.focusedModuleId) return;
 
                 state.focusedModuleId = null;
                 searchInput.value = "";
-                updateRightActionButton();
+                document.body.classList.remove("has-search-text");
+                updateStandaloneButtonState();
 
                 state.activeTab = targetTab;
                 tabItems.forEach(t => {
@@ -3153,9 +3311,7 @@
 
                 isTabAnimating = true;
                 clearTimeout(tabAnimTimer);
-                tabAnimTimer = setTimeout(() => {
-                    isTabAnimating = false;
-                }, 460);
+                tabAnimTimer = setTimeout(() => { isTabAnimating = false; }, 460);
 
                 updateTabIndicator(true);
 
@@ -3171,8 +3327,9 @@
 
         searchInput.addEventListener("input", () => {
             state.focusedModuleId = null;
+            document.body.classList.toggle("has-search-text", searchInput.value.length > 0);
             if (state.isListView) {
-                setListViewMode(false);
+                setListViewMode(false, false);
             }
             clearTimeout(searchTimer);
             searchTimer = setTimeout(filterModules, 120);
@@ -3180,17 +3337,19 @@
 
         window.addEventListener("keydown", (e) => {
             if (e.key === "/" && document.activeElement !== searchInput) {
-                if (searchInput.disabled) return;
                 e.preventDefault();
+                setListViewMode(false, false);
+                window.scrollTo(0, 0);
                 searchInput.focus();
                 searchInput.select();
             } else if (e.key === "Escape") {
                 state.focusedModuleId = null;
                 searchInput.value = "";
                 searchInput.blur();
+                document.body.classList.remove("has-search-text", "has-search-focus");
                 setListViewMode(false);
                 filterModules();
-                updateRightActionButton();
+                updateStandaloneButtonState();
             }
         });
 
@@ -3207,7 +3366,7 @@
 
             if (!enabled) {
                 searchInput.value = "";
-                updateRightActionButton();
+                updateStandaloneButtonState();
             }
         }
 
@@ -3260,11 +3419,8 @@
             startNoticeLoop();
 
             document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    stopNoticeLoop();
-                } else {
-                    startNoticeLoop();
-                }
+                if (document.hidden) stopNoticeLoop();
+                else startNoticeLoop();
             });
         }
 
@@ -3404,7 +3560,7 @@
 
             setSearchState(!searchInput.disabled);
             updateThemeUI();
-            updateRightActionButton();
+            updateStandaloneButtonState();
 
             if (!state.focusedModuleId && state.statusKey && dict[state.statusKey]) {
                 statusText.textContent = dict[state.statusKey];
