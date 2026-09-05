@@ -488,7 +488,7 @@
             filter: none; 
         }
 
-        /* 容器 2：搜索栏、状态及衍生弹窗面板 */
+        /* 容器 2：搜索栏、状态及衍生弹窗面板：第一列自适应宽度，第二列与右侧主卡片同宽 */
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
@@ -657,11 +657,11 @@
             background: transparent; 
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
 
-        /* 独立的资源列表按钮（放置于搜索框左侧） */
+        /* 独立的资源列表按钮（放在左侧） */
         .standalone-list-btn {
             width: 44px;
             height: 44px;
@@ -710,12 +710,13 @@
         .standalone-list-btn:active {
             transform: scale(0.92);
         }
+        
+        /* 按照用户要求：取消原先激活时的青色边框和青色遮罩 */
         .standalone-list-btn.active {
-            color: var(--primary);
-            border-color: var(--primary);
-            background-color: var(--primary-soft);
+            color: var(--text-secondary);
         }
 
+        /* 搜索框：自适应填满左侧资源列表按钮与右侧（或返回按钮）之间的所有可用空间，右边缘完美对齐 */
         .search-box-inner {
             position: relative; 
             flex: 1 1 auto; 
@@ -855,6 +856,7 @@
             display: none;
         }
 
+        /* 返回顶端按钮：间距严格保持 8px 与其他按钮统一 */
         .back-to-top-btn {
             width: 0;
             height: 44px;
@@ -878,7 +880,7 @@
         }
         .back-to-top-btn.visible {
             width: 44px;
-            margin-left: 10px;
+            margin-left: 8px;
             opacity: 1;
             visibility: visible;
             transform: scale(1);
@@ -1323,7 +1325,7 @@
             pointer-events: none;
         }
 
-        /* 资源列表卡片（左侧）：z-index 设为 10 */
+        /* 资源列表卡片（左侧）：左边缘始终实时与独立资源列表按钮左边缘对齐 */
         .alphabet-main-card {
             position: relative;
             z-index: 10;
@@ -1571,7 +1573,7 @@
             pointer-events: none;
         }
 
-        /* 滑动字母放大预选效果：z-index 设为 30 */
+        /* 滑动字母放大预选效果 */
         .alphabet-popup-bubble {
             position: absolute;
             width: 44px;
@@ -1886,7 +1888,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
                 </button>
 
-                <!-- 恢复原生输入功能的搜索框（去掉了所有阻挡输入的旧遮罩与 readonly 限制） -->
+                <!-- 搜索框：自适应大小，右边缘自动对齐到主卡片右边缘 -->
                 <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
@@ -1937,7 +1939,7 @@
         </footer>
     </div>
 
-    <!-- 资源列表与字母列表分离并左右并列展示的容器 -->
+    <!-- 资源列表与字母列表分离并左右并列展示的容器：左边缘实时与资源列表按钮左边缘对齐 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
             <div class="alphabet-main-card">
@@ -1952,7 +1954,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "202609051613"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -1971,7 +1973,7 @@
                 searchPlaceholderReady: "输入关键字全局搜索...",
                 notice1: "相关资源均来源于开源社区",
                 notice2: "所有权利责任归原作者所有",
-                searchClearTitle: "清空搜索",
+                searchClearTitle: "关闭列表",
                 backToTopTitle: "返回顶部",
                 searchInputAria: "搜索资源",
                 statusSyncing: "正在同步资源索引...",
@@ -2097,7 +2099,7 @@
             {
                 category: "more",
                 i18n: {
-                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块,规则,配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
+                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
                     en: { name: "Theme & Config Repo", description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.", primaryBtnText: "Visit Repo" }
                 },
                 icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
@@ -2433,9 +2435,6 @@
                 setListViewMode(false, false);
             }
             searchInput.blur();
-            if (searchInput.value.length === 0) {
-                searchInput.readOnly = true;
-            }
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
@@ -2590,7 +2589,7 @@
                 standaloneListBtn.innerHTML = CLOSE_SVG;
             } else {
                 standaloneListBtn.classList.remove("active");
-                standaloneListBtn.setAttribute("title", "首字母资源列表");
+                standaloneListBtn.setAttribute("title", "资源列表");
                 standaloneListBtn.setAttribute("aria-label", "首字母资源列表");
                 standaloneListBtn.innerHTML = LIST_SVG;
             }
@@ -2850,9 +2849,11 @@
 
         window.addEventListener("mouseup", hideFastIndexSelection);
 
+        // 核心修复 2：资源列表卡片的左边缘始终实时与资源列表按钮的左边缘对齐
         function updateAlphabetPosition() {
-            if (!alphabetViewContainer || !searchBoxInner || !pageContainer) return;
+            if (!alphabetViewContainer || !standaloneListBtn || !pageContainer) return;
 
+            const btnRect = standaloneListBtn.getBoundingClientRect();
             const containerRect = pageContainer.getBoundingClientRect();
 
             const style = window.getComputedStyle(controlBarEl);
@@ -2871,8 +2872,9 @@
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
-            alphabetViewContainer.style.left = `${containerRect.left}px`;
-            alphabetViewContainer.style.width = `${containerRect.width}px`;
+            // 左边缘实时对齐到资源列表按钮左边缘
+            alphabetViewContainer.style.left = `${btnRect.left}px`;
+            alphabetViewContainer.style.width = `${containerRect.right - btnRect.left}px`;
         }
 
         let listViewTransitionTimer = null;
@@ -2950,7 +2952,6 @@
             setListViewMode(false);
         });
 
-        // 独立的资源列表按钮点击事件
         standaloneListBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
@@ -2984,7 +2985,6 @@
             }
         });
 
-        // 搜索框内部的清空按钮事件
         searchClearBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             searchInput.value = "";
@@ -2994,9 +2994,7 @@
             searchInput.focus();
         });
 
-        /* 恢复搜索框原生功能：点击搜索框本身仅激活输入焦点，不触发资源列表 */
         searchBoxInner.addEventListener("click", (e) => {
-            if (searchInput.disabled) return;
             if (e.target.closest("#searchClearBtn")) return;
             if (document.activeElement !== searchInput) {
                 searchInput.focus();
@@ -3281,7 +3279,6 @@
 
         window.addEventListener("keydown", (e) => {
             if (e.key === "/" && document.activeElement !== searchInput) {
-                if (searchInput.disabled) return;
                 e.preventDefault();
                 setListViewMode(false, false);
                 window.scrollTo(0, 0);
@@ -3390,7 +3387,7 @@
             const currentTheme = getEffectiveTheme(mode);
             document.documentElement.setAttribute("data-theme", currentTheme);
             
-            const themeColor = currentTheme === "dark" ? "#14161a" : "#f0f2f5";
+            const themeColor = currentTheme === "dark" ? '#14161a' : '#f0f2f5';
             const themeColorMeta = document.querySelector('meta[name="theme-color"]');
             if (themeColorMeta) {
                 themeColorMeta.setAttribute("content", themeColor);
