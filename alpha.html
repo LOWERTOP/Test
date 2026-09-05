@@ -1158,7 +1158,7 @@
             bottom: var(--toast-bottom); 
             left: 50%; 
             transform: translateX(-50%) translateY(100px); 
-            z-index: 999999; 
+            z-index: 9999999; 
             padding: 12px 26px; 
             border-radius: var(--radius-pill); 
             color: var(--text-primary); 
@@ -1262,10 +1262,10 @@
             font-weight: 400 !important;
         }
 
-        /* 资源列表与字母列表区域：置于搜索栏下方，并确保 z-index 低于搜索栏（防止被搜索栏阴影压到） */
+        /* 资源列表与字母列表区域：层级提升至 999999，高于控制栏、搜索栏及返回顶端按钮 */
         .alphabet-view-container {
             position: fixed;
-            z-index: 999970; /* 低于控制栏/搜索栏的 z-index (999990) */
+            z-index: 999999;
             display: flex;
             opacity: 0;
             visibility: hidden;
@@ -1274,7 +1274,6 @@
             will-change: opacity;
             box-sizing: border-box;
             background: transparent;
-            pointer-events: none;
         }
 
         .alphabet-view-container.is-visible {
@@ -1283,6 +1282,7 @@
             pointer-events: auto;
         }
 
+        /* 间距修改为与搜索框内部间距一致 (8px) */
         .alphabet-content-box {
             position: relative;
             width: 100%;
@@ -1290,19 +1290,21 @@
             display: flex;
             padding: 0;
             margin: 0;
-            gap: var(--layout-gap, 44px); /* 资源列表卡片与字母列表卡片互相之间的间距使用标题栏距离左侧屏幕边缘相同的间距数值 */
+            gap: 8px; 
             background: transparent;
             pointer-events: none;
         }
 
-        /* 资源列表卡片（左侧）：采用与主资源卡片相同的视觉效果、四周留白和圆角 */
+        /* 资源列表卡片（左侧） */
         .alphabet-main-card {
+            position: relative;
+            z-index: 20;
             flex: 1;
             min-width: 0;
             height: 100%;
             display: flex;
             flex-direction: column;
-            padding: 28px; /* 四周留白参考主资源卡片 */
+            padding: 28px;
             border-radius: var(--radius-card);
             box-shadow: var(--shadow-glass-ui);
             background-color: transparent;
@@ -1325,19 +1327,22 @@
             border: 1px solid var(--border-subtle);
         }
 
+        /* 修复首字母消隐：顶端不再使用渐变遮罩消隐，保留底端平滑消隐 */
         .alphabet-scroll-area {
+            position: relative;
             flex: 1;
             height: 100%;
             overflow-y: scroll;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
+            padding-top: 4px;
             padding-left: 0;
             padding-right: 16px;
             padding-bottom: 24px;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 24px, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 24px, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) calc(100% - 24px), transparent 100%);
         }
         .alphabet-scroll-area::-webkit-scrollbar {
             display: none;
@@ -1351,14 +1356,36 @@
             margin-bottom: 20px;
         }
 
+        /* 资源列表顶部的首字母样式：与取消按钮激活时（.list-toggle-icon.active）样式完全相同 */
         .alphabet-letter-header {
+            width: 32px;
+            height: 32px;
+            flex: 0 0 32px;
+            margin-left: 8px; /* 与 alphabet-item-row 内的 8px 水平内边距精确对齐 */
+            margin-top: 8px;
+            margin-bottom: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 13.5px;
             font-weight: 700;
+            border: 1px solid var(--primary);
+            background-color: var(--primary-soft);
             color: var(--primary);
-            padding: 10px 0 6px 0;
-            letter-spacing: 0.5px;
+            box-shadow: none;
+            cursor: default;
             user-select: none;
             -webkit-user-select: none;
+            box-sizing: border-box;
+            transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+        }
+
+        [data-theme="dark"] .alphabet-letter-header {
+            border: 1px solid var(--primary);
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            box-shadow: none;
         }
 
         .alphabet-item-list {
@@ -1437,18 +1464,21 @@
             flex-shrink: 0;
         }
 
-        /* 字母列表卡片（右侧）：自适应宽度，高度和资源卡片相同，采用与主资源卡片相同的视觉效果与圆角，内部内容自适应卡片高度均匀平铺 */
+        /* 字母列表卡片（右侧）：宽度与返回顶端按钮 (44px) 保持一致 */
         .alphabet-fast-index {
             position: relative;
+            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* 内容自适应卡片高度，充满整个卡片高度 */
-            width: auto; /* 自适应宽度 */
-            min-width: 32px;
-            height: 100%; /* 高度和资源卡片相同 */
-            padding: 8px 6px;
-            border-radius: var(--radius-card); /* 采用与主资源卡片相同的圆角 */
+            justify-content: space-between;
+            width: 44px;
+            min-width: 44px;
+            max-width: 44px;
+            flex: 0 0 44px;
+            height: 100%;
+            padding: 8px 0;
+            border-radius: var(--radius-card);
             box-shadow: var(--shadow-glass-ui);
             box-sizing: border-box;
             background-color: transparent;
@@ -1462,7 +1492,6 @@
             user-select: none;
             -webkit-user-select: none;
             touch-action: none;
-            z-index: 10;
             pointer-events: auto;
         }
 
@@ -1480,9 +1509,9 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            flex: 1; /* 内容自适应高度均匀分布 */
+            flex: 1;
             min-height: 0;
-            padding: 0 4px;
+            padding: 0;
             font-size: 11px;
             font-weight: 600;
             color: var(--text-tertiary);
@@ -1493,8 +1522,11 @@
 
         @media (orientation: portrait) {
             .alphabet-fast-index {
-                min-width: 28px;
-                padding: 6px 4px;
+                width: 44px;
+                min-width: 44px;
+                max-width: 44px;
+                flex: 0 0 44px;
+                padding: 6px 0;
             }
             .alphabet-fast-char {
                 font-size: 10px;
@@ -1513,21 +1545,19 @@
             pointer-events: none;
         }
 
+        /* 滑动字母放大预选效果：规格、毛玻璃、动画与阴影完全与返回顶端按钮 (44px) 一致，置于最高层级确保不被覆盖 */
         .alphabet-popup-bubble {
             position: absolute;
-            right: calc(100% + 16px);
             top: 50%;
             width: 44px;
             height: 44px;
             border-radius: 50%;
             color: var(--text-primary);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid transparent;
-            box-shadow: none;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -1536,16 +1566,18 @@
                         transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                         visibility 0.35s ease,
                         box-shadow 0.35s ease,
-                        border-color 0.35s ease;
-            z-index: 100;
+                        border-color 0.35s ease,
+                        top 0.06s ease-out;
+            z-index: 1000000;
+            box-shadow: none;
             background-color: transparent;
             background-image: var(--noise-pattern), var(--glass-bg);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border-top: 1px solid var(--glass-border-t);
-            border-left: 1px solid var(--glass-border-l);
-            border-right: 1px solid var(--glass-border-r);
-            border-bottom: 1px solid var(--glass-border-b);
+            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            border-top: 1px solid var(--glass-border-t) !important;
+            border-left: 1px solid var(--glass-border-l) !important;
+            border-right: 1px solid var(--glass-border-r) !important;
+            border-bottom: 1px solid var(--glass-border-b) !important;
         }
         .alphabet-popup-bubble.visible {
             opacity: 1;
@@ -1553,9 +1585,17 @@
             transform: translateY(-50%) scale(1);
             box-shadow: var(--shadow-search);
         }
-        [data-theme="dark"] .alphabet-popup-bubble.visible {
-            border-color: var(--border-subtle);
+        [data-theme="dark"] .alphabet-popup-bubble {
             background-color: var(--bg-surface);
+            background-image: var(--noise-pattern);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--border-subtle) !important;
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .alphabet-popup-bubble.visible {
+            border-color: var(--border-subtle) !important;
+            box-shadow: var(--shadow-search);
         }
 
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
@@ -1873,14 +1913,14 @@
                 <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
             </div>
             <div id="alphabetFastIndex" class="alphabet-fast-index" aria-label="字母快速定位导航"></div>
-            <div id="alphabetPopupBubble" class="alphabet-popup-bubble">#</div>
+            <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
         </div>
     </div>
     
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "20260905"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2331,6 +2371,14 @@
 
         function floatSearchToTarget(smooth = true) {
             const targetTop = getControlBarStickyScrollTop();
+            if (targetTop <= 0) return;
+
+            // 若当前页面高度不够，给 body 补充最小高度撑开可滚动空间，确保卡片少时也能必定上浮
+            const neededHeight = window.innerHeight + targetTop + 50;
+            if (document.body.scrollHeight < neededHeight) {
+                document.body.style.minHeight = `${neededHeight}px`;
+            }
+
             window.scrollTo({
                 top: targetTop,
                 behavior: smooth ? "smooth" : "auto"
@@ -2603,6 +2651,7 @@
                     groupContainer.className = "alphabet-group";
                     groupContainer.id = `alphabet-group-${letter === '#' ? 'hash' : letter}`;
 
+                    // 首字母提示圆圈：样式与取消按钮激活时保持一致
                     const headerEl = document.createElement("div");
                     headerEl.className = "alphabet-letter-header";
                     headerEl.textContent = letter;
@@ -2674,34 +2723,59 @@
 
         let isTouchingIndex = false;
 
+        // 修复滑动字母列表时字母放大预选效果的计算与显示
         function updateFastIndexSelection(clientX, clientY) {
-            const indexRect = alphabetFastIndex.getBoundingClientRect();
-            let target = document.elementFromPoint(clientX, clientY);
-            let charEl = target ? target.closest(".alphabet-fast-char") : null;
+            if (!alphabetFastIndex || !alphabetFastIndex.parentElement) return;
 
-            if (!charEl && clientX >= indexRect.left) {
-                const chars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
+            const indexRect = alphabetFastIndex.getBoundingClientRect();
+            const contentRect = alphabetFastIndex.parentElement.getBoundingClientRect();
+            
+            let target = document.elementFromPoint(clientX, clientY);
+            let charEl = (target && target.closest) ? target.closest(".alphabet-fast-char") : null;
+
+            const chars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
+            if (!chars.length) return;
+
+            // 当手指滑出狭窄的字母条边缘时，依旧根据 Y 轴坐标精准匹配
+            if (!charEl) {
                 charEl = chars.find(el => {
                     const r = el.getBoundingClientRect();
                     return clientY >= r.top && clientY <= r.bottom;
                 });
+                if (!charEl) {
+                    const firstRect = chars[0].getBoundingClientRect();
+                    const lastRect = chars[chars.length - 1].getBoundingClientRect();
+                    if (clientY < firstRect.top) charEl = chars[0];
+                    else if (clientY > lastRect.bottom) charEl = chars[chars.length - 1];
+                }
             }
             
             if (charEl && !charEl.classList.contains("disabled")) {
                 const letter = charEl.dataset.letter;
                 if (letter) {
                     scrollToAlphabetLetter(letter);
-                    document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
+                    chars.forEach(c => c.classList.remove("active"));
                     charEl.classList.add("active");
 
                     if (alphabetPopupBubble) {
                         alphabetPopupBubble.textContent = letter;
-                        const containerRect = alphabetFastIndex.getBoundingClientRect();
-                        let relativeY = clientY - containerRect.top;
-                        alphabetPopupBubble.style.top = `${Math.max(22, Math.min(relativeY, containerRect.height - 22))}px`;
+                        const charRect = charEl.getBoundingClientRect();
+                        const relativeY = (charRect.top + charRect.height / 2) - contentRect.top;
+                        const rightOffset = (contentRect.right - indexRect.left) + 10;
+
+                        alphabetPopupBubble.style.top = `${relativeY}px`;
+                        alphabetPopupBubble.style.right = `${rightOffset}px`;
                         alphabetPopupBubble.classList.add("visible");
                     }
                 }
+            }
+        }
+
+        function hideFastIndexSelection() {
+            if (isTouchingIndex) {
+                isTouchingIndex = false;
+                if (alphabetPopupBubble) alphabetPopupBubble.classList.remove("visible");
+                document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
             }
         }
 
@@ -2720,13 +2794,8 @@
             }
         }, { passive: false });
 
-        window.addEventListener("touchend", () => {
-            if (isTouchingIndex) {
-                isTouchingIndex = false;
-                if (alphabetPopupBubble) alphabetPopupBubble.classList.remove("visible");
-                document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
-            }
-        });
+        window.addEventListener("touchend", hideFastIndexSelection, { passive: true });
+        window.addEventListener("touchcancel", hideFastIndexSelection, { passive: true });
 
         alphabetFastIndex.addEventListener("mousedown", (e) => {
             isTouchingIndex = true;
@@ -2739,18 +2808,11 @@
             }
         });
 
-        window.addEventListener("mouseup", () => {
-            if (isTouchingIndex) {
-                isTouchingIndex = false;
-                if (alphabetPopupBubble) alphabetPopupBubble.classList.remove("visible");
-                document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
-            }
-        });
+        window.addEventListener("mouseup", hideFastIndexSelection);
 
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !searchBoxInner || !pageContainer) return;
 
-            const searchRect = searchBoxInner.getBoundingClientRect();
             const containerRect = pageContainer.getBoundingClientRect();
 
             const style = window.getComputedStyle(controlBarEl);
@@ -2774,7 +2836,6 @@
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
-            /* 保证左右边缘与大标题栏、主容器完全对齐 */
             alphabetViewContainer.style.left = `${containerRect.left}px`;
             alphabetViewContainer.style.width = `${containerRect.width}px`;
         }
@@ -2787,8 +2848,7 @@
             clearTimeout(listViewTransitionTimer);
 
             if (enable) {
-                const alreadyFloating = isSearchFloating();
-                state.wasFloatingBeforeActive = alreadyFloating;
+                state.wasFloatingBeforeActive = isSearchFloating();
                 state.listViewReturnScrollY = window.scrollY || document.documentElement.scrollTop || 0;
 
                 state.isListView = true;
@@ -2799,7 +2859,7 @@
 
                 searchInput.readOnly = false;
 
-                /* 无论是哪个标签页点击，强制将搜索框上浮到顶端 */
+                // 强制触发搜索栏吸顶滚动（少卡片时已由 body.minHeight 撑开保证上浮）
                 floatSearchToTarget(true);
 
                 if (!state.isAlphabetRendered) {
@@ -2824,6 +2884,10 @@
                 alphabetViewContainer.classList.remove("is-visible");
                 document.body.classList.remove("is-list-view");
                 updateRightActionButton();
+                
+                // 恢复默认高度
+                document.body.style.minHeight = "";
+                
                 checkScrollLock();
                 scheduleCardLayerUpdate();
 
