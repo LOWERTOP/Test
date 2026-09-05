@@ -696,6 +696,18 @@
             height: 18px;
             pointer-events: none;
         }
+
+        .standalone-list-btn .close-icon {
+            display: none;
+        }
+
+        .standalone-list-btn.active .list-icon {
+            display: none;
+        }
+
+        .standalone-list-btn.active .close-icon {
+            display: block;
+        }
         .standalone-list-btn:hover {
             background-image: var(--noise-pattern), var(--glass-bg-hover);
             color: var(--text-primary);
@@ -1575,56 +1587,50 @@
             pointer-events: none;
         }
 
-        /* 滑动字母放大预选效果 */
+        /* 滑动字母提示：轻量青色描边 + 放大字母，避免毛玻璃合成造成跟手延迟 */
         .alphabet-popup-bubble {
             position: absolute;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             color: var(--primary);
-            font-size: 20px;
+            font-size: 28px;
             font-weight: 700;
+            line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transform: translateY(-50%) scale(0.6);
-            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                        visibility 0.35s ease,
-                        box-shadow 0.35s ease,
-                        border-color 0.35s ease,
-                        top 0.06s ease-out;
+            transform: translate3d(0, -50%, 0);
+            transition: opacity 0.12s ease, visibility 0.12s ease;
             z-index: 999999;
-            box-shadow: none;
-            background-color: transparent;
-            background-image: var(--noise-pattern), var(--glass-bg);
-            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
-            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
-            border-top: 1px solid var(--glass-border-t) !important;
-            border-left: 1px solid var(--glass-border-l) !important;
-            border-right: 1px solid var(--glass-border-r) !important;
-            border-bottom: 1px solid var(--glass-border-b) !important;
+            box-shadow: none !important;
+            background: var(--primary-soft) !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--primary) !important;
+            will-change: top, opacity;
         }
+
         .alphabet-popup-bubble.visible {
             opacity: 1;
             visibility: visible;
-            transform: translateY(-50%) scale(1);
-            box-shadow: var(--shadow-search);
+            transform: translate3d(0, -50%, 0);
+            box-shadow: none !important;
         }
-        [data-theme="dark"] .alphabet-popup-bubble {
-            background-color: var(--bg-surface);
-            background-image: var(--noise-pattern);
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            border: 1px solid var(--border-subtle) !important;
-            color: var(--primary);
-        }
+
+        [data-theme="dark"] .alphabet-popup-bubble,
         [data-theme="dark"] .alphabet-popup-bubble.visible {
-            border-color: var(--border-subtle) !important;
-            box-shadow: var(--shadow-search);
+            background: var(--primary-soft) !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: 1px solid var(--primary) !important;
+            color: var(--primary);
+            box-shadow: none !important;
         }
 
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
@@ -1725,6 +1731,18 @@
                 -webkit-tap-highlight-color: transparent !important;
             }
 
+            /* 移动端资源列表按钮与返回按钮保持完全稳定：触摸时不缩放、不切换阴影，避免 iOS 合成层闪烁 */
+            .standalone-list-btn,
+            .standalone-list-btn:hover,
+            .standalone-list-btn:active,
+            .standalone-list-btn:focus,
+            .standalone-list-btn:focus-visible {
+                transform: none !important;
+                box-shadow: var(--shadow-glass-ui) !important;
+                transition: none !important;
+                -webkit-tap-highlight-color: transparent !important;
+            }
+
             .theme-toggle:hover,
             .theme-toggle:active {
                 transform: none !important;
@@ -1796,6 +1814,16 @@
             transform: none !important;
             opacity: 1 !important;
             transition: none !important;
+        }
+        html.is-mobile .standalone-list-btn,
+        html.is-mobile .standalone-list-btn:hover,
+        html.is-mobile .standalone-list-btn:active,
+        html.is-mobile .standalone-list-btn:focus,
+        html.is-mobile .standalone-list-btn:focus-visible {
+            transform: none !important;
+            box-shadow: var(--shadow-glass-ui) !important;
+            transition: none !important;
+            -webkit-tap-highlight-color: transparent !important;
         }
 
         @media (max-width: 600px) {
@@ -1883,7 +1911,8 @@
 
             <div class="search-wrapper">
                 <button id="standaloneListBtn" class="standalone-list-btn glass-element" type="button" aria-label="资源列表" title="资源列表">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
+                    <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
+                    <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
 
                 <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
@@ -1950,7 +1979,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609051645"; 
+        const CACHE_VERSION = "202609051800"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2582,12 +2611,10 @@
                 standaloneListBtn.classList.add("active");
                 standaloneListBtn.setAttribute("title", I18N[state.currentLang].searchClearTitle);
                 standaloneListBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
-                standaloneListBtn.innerHTML = CLOSE_SVG;
             } else {
                 standaloneListBtn.classList.remove("active");
                 standaloneListBtn.setAttribute("title", "资源列表");
                 standaloneListBtn.setAttribute("aria-label", "资源列表");
-                standaloneListBtn.innerHTML = LIST_SVG;
             }
             document.body.classList.toggle("has-search-text", hasText);
         }
@@ -2741,6 +2768,9 @@
                 alphabetFastIndex.appendChild(alphabetPopupBubble);
             }
             state.isAlphabetRendered = true;
+            fastIndexChars = [];
+            fastIndexCharHeight = 0;
+            prepareFastIndexGeometry();
             updateAlphabetPosition();
         }
 
@@ -2753,80 +2783,107 @@
         }
 
         let isTouchingIndex = false;
+        let fastIndexChars = [];
+        let fastIndexCharHeight = 0;
+        let fastIndexTop = 0;
+        let fastIndexRightOffset = 0;
+        let lastSelectedLetter = null;
+
+        function prepareFastIndexGeometry() {
+            if (!alphabetFastIndex) return false;
+
+            fastIndexChars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
+            if (!fastIndexChars.length) return false;
+
+            const firstRect = fastIndexChars[0].getBoundingClientRect();
+            const indexRect = alphabetFastIndex.getBoundingClientRect();
+            const contentRect = alphabetFastIndex.parentElement
+                ? alphabetFastIndex.parentElement.getBoundingClientRect()
+                : indexRect;
+
+            fastIndexTop = firstRect.top;
+            fastIndexCharHeight = firstRect.height || (indexRect.height / fastIndexChars.length);
+            fastIndexRightOffset = (contentRect.right - indexRect.left) + 10;
+
+            return fastIndexCharHeight > 0;
+        }
 
         function updateFastIndexSelection(clientX, clientY) {
-            if (!alphabetFastIndex || !alphabetFastIndex.parentElement) return;
+            if (!alphabetFastIndex) return;
 
-            const indexRect = alphabetFastIndex.getBoundingClientRect();
-            const contentRect = alphabetFastIndex.parentElement.getBoundingClientRect();
-            
-            let target = document.elementFromPoint(clientX, clientY);
-            let charEl = (target && target.closest) ? target.closest(".alphabet-fast-char") : null;
-
-            const chars = Array.from(alphabetFastIndex.querySelectorAll(".alphabet-fast-char"));
-            if (!chars.length) return;
-
-            if (!charEl) {
-                charEl = chars.find(el => {
-                    const r = el.getBoundingClientRect();
-                    return clientY >= r.top && clientY <= r.bottom;
-                });
-                if (!charEl) {
-                    const firstRect = chars[0].getBoundingClientRect();
-                    const lastRect = chars[chars.length - 1].getBoundingClientRect();
-                    if (clientY < firstRect.top) charEl = chars[0];
-                    else if (clientY > lastRect.bottom) charEl = chars[chars.length - 1];
-                }
+            if (!fastIndexChars.length || !fastIndexCharHeight) {
+                if (!prepareFastIndexGeometry()) return;
             }
-            
-            if (charEl && !charEl.classList.contains("disabled")) {
-                const letter = charEl.dataset.letter;
-                if (letter) {
-                    scrollToAlphabetLetter(letter);
-                    chars.forEach(c => c.classList.remove("active"));
-                    charEl.classList.add("active");
 
-                    if (alphabetPopupBubble) {
-                        alphabetPopupBubble.textContent = letter;
-                        const charRect = charEl.getBoundingClientRect();
-                        const containerRect = alphabetFastIndex.getBoundingClientRect();
-                        
-                        let relativeY = (charRect.top + charRect.height / 2) - containerRect.top;
-                        const bubbleHalfH = 22;
-                        
-                        relativeY = Math.max(bubbleHalfH, Math.min(relativeY, containerRect.height - bubbleHalfH));
+            /* 所有字母使用 flex:1，直接按等高区域计算索引，避免 touchmove 时遍历 27 个元素并反复触发布局 */
+            let index = Math.floor((clientY - fastIndexTop) / fastIndexCharHeight);
+            index = Math.max(0, Math.min(index, fastIndexChars.length - 1));
 
-                        const rightOffset = (contentRect.right - indexRect.left) + 10;
+            const charEl = fastIndexChars[index];
+            if (!charEl || charEl.classList.contains("disabled")) return;
 
-                        alphabetPopupBubble.style.top = `${relativeY}px`;
-                        alphabetPopupBubble.style.right = `${rightOffset}px`;
-                        alphabetPopupBubble.classList.add("visible");
-                    }
+            const letter = charEl.dataset.letter;
+            if (!letter) return;
+
+            /* 只有真正切换字母时才滚动列表和切换 active */
+            if (letter !== lastSelectedLetter) {
+                lastSelectedLetter = letter;
+                scrollToAlphabetLetter(letter);
+
+                const previous = alphabetFastIndex.querySelector(".alphabet-fast-char.active");
+                if (previous && previous !== charEl) {
+                    previous.classList.remove("active");
                 }
+                charEl.classList.add("active");
+            }
+
+            if (alphabetPopupBubble) {
+                const indexRect = alphabetFastIndex.getBoundingClientRect();
+                let relativeY = clientY - indexRect.top;
+                const bubbleHalfH = 24;
+
+                relativeY = Math.max(
+                    bubbleHalfH,
+                    Math.min(relativeY, indexRect.height - bubbleHalfH)
+                );
+
+                alphabetPopupBubble.textContent = letter;
+                alphabetPopupBubble.style.top = `${relativeY}px`;
+                alphabetPopupBubble.style.right = `${fastIndexRightOffset}px`;
+                alphabetPopupBubble.classList.add("visible");
             }
         }
 
         function hideFastIndexSelection() {
-            if (isTouchingIndex) {
-                isTouchingIndex = false;
-                if (alphabetPopupBubble) alphabetPopupBubble.classList.remove("visible");
-                document.querySelectorAll(".alphabet-fast-char").forEach(c => c.classList.remove("active"));
+            if (!isTouchingIndex) return;
+
+            isTouchingIndex = false;
+            lastSelectedLetter = null;
+
+            if (alphabetPopupBubble) {
+                alphabetPopupBubble.classList.remove("visible");
             }
+
+            const active = alphabetFastIndex.querySelector(".alphabet-fast-char.active");
+            if (active) active.classList.remove("active");
         }
 
         alphabetFastIndex.addEventListener("touchstart", (e) => {
             isTouchingIndex = true;
+            lastSelectedLetter = null;
+            prepareFastIndexGeometry();
             e.preventDefault();
+
             const touch = e.touches[0];
             updateFastIndexSelection(touch.clientX, touch.clientY);
         }, { passive: false });
 
         alphabetFastIndex.addEventListener("touchmove", (e) => {
-            if (isTouchingIndex) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                updateFastIndexSelection(touch.clientX, touch.clientY);
-            }
+            if (!isTouchingIndex) return;
+
+            e.preventDefault();
+            const touch = e.touches[0];
+            updateFastIndexSelection(touch.clientX, touch.clientY);
         }, { passive: false });
 
         window.addEventListener("touchend", hideFastIndexSelection, { passive: true });
@@ -2834,6 +2891,8 @@
 
         alphabetFastIndex.addEventListener("mousedown", (e) => {
             isTouchingIndex = true;
+            lastSelectedLetter = null;
+            prepareFastIndexGeometry();
             updateFastIndexSelection(e.clientX, e.clientY);
         });
 
@@ -2870,6 +2929,10 @@
             // 左边缘始终实时与资源列表按钮的左边缘对齐
             alphabetViewContainer.style.left = `${btnRect.left}px`;
             alphabetViewContainer.style.width = `${containerRect.right - btnRect.left}px`;
+
+            /* 容器尺寸或位置改变后，下次触摸重新测量 */
+            fastIndexChars = [];
+            fastIndexCharHeight = 0;
         }
 
         let listViewTransitionTimer = null;
