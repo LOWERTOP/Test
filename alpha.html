@@ -488,13 +488,13 @@
             filter: none; 
         }
 
-        /* 容器 2：搜索栏、状态及衍生弹窗面板：第一列自适应宽度，第二列与右侧主卡片同宽 */
+        /* 容器 2：搜索栏、状态及衍生弹窗面板：第二列固定为 var(--card-width)，确保右边缘与主卡片对齐 */
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
             z-index: 999990;
             display: grid;
-            grid-template-columns: var(--card-width, 380px) minmax(0, 1fr);
+            grid-template-columns: var(--card-width, 380px) var(--card-width, 380px);
             gap: var(--layout-gap, 44px);
             align-items: center;
             width: 100%;
@@ -657,15 +657,15 @@
             background: transparent; 
             display: flex;
             align-items: center;
-            gap: 8px;
             width: 100%;
         }
 
-        /* 独立的资源列表按钮（放在左侧） */
+        /* 独立的资源列表按钮（放在左侧，固定间距 8px） */
         .standalone-list-btn {
             width: 44px;
             height: 44px;
             flex: 0 0 44px;
+            margin-right: 8px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
@@ -710,13 +710,13 @@
         .standalone-list-btn:active {
             transform: scale(0.92);
         }
-        
-        /* 按照用户要求：取消原先激活时的青色边框和青色遮罩 */
         .standalone-list-btn.active {
-            color: var(--text-secondary);
+            color: var(--primary);
+            border-color: var(--primary);
+            background-color: var(--primary-soft);
         }
 
-        /* 搜索框：自适应填满左侧资源列表按钮与右侧（或返回按钮）之间的所有可用空间，右边缘完美对齐 */
+        /* 搜索框自适应大小，无返回按钮时右侧与主卡片边缘对齐，有返回按钮时自动收缩且间距严格保持 8px */
         .search-box-inner {
             position: relative; 
             flex: 1 1 auto; 
@@ -856,7 +856,7 @@
             display: none;
         }
 
-        /* 返回顶端按钮：间距严格保持 8px 与其他按钮统一 */
+        /* 返回顶端按钮：显现时右侧间距与左侧资源列表按钮间距保持完美的 8px 对称一致 */
         .back-to-top-btn {
             width: 0;
             height: 44px;
@@ -1884,11 +1884,11 @@
 
             <div class="search-wrapper">
                 <!-- 独立的资源列表按钮：放在搜索框左侧 -->
-                <button id="standaloneListBtn" class="standalone-list-btn glass-element" type="button" aria-label="首字母资源列表" title="首字母资源列表">
+                <button id="standaloneListBtn" class="standalone-list-btn glass-element" type="button" aria-label="资源列表" title="资源列表">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
                 </button>
 
-                <!-- 搜索框：自适应大小，右边缘自动对齐到主卡片右边缘 -->
+                <!-- 搜索框：支持原生点击、聚焦和输入功能 -->
                 <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
@@ -1954,7 +1954,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609051613"; 
+        const CACHE_VERSION = "20260904"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2590,7 +2590,7 @@
             } else {
                 standaloneListBtn.classList.remove("active");
                 standaloneListBtn.setAttribute("title", "资源列表");
-                standaloneListBtn.setAttribute("aria-label", "首字母资源列表");
+                standaloneListBtn.setAttribute("aria-label", "资源列表");
                 standaloneListBtn.innerHTML = LIST_SVG;
             }
             document.body.classList.toggle("has-search-text", hasText);
@@ -2849,7 +2849,6 @@
 
         window.addEventListener("mouseup", hideFastIndexSelection);
 
-        // 核心修复 2：资源列表卡片的左边缘始终实时与资源列表按钮的左边缘对齐
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !standaloneListBtn || !pageContainer) return;
 
@@ -2872,7 +2871,7 @@
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
-            // 左边缘实时对齐到资源列表按钮左边缘
+            // 左边缘始终实时与资源列表按钮的左边缘对齐
             alphabetViewContainer.style.left = `${btnRect.left}px`;
             alphabetViewContainer.style.width = `${containerRect.right - btnRect.left}px`;
         }
@@ -3387,7 +3386,7 @@
             const currentTheme = getEffectiveTheme(mode);
             document.documentElement.setAttribute("data-theme", currentTheme);
             
-            const themeColor = currentTheme === "dark" ? '#14161a' : '#f0f2f5';
+            const themeColor = currentTheme === "dark" ? "#14161a" : "#f0f2f5";
             const themeColorMeta = document.querySelector('meta[name="theme-color"]');
             if (themeColorMeta) {
                 themeColorMeta.setAttribute("content", themeColor);
