@@ -326,6 +326,7 @@
         .ptr-icon svg { width: 100%; height: 100%; }
         .ptr-icon.rotate { transform: rotate(180deg); }
 
+        /* 容器 1：大标题栏 */
         .header { 
             padding: 24px 0 18px; 
             max-height: 140px;
@@ -487,6 +488,7 @@
             filter: none; 
         }
 
+        /* 容器 2：搜索栏、状态及衍生弹窗面板 */
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
@@ -502,6 +504,7 @@
             transition: margin-bottom 0.35s ease;
         }
 
+        /* 容器 3：标签栏 */
         .tab-bar-wrapper {
             width: 100%;
             min-width: 0;
@@ -1196,6 +1199,14 @@
             pointer-events: auto;
         }
 
+        /* 标签栏在竖屏模式且激活列表时的隐藏逻辑 */
+        body.is-list-view .control-bar.is-single-column .tab-bar-wrapper {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
         .control-bar.is-single-column .tab-bar-wrapper {
             position: fixed;
             left: 0;
@@ -1210,6 +1221,7 @@
             justify-content: center;
             pointer-events: none;
             z-index: 999999;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
         }
 
         .control-bar.is-single-column .tab-bar {
@@ -1250,9 +1262,10 @@
             font-weight: 400 !important;
         }
 
+        /* 资源列表与字母列表区域：置于搜索栏下方，并确保 z-index 低于搜索栏（防止被搜索栏阴影压到） */
         .alphabet-view-container {
             position: fixed;
-            z-index: 999980;
+            z-index: 999970; /* 低于控制栏/搜索栏的 z-index (999990) */
             display: flex;
             opacity: 0;
             visibility: hidden;
@@ -1260,6 +1273,8 @@
             transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s;
             will-change: opacity;
             box-sizing: border-box;
+            background: transparent;
+            pointer-events: none;
         }
 
         .alphabet-view-container.is-visible {
@@ -1275,6 +1290,39 @@
             display: flex;
             padding: 0;
             margin: 0;
+            gap: var(--layout-gap, 44px); /* 资源列表卡片与字母列表卡片互相之间的间距使用标题栏距离左侧屏幕边缘相同的间距数值 */
+            background: transparent;
+            pointer-events: none;
+        }
+
+        /* 资源列表卡片（左侧）：采用与主资源卡片相同的视觉效果、四周留白和圆角 */
+        .alphabet-main-card {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 28px; /* 四周留白参考主资源卡片 */
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-glass-ui);
+            background-color: transparent;
+            background-image: var(--noise-pattern), var(--glass-bg);
+            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            border-top: 1px solid var(--glass-border-t);
+            border-left: 1px solid var(--glass-border-l);
+            border-right: 1px solid var(--glass-border-r);
+            border-bottom: 1px solid var(--glass-border-b);
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .alphabet-main-card {
+            background-color: var(--bg-surface);
+            background-image: var(--noise-pattern);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--border-subtle);
         }
 
         .alphabet-scroll-area {
@@ -1284,7 +1332,7 @@
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             padding-left: 0;
-            padding-right: 36px;
+            padding-right: 16px;
             padding-bottom: 24px;
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -1389,37 +1437,41 @@
             flex-shrink: 0;
         }
 
+        /* 字母列表卡片（右侧）：自适应宽度，高度和资源卡片相同，采用与主资源卡片相同的视觉效果与圆角，内部内容自适应卡片高度均匀平铺 */
         .alphabet-fast-index {
-            position: absolute;
-            right: 0;
-            top: 0;
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            gap: 1px;
+            justify-content: space-between; /* 内容自适应卡片高度，充满整个卡片高度 */
+            width: auto; /* 自适应宽度 */
+            min-width: 32px;
+            height: 100%; /* 高度和资源卡片相同 */
+            padding: 8px 6px;
+            border-radius: var(--radius-card); /* 采用与主资源卡片相同的圆角 */
+            box-shadow: var(--shadow-glass-ui);
+            box-sizing: border-box;
+            background-color: transparent;
+            background-image: var(--noise-pattern), var(--glass-bg);
+            backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            -webkit-backdrop-filter: blur(32px) saturate(120%) brightness(102%);
+            border-top: 1px solid var(--glass-border-t);
+            border-left: 1px solid var(--glass-border-l);
+            border-right: 1px solid var(--glass-border-r);
+            border-bottom: 1px solid var(--glass-border-b);
             user-select: none;
             -webkit-user-select: none;
             touch-action: none;
             z-index: 10;
-            width: 26px;
-            padding: 8px 0;
-            border-radius: 13px;
-            box-shadow: var(--shadow-search);
-            box-sizing: border-box;
-            background-color: transparent;
+            pointer-events: auto;
         }
 
-        .alphabet-fast-index::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: -100vw;
-            background: transparent;
-            pointer-events: auto;
-            z-index: -1;
+        [data-theme="dark"] .alphabet-fast-index {
+            background-color: var(--bg-surface);
+            background-image: var(--noise-pattern);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--border-subtle);
         }
 
         .alphabet-fast-char {
@@ -1427,37 +1479,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 20px;
-            height: 13.5px;
-            padding: 0;
-            font-size: 10px;
+            width: 100%;
+            flex: 1; /* 内容自适应高度均匀分布 */
+            min-height: 0;
+            padding: 0 4px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-tertiary);
             cursor: pointer;
             transition: color 0.15s ease, transform 0.15s ease;
-        }
-
-        .alphabet-fast-char::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: -100vw;
-            background: transparent;
+            white-space: nowrap;
         }
 
         @media (orientation: portrait) {
             .alphabet-fast-index {
-                right: 0;
-                width: 24px;
-                padding: 6px 0;
-                border-radius: 12px;
+                min-width: 28px;
+                padding: 6px 4px;
             }
             .alphabet-fast-char {
-                width: 18px;
-                height: 12px;
-                font-size: 9.5px;
+                font-size: 10px;
             }
         }
 
@@ -1475,7 +1515,8 @@
 
         .alphabet-popup-bubble {
             position: absolute;
-            right: 36px;
+            right: calc(100% + 16px);
+            top: 50%;
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -1497,19 +1538,24 @@
                         box-shadow 0.35s ease,
                         border-color 0.35s ease;
             z-index: 100;
+            background-color: transparent;
+            background-image: var(--noise-pattern), var(--glass-bg);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border-top: 1px solid var(--glass-border-t);
+            border-left: 1px solid var(--glass-border-l);
+            border-right: 1px solid var(--glass-border-r);
+            border-bottom: 1px solid var(--glass-border-b);
         }
         .alphabet-popup-bubble.visible {
             opacity: 1;
             visibility: visible;
             transform: translateY(-50%) scale(1);
             box-shadow: var(--shadow-search);
-            border-top-color: var(--glass-border-t);
-            border-left-color: var(--glass-border-l);
-            border-right-color: var(--glass-border-r);
-            border-bottom-color: var(--glass-border-b);
         }
         [data-theme="dark"] .alphabet-popup-bubble.visible {
             border-color: var(--border-subtle);
+            background-color: var(--bg-surface);
         }
 
         @media (hover: none), (pointer: coarse), (max-width: 860px) {
@@ -1721,6 +1767,7 @@
     </div>
 
     <div id="pageContainer" class="container">
+        <!-- 容器 1：大标题栏 -->
         <header class="header">
             <div class="header-top">
                 <div class="brand-wrapper">
@@ -1755,7 +1802,9 @@
             </div>
         </header>
 
+        <!-- 容器 2：搜索栏、状态提示 -->
         <div id="controlBar" class="control-bar">
+            <!-- 容器 3：标签栏 -->
             <nav class="tab-bar-wrapper" aria-label="资源分类导航">
                 <div class="tab-bar glass-element" role="tablist">
                     <div id="tabIndicator" class="tab-indicator"></div>
@@ -1817,11 +1866,14 @@
         </footer>
     </div>
 
+    <!-- 资源列表与字母列表分离并左右并列展示的容器 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
-            <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
-            <div id="alphabetFastIndex" class="alphabet-fast-index glass-element" aria-label="字母快速定位导航"></div>
-            <div id="alphabetPopupBubble" class="alphabet-popup-bubble glass-element">#</div>
+            <div class="alphabet-main-card">
+                <div id="alphabetScrollArea" class="alphabet-scroll-area"></div>
+            </div>
+            <div id="alphabetFastIndex" class="alphabet-fast-index" aria-label="字母快速定位导航"></div>
+            <div id="alphabetPopupBubble" class="alphabet-popup-bubble">#</div>
         </div>
     </div>
     
@@ -2644,10 +2696,9 @@
 
                     if (alphabetPopupBubble) {
                         alphabetPopupBubble.textContent = letter;
-                        const containerRect = alphabetViewContainer.getBoundingClientRect();
+                        const containerRect = alphabetFastIndex.getBoundingClientRect();
                         let relativeY = clientY - containerRect.top;
-                        relativeY = Math.max(35, Math.min(relativeY, containerRect.height - 35));
-                        alphabetPopupBubble.style.top = `${relativeY}px`;
+                        alphabetPopupBubble.style.top = `${Math.max(22, Math.min(relativeY, containerRect.height - 22))}px`;
                         alphabetPopupBubble.classList.add("visible");
                     }
                 }
@@ -2723,8 +2774,9 @@
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
-            alphabetViewContainer.style.left = `${searchRect.left}px`;
-            alphabetViewContainer.style.width = `${containerRect.right - searchRect.left}px`;
+            /* 保证左右边缘与大标题栏、主容器完全对齐 */
+            alphabetViewContainer.style.left = `${containerRect.left}px`;
+            alphabetViewContainer.style.width = `${containerRect.width}px`;
         }
 
         let listViewTransitionTimer = null;
@@ -2747,9 +2799,8 @@
 
                 searchInput.readOnly = false;
 
-                if (!alreadyFloating) {
-                    floatSearchToTarget(true);
-                }
+                /* 无论是哪个标签页点击，强制将搜索框上浮到顶端 */
+                floatSearchToTarget(true);
 
                 if (!state.isAlphabetRendered) {
                     renderAlphabetList();
@@ -2842,9 +2893,7 @@
                 setListViewMode(false, false);
                 window.scrollTo(0, 0);
             } else {
-                if (!isSearchFloating()) {
-                    floatSearchToTarget(true);
-                }
+                floatSearchToTarget(true);
             }
         });
 
