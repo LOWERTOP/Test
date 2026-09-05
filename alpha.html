@@ -660,7 +660,7 @@
             width: 100%;
         }
 
-        /* 独立的资源列表按钮（放在左侧，固定间距 8px） */
+        /* 独立的资源列表按钮（放在左侧，固定间距 8px）：已移除青色边框和青色遮罩 */
         .standalone-list-btn {
             width: 44px;
             height: 44px;
@@ -685,7 +685,7 @@
                 border-color 0.35s ease;
             outline: none;
             padding: 0;
-            z-index: 15;
+            z-index: 999996;
         }
         [data-theme="dark"] .standalone-list-btn {
             border: 1px solid var(--border-subtle);
@@ -710,10 +710,12 @@
         .standalone-list-btn:active {
             transform: scale(0.92);
         }
+        /* 激活状态不再变为青色边框和青色背景，保持默认毛玻璃及图标高亮或原色 */
         .standalone-list-btn.active {
-            color: var(--primary);
-            border-color: var(--primary);
-            background-color: var(--primary-soft);
+            color: var(--text-primary);
+        }
+        [data-theme="dark"] .standalone-list-btn.active {
+            color: var(--text-primary);
         }
 
         /* 搜索框自适应大小，无返回按钮时右侧与主卡片边缘对齐，有返回按钮时自动收缩且间距严格保持 8px */
@@ -1595,7 +1597,7 @@
                         box-shadow 0.35s ease,
                         border-color 0.35s ease,
                         top 0.06s ease-out;
-            z-index: 30;
+            z-index: 999999;
             box-shadow: none;
             background-color: transparent;
             background-image: var(--noise-pattern), var(--glass-bg);
@@ -1834,7 +1836,6 @@
     </div>
 
     <div id="pageContainer" class="container">
-        <!-- 容器 1：大标题栏 -->
         <header class="header">
             <div class="header-top">
                 <div class="brand-wrapper">
@@ -1869,9 +1870,7 @@
             </div>
         </header>
 
-        <!-- 容器 2：搜索栏、状态提示 -->
         <div id="controlBar" class="control-bar">
-            <!-- 容器 3：标签栏 -->
             <nav class="tab-bar-wrapper" aria-label="资源分类导航">
                 <div class="tab-bar glass-element" role="tablist">
                     <div id="tabIndicator" class="tab-indicator"></div>
@@ -1883,12 +1882,10 @@
             </nav>
 
             <div class="search-wrapper">
-                <!-- 独立的资源列表按钮：放在搜索框左侧 -->
                 <button id="standaloneListBtn" class="standalone-list-btn glass-element" type="button" aria-label="资源列表" title="资源列表">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
                 </button>
 
-                <!-- 搜索框：支持原生点击、聚焦和输入功能 -->
                 <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
@@ -1939,7 +1936,6 @@
         </footer>
     </div>
 
-    <!-- 资源列表与字母列表分离并左右并列展示的容器：左边缘实时与资源列表按钮左边缘对齐 -->
     <div id="alphabetViewContainer" class="alphabet-view-container">
         <div class="alphabet-content-box">
             <div class="alphabet-main-card">
@@ -1954,7 +1950,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260904"; 
+        const CACHE_VERSION = "202609051645"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
