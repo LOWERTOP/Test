@@ -326,7 +326,6 @@
         .ptr-icon svg { width: 100%; height: 100%; }
         .ptr-icon.rotate { transform: rotate(180deg); }
 
-        /* 容器 1：大标题栏 */
         .header { 
             padding: 24px 0 18px; 
             max-height: 140px;
@@ -488,7 +487,6 @@
             filter: none; 
         }
 
-        /* 容器 2：搜索栏、状态及衍生弹窗面板：第二列固定为 var(--card-width)，确保右边缘与主卡片对齐 */
         .control-bar {
             position: sticky;
             top: max(12px, env(safe-area-inset-top, 0px));
@@ -504,7 +502,6 @@
             transition: margin-bottom 0.35s ease;
         }
 
-        /* 容器 3：标签栏 */
         .tab-bar-wrapper {
             width: 100%;
             min-width: 0;
@@ -659,7 +656,6 @@
             width: 100%;
         }
 
-        /* 独立的资源列表按钮（放在左侧，固定间距 8px）：已移除青色边框和青色遮罩 */
         .standalone-list-btn {
             width: 44px;
             height: 44px;
@@ -721,7 +717,6 @@
         .standalone-list-btn:active {
             transform: scale(0.92);
         }
-        /* 激活状态不再变为青色边框和青色背景，保持默认毛玻璃及图标高亮或原色 */
         .standalone-list-btn.active {
             color: var(--text-primary);
         }
@@ -729,7 +724,6 @@
             color: var(--text-primary);
         }
 
-        /* 搜索框自适应大小，无返回按钮时右侧与主卡片边缘对齐，有返回按钮时自动收缩且间距严格保持 8px */
         .search-box-inner {
             position: relative; 
             flex: 1 1 auto; 
@@ -869,7 +863,6 @@
             display: none;
         }
 
-        /* 返回顶端按钮：显现时右侧间距与左侧资源列表按钮间距保持完美的 8px 对称一致 */
         .back-to-top-btn {
             width: 0;
             height: 44px;
@@ -1010,10 +1003,15 @@
         }
         .module-icon img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
         
-        .card-main { min-width: 0; flex: 1; }
+        .card-main { 
+            min-width: 0; 
+            flex: 1; 
+            container-type: inline-size; 
+        }
+        
         .module-name { 
             margin: 0; 
-            font-size: 18px; 
+            font-size: clamp(13px, 6.8cqw, 18px); 
             line-height: 1.3; 
             font-weight: 700;
             letter-spacing: -0.2px; 
@@ -1243,7 +1241,6 @@
             pointer-events: auto;
         }
 
-        /* 标签栏在竖屏模式且激活列表时的隐藏逻辑 */
         body.is-list-view .control-bar.is-single-column .tab-bar-wrapper {
             display: none !important;
             opacity: 0 !important;
@@ -1306,7 +1303,6 @@
             font-weight: 400 !important;
         }
 
-        /* 资源列表与字母列表区域 */
         .alphabet-view-container {
             position: fixed;
             z-index: 999999;
@@ -1338,7 +1334,6 @@
             pointer-events: none;
         }
 
-        /* 资源列表卡片（左侧）：左边缘始终实时与独立资源列表按钮左边缘对齐 */
         .alphabet-main-card {
             position: relative;
             z-index: 10;
@@ -1511,7 +1506,6 @@
             flex-shrink: 0;
         }
 
-        /* 字母列表卡片（右侧） */
         .alphabet-fast-index {
             position: relative;
             z-index: 10;
@@ -1592,7 +1586,6 @@
             pointer-events: none;
         }
 
-        /* 滑动字母提示：轻量青色描边 + 放大字母，避免毛玻璃合成造成跟手延迟 */
         .alphabet-popup-bubble {
             position: absolute;
             width: 48px;
@@ -1736,7 +1729,6 @@
                 -webkit-tap-highlight-color: transparent !important;
             }
 
-            /* 移动端资源列表按钮与返回按钮保持完全稳定：触摸时不缩放、不切换阴影，避免 iOS 合成层闪烁 */
             .standalone-list-btn,
             .standalone-list-btn:hover,
             .standalone-list-btn:active,
@@ -1941,7 +1933,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609052100"; 
+        const CACHE_VERSION = "202609052135"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2104,8 +2096,6 @@
         const SYSTEM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
         const MOON_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         const SUN_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
-        const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-        const LIST_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>`;
 
         const tagPillBadge = document.getElementById("tagPillBadge");
         const subtitleEl = document.getElementById("subtitle");
@@ -2260,6 +2250,32 @@
             img.addEventListener("error", () => { img.src = fallbackSrc; }, { once: true });
         }
 
+        function extractInitialLetter(name) {
+            const clean = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
+            const first = clean.charAt(0);
+            if (!first) return "#";
+            if (/^[A-Za-z]$/.test(first)) return first.toUpperCase();
+            
+            if (/^[\u4e00-\u9fa5]$/.test(first)) {
+                try {
+                    const zhLetters = [
+                        { l: "A", c: "啊" }, { l: "B", c: "芭" }, { l: "C", c: "擦" }, { l: "D", c: "搭" },
+                        { l: "E", c: "蛾" }, { l: "F", c: "发" }, { l: "G", c: "噶" }, { l: "H", c: "哈" },
+                        { l: "J", c: "击" }, { l: "K", c: "喀" }, { l: "L", c: "垃" }, { l: "M", c: "妈" },
+                        { l: "N", c: "拿" }, { l: "O", c: "哦" }, { l: "P", c: "啪" }, { l: "Q", c: "期" },
+                        { l: "R", c: "然" }, { l: "S", c: "撒" }, { l: "T", c: "塌" }, { l: "W", c: "挖" },
+                        { l: "X", c: "昔" }, { l: "Y", c: "压" }, { l: "Z", c: "匝" }
+                    ];
+                    for (let i = zhLetters.length - 1; i >= 0; i--) {
+                        if (first.localeCompare(zhLetters[i].c, "zh-Hans-CN-u-co-pinyin") >= 0) {
+                            return zhLetters[i].l;
+                        }
+                    }
+                } catch (e) {}
+            }
+            return "#";
+        }
+
         function normalizeStaticResources(lang = state.currentLang) {
             return STATIC_RESOURCES_DATA
                 .filter(item => !item.isDubious)
@@ -2287,7 +2303,7 @@
                         isRepoCard: item.isRepoCard,
                         primaryBtnText: localized.primaryBtnText,
                         _searchText: searchTokens,
-                        _domElement: null
+                        _initialLetter: extractInitialLetter(localized.name)
                     };
                 });
         }
@@ -2337,7 +2353,7 @@
                         isRepoCard: Boolean(m.isRepoCard),
                         primaryBtnText: m.primaryBtnText || "",
                         _searchText: searchTokens,
-                        _domElement: null
+                        _initialLetter: extractInitialLetter(m.name || "未命名模块")
                     };
                 });
         }
@@ -2406,16 +2422,31 @@
         }
 
         let backToTopVisible = false;
-        function updateSearchLayer() {
+        let scrollRaf = 0;
+        let lastScrollY = -1;
+
+        function updateSearchLayer(scrollY = null) {
             if (!backToTopBtn) return;
-            const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+            if (scrollY == null) scrollY = window.scrollY || document.documentElement.scrollTop || 0;
             const shouldShow = scrollY > 160 && !state.isListView;
             if (shouldShow === backToTopVisible) return;
             backToTopVisible = shouldShow;
             backToTopBtn.classList.toggle("visible", shouldShow);
         }
-        
-        window.addEventListener('scroll', updateSearchLayer, { passive: true });
+
+        function scheduleScrollUpdate() {
+            if (scrollRaf) return;
+            scrollRaf = requestAnimationFrame(() => {
+                scrollRaf = 0;
+                const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+                if (scrollY !== lastScrollY) {
+                    lastScrollY = scrollY;
+                    updateSearchLayer(scrollY);
+                }
+            });
+        }
+
+        window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
 
         backToTopBtn.addEventListener("click", () => {
             if (state.isListView) {
@@ -2451,10 +2482,25 @@
             }
         }
 
-        function getGridColumns() {
+        let layoutCache = {
+            columns: 0,
+            cardWidth: 0,
+            gap: 0,
+            valid: false
+        };
+
+        function invalidateLayoutCache() {
+            layoutCache.valid = false;
+        }
+
+        function getGridColumns(force = false) {
+            if (!force && layoutCache.valid && layoutCache.columns > 0) return layoutCache.columns;
             const style = window.getComputedStyle(modulesContainer);
             const template = style.getPropertyValue("grid-template-columns");
-            return template ? template.trim().split(/\s+/).length : 1;
+            const columns = template ? template.trim().split(/\s+/).length : 1;
+            layoutCache.columns = Math.max(1, columns);
+            layoutCache.valid = true;
+            return layoutCache.columns;
         }
 
         function updateControlBarLayout(columns = null) {
@@ -2464,34 +2510,23 @@
         }
 
         function updateCardWidth(columns = null) {
+            const cols = columns || getGridColumns() || 1;
             const firstCard = modulesContainer.querySelector('.module-card, .loading-card');
             let newWidth = 0;
             if (firstCard && firstCard.offsetWidth > 0) {
                 newWidth = firstCard.offsetWidth;
             } else if (modulesContainer.offsetWidth > 0) {
-                const cols = columns || getGridColumns() || 1;
-                const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--layout-gap")) || 44;
-                const totalGap = (cols - 1) * gap;
+                if (!layoutCache.gap) {
+                    layoutCache.gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--layout-gap")) || 44;
+                }
+                const totalGap = (cols - 1) * layoutCache.gap;
                 newWidth = Math.max(0, (modulesContainer.offsetWidth - totalGap) / cols);
             }
-            if (newWidth > 0 && Math.abs(newWidth - lastCardWidthVal) > 1) {
-                lastCardWidthVal = newWidth;
-                document.documentElement.style.setProperty('--card-width', `${newWidth}px`);
-            }
-        }
-
-        function updateCardLayerOrder(columns = null) {
-            const cards = modulesContainer.querySelectorAll(".module-card, .loading-card");
-            const count = cards.length;
-            if (!count) return;
-
-            const cols = columns || getGridColumns() || 1;
-            for (let i = 0; i < count; i++) {
-                const r = Math.floor(i / cols);
-                const c = i % cols;
-                const z = String((r + 1) * 100 + (cols - c));
-                if (cards[i].style.zIndex !== z) {
-                    cards[i].style.zIndex = z;
+            if (newWidth > 0) {
+                layoutCache.cardWidth = newWidth;
+                if (Math.abs(newWidth - lastCardWidthVal) > 1) {
+                    lastCardWidthVal = newWidth;
+                    document.documentElement.style.setProperty('--card-width', `${newWidth}px`);
                 }
             }
         }
@@ -2500,22 +2535,21 @@
         let resizeEndTimer = null;
 
         function scheduleLayoutUpdate() {
+            invalidateLayoutCache();
             if (layoutRaf) return;
 
             layoutRaf = requestAnimationFrame(() => {
                 layoutRaf = 0;
 
-                const columns = getGridColumns() || 1;
+                const columns = getGridColumns(true) || 1;
                 updateControlBarLayout(columns);
                 updateCardWidth(columns);
-                updateCardLayerOrder(columns);
                 updateAlphabetPosition();
                 if (!isTabAnimating) updateTabIndicator(false);
                 checkScrollLock();
             });
         }
 
-        // 保留一个轻量的 resize 结束标记，避免连续 resize 时反复触发完整布局计算。
         window.addEventListener("resize", () => {
             document.documentElement.classList.add("is-resizing");
             isTabAnimating = false;
@@ -2536,32 +2570,6 @@
             if (tabBarEl) {
                 new ResizeObserver(scheduleLayoutUpdate).observe(tabBarEl);
             }
-        }
-
-        function getItemInitialLetter(name) {
-            const clean = (name || "").trim().replace(/^[\[\(\{#_\-\s【（〔［]+/, "");
-            const first = clean.charAt(0);
-            if (!first) return "#";
-            if (/^[A-Za-z]$/.test(first)) return first.toUpperCase();
-            
-            if (/^[\u4e00-\u9fa5]$/.test(first)) {
-                try {
-                    const zhLetters = [
-                        { l: "A", c: "啊" }, { l: "B", c: "芭" }, { l: "C", c: "擦" }, { l: "D", c: "搭" },
-                        { l: "E", c: "蛾" }, { l: "F", c: "发" }, { l: "G", c: "噶" }, { l: "H", c: "哈" },
-                        { l: "J", c: "击" }, { l: "K", c: "喀" }, { l: "L", c: "垃" }, { l: "M", c: "妈" },
-                        { l: "N", c: "拿" }, { l: "O", c: "哦" }, { l: "P", c: "啪" }, { l: "Q", c: "期" },
-                        { l: "R", c: "然" }, { l: "S", c: "撒" }, { l: "T", c: "塌" }, { l: "W", c: "挖" },
-                        { l: "X", c: "昔" }, { l: "Y", c: "压" }, { l: "Z", c: "匝" }
-                    ];
-                    for (let i = zhLetters.length - 1; i >= 0; i--) {
-                        if (first.localeCompare(zhLetters[i].c, "zh-Hans-CN-u-co-pinyin") >= 0) {
-                            return zhLetters[i].l;
-                        }
-                    }
-                } catch (e) {}
-            }
-            return "#";
         }
 
         function updateStandaloneButtonState() {
@@ -2605,7 +2613,6 @@
             modulesContainer.innerHTML = "";
             sentinel.style.display = "none";
 
-            mod._domElement = null;
             const singleCard = createModuleCard(mod);
             singleCard.classList.add("single-focused");
             modulesContainer.appendChild(singleCard);
@@ -2623,6 +2630,11 @@
 
         function renderAlphabetList() {
             if (!alphabetScrollArea || !alphabetFastIndex) return;
+            
+            if (alphabetImgObserver) {
+                alphabetImgObserver.disconnect();
+            }
+
             alphabetScrollArea.innerHTML = "";
             
             Array.from(alphabetFastIndex.children).forEach(child => {
@@ -2635,8 +2647,8 @@
 
             let sourceList = state.allModules;
             const sorted = [...sourceList].sort((a, b) => {
-                const letterA = getItemInitialLetter(a.name);
-                const letterB = getItemInitialLetter(b.name);
+                const letterA = a._initialLetter || "#";
+                const letterB = b._initialLetter || "#";
                 if (letterA === "#" && letterB !== "#") return -1;
                 if (letterA !== "#" && letterB === "#") return 1;
                 if (letterA !== letterB) return letterA.localeCompare(letterB);
@@ -2645,7 +2657,7 @@
 
             const groups = {};
             sorted.forEach(item => {
-                const l = getItemInitialLetter(item.name);
+                const l = item._initialLetter || "#";
                 if (!groups[l]) groups[l] = [];
                 groups[l].push(item);
             });
@@ -2750,6 +2762,7 @@
         let fastIndexHeight = 0;
         let fastIndexRightOffset = 0;
         let lastSelectedLetter = null;
+        let activeFastIndexChar = null;
 
         function prepareFastIndexGeometry() {
             if (!alphabetFastIndex) return false;
@@ -2771,14 +2784,17 @@
             return fastIndexCharHeight > 0 && fastIndexHeight > 0;
         }
 
-        function updateFastIndexSelection(clientX, clientY) {
+        let fastIndexRaf = 0;
+        let pendingFastIndexX = 0;
+        let pendingFastIndexY = 0;
+
+        function renderFastIndexSelection(clientX, clientY) {
             if (!alphabetFastIndex) return;
 
             if (!fastIndexChars.length || !fastIndexCharHeight) {
                 if (!prepareFastIndexGeometry()) return;
             }
 
-            /* 所有字母使用 flex:1，直接按等高区域计算索引，避免 touchmove 时遍历 27 个元素并反复触发布局 */
             let index = Math.floor((clientY - fastIndexTop) / fastIndexCharHeight);
             index = Math.max(0, Math.min(index, fastIndexChars.length - 1));
 
@@ -2788,20 +2804,18 @@
             const letter = charEl.dataset.letter;
             if (!letter) return;
 
-            /* 只有真正切换字母时才滚动列表和切换 active */
             if (letter !== lastSelectedLetter) {
                 lastSelectedLetter = letter;
                 scrollToAlphabetLetter(letter);
 
-                const previous = alphabetFastIndex.querySelector(".alphabet-fast-char.active");
-                if (previous && previous !== charEl) {
-                    previous.classList.remove("active");
+                if (activeFastIndexChar && activeFastIndexChar !== charEl) {
+                    activeFastIndexChar.classList.remove("active");
                 }
                 charEl.classList.add("active");
+                activeFastIndexChar = charEl;
             }
 
             if (alphabetPopupBubble) {
-                // touchmove 阶段只使用缓存的几何数据，避免强制同步布局导致气泡跟手延迟。
                 let relativeY = clientY - fastIndexTop;
                 const bubbleHalfH = 24;
 
@@ -2817,7 +2831,27 @@
             }
         }
 
+        function updateFastIndexSelection(clientX, clientY, immediate = false) {
+            pendingFastIndexX = clientX;
+            pendingFastIndexY = clientY;
+
+            if (immediate) {
+                renderFastIndexSelection(clientX, clientY);
+                return;
+            }
+
+            if (fastIndexRaf) return;
+            fastIndexRaf = requestAnimationFrame(() => {
+                fastIndexRaf = 0;
+                renderFastIndexSelection(pendingFastIndexX, pendingFastIndexY);
+            });
+        }
+
         function hideFastIndexSelection() {
+            if (fastIndexRaf) {
+                cancelAnimationFrame(fastIndexRaf);
+                fastIndexRaf = 0;
+            }
             if (!isTouchingIndex) return;
 
             isTouchingIndex = false;
@@ -2827,8 +2861,10 @@
                 alphabetPopupBubble.classList.remove("visible");
             }
 
-            const active = alphabetFastIndex.querySelector(".alphabet-fast-char.active");
-            if (active) active.classList.remove("active");
+            if (activeFastIndexChar) {
+                activeFastIndexChar.classList.remove("active");
+                activeFastIndexChar = null;
+            }
         }
 
         alphabetFastIndex.addEventListener("touchstart", (e) => {
@@ -2838,7 +2874,7 @@
             e.preventDefault();
 
             const touch = e.touches[0];
-            updateFastIndexSelection(touch.clientX, touch.clientY);
+            updateFastIndexSelection(touch.clientX, touch.clientY, true);
         }, { passive: false });
 
         alphabetFastIndex.addEventListener("touchmove", (e) => {
@@ -2869,6 +2905,7 @@
 
         function updateAlphabetPosition() {
             if (!alphabetViewContainer || !standaloneListBtn || !pageContainer) return;
+            invalidateLayoutCache();
 
             const btnRect = standaloneListBtn.getBoundingClientRect();
             const containerRect = pageContainer.getBoundingClientRect();
@@ -2889,22 +2926,22 @@
 
             alphabetViewContainer.style.top = `${topPos}px`;
             alphabetViewContainer.style.bottom = `${bottomPos}px`;
-            // 左边缘始终实时与资源列表按钮的左边缘对齐
             alphabetViewContainer.style.left = `${btnRect.left}px`;
             alphabetViewContainer.style.width = `${containerRect.right - btnRect.left}px`;
 
-            /* 容器尺寸或位置改变后，下次触摸重新测量 */
             fastIndexChars = [];
             fastIndexCharHeight = 0;
             fastIndexHeight = 0;
         }
 
         let listViewTransitionTimer = null;
+        let listViewScrollLockTimer = null;
 
         function setListViewMode(enable, restoreScroll = true) {
             if (state.isListView === enable) return;
 
             clearTimeout(listViewTransitionTimer);
+            clearTimeout(listViewScrollLockTimer);
 
             if (enable) {
                 state.wasFloatingBeforeActive = isSearchFloating();
@@ -2930,7 +2967,8 @@
                     }
                 }, 320);
 
-                setTimeout(() => {
+                listViewScrollLockTimer = setTimeout(() => {
+                    listViewScrollLockTimer = null;
                     if (state.isListView) {
                         checkScrollLock();
                     }
@@ -3049,34 +3087,7 @@
             return `<span class="author">${avatarHTML}${escapeHTML(authorName)}</span>`;
         }
 
-        function autoFitModuleName(nameElement) {
-            if (!nameElement) return;
-            nameElement.style.fontSize = '18px';
-            nameElement.style.letterSpacing = '-0.2px';
-            
-            if (nameElement.scrollWidth > nameElement.clientWidth) {
-                nameElement.style.fontSize = '16px';
-                nameElement.style.letterSpacing = '-0.4px';
-            }
-            if (nameElement.scrollWidth > nameElement.clientWidth) {
-                nameElement.style.fontSize = '14.5px';
-                nameElement.style.letterSpacing = '-0.6px';
-            }
-            if (nameElement.scrollWidth > nameElement.clientWidth) {
-                nameElement.style.fontSize = '13px';
-                nameElement.style.letterSpacing = '-0.8px';
-            }
-        }
-
         function createModuleCard(module) {
-            if (module._domElement) {
-                requestAnimationFrame(() => {
-                    const nameEl = module._domElement.querySelector('.module-name');
-                    autoFitModuleName(nameEl);
-                });
-                return module._domElement;
-            }
-
             const langObj = I18N[state.currentLang];
             const card = document.createElement("article");
             card.className = "module-card glass-element";
@@ -3148,11 +3159,6 @@
                     </div>
                 </div>
             `;
-            
-            const nameEl = card.querySelector(".module-name");
-            requestAnimationFrame(() => {
-                autoFitModuleName(nameEl);
-            });
 
             const copyBtn = card.querySelector(".copy-btn");
             if (copyBtn) {
@@ -3176,7 +3182,6 @@
             bindImageError(card.querySelector(".module-icon img"), fallbackIcon);
             bindImageError(card.querySelector(".author-avatar"), null);
 
-            module._domElement = card;
             return card;
         }
 
@@ -3199,7 +3204,6 @@
             sentinel.style.display = state.currentlyRendered >= state.filteredModules.length ? "none" : "block";
             
             updateCardWidth();
-            updateCardLayerOrder();
             updateSearchLayer();
             checkScrollLock();
         }
@@ -3539,7 +3543,6 @@
             state.allModules = [...staticItems, ...dynamicItems];
 
             state.isAlphabetRendered = false;
-            state.allModules.forEach(m => { m._domElement = null; });
             filterModules();
             scheduleAlphabetPreRender();
 
