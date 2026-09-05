@@ -551,8 +551,7 @@
         }
 
         .tab-item,
-        .button-secondary,
-        .alphabet-item-row {
+        .button-secondary {
             position: relative;
             isolation: isolate;
             z-index: 2;
@@ -1437,6 +1436,12 @@
         }
 
         .alphabet-item-row {
+            position: relative;
+            isolation: isolate;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
             display: flex;
             align-items: center;
             gap: 14px;
@@ -1612,7 +1617,7 @@
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
             border: 1px solid var(--primary) !important;
-            will-change: top, opacity;
+            will-change: transform, opacity;
         }
 
         .alphabet-popup-bubble.visible {
@@ -1783,49 +1788,6 @@
             }
         }
 
-        html.is-mobile .tab-item:not(.active)::before,
-        html.is-mobile .button-secondary::before,
-        html.is-mobile .alphabet-item-row::before,
-        html.is-mobile .tab-item:not(.active):hover::before,
-        html.is-mobile .tab-item:not(.active):active::before,
-        html.is-mobile .button-secondary:hover::before,
-        html.is-mobile .button-secondary:active::before,
-        html.is-mobile .alphabet-item-row:hover::before,
-        html.is-mobile .alphabet-item-row:active::before {
-            display: none !important;
-            opacity: 0 !important;
-        }
-        html.is-mobile .button-secondary:active,
-        html.is-mobile .theme-toggle:hover,
-        html.is-mobile .theme-toggle:active,
-        html.is-mobile .back-to-top-btn.visible:hover,
-        html.is-mobile .back-to-top-btn.visible:active {
-            transform: none !important;
-        }
-        html.is-mobile .button-primary:hover,
-        html.is-mobile .button-primary:active,
-        html.is-mobile .button-primary:focus-visible {
-            box-shadow: var(--primary-gradient-shadow) !important;
-        }
-        html.is-mobile .module-icon,
-        html.is-mobile .module-icon:hover,
-        html.is-mobile .module-icon:active,
-        html.is-mobile .module-icon:focus {
-            transform: none !important;
-            opacity: 1 !important;
-            transition: none !important;
-        }
-        html.is-mobile .standalone-list-btn,
-        html.is-mobile .standalone-list-btn:hover,
-        html.is-mobile .standalone-list-btn:active,
-        html.is-mobile .standalone-list-btn:focus,
-        html.is-mobile .standalone-list-btn:focus-visible {
-            transform: none !important;
-            box-shadow: var(--shadow-glass-ui) !important;
-            transition: none !important;
-            -webkit-tap-highlight-color: transparent !important;
-        }
-
         @media (max-width: 600px) {
             :root {
                 --radius-card: 42px;
@@ -1979,7 +1941,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "202609051800"; 
+        const CACHE_VERSION = "202609052100"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2495,20 +2457,19 @@
             return template ? template.trim().split(/\s+/).length : 1;
         }
 
-        function updateControlBarLayout() {
-            const bar = document.getElementById("controlBar");
-            if (!bar || !modulesContainer) return;
-            const columns = getGridColumns();
-            bar.classList.toggle("is-single-column", columns === 1);
+        function updateControlBarLayout(columns = null) {
+            if (!controlBarEl || !modulesContainer) return;
+            const resolvedColumns = columns || getGridColumns();
+            controlBarEl.classList.toggle("is-single-column", resolvedColumns === 1);
         }
 
-        function updateCardWidth() {
+        function updateCardWidth(columns = null) {
             const firstCard = modulesContainer.querySelector('.module-card, .loading-card');
             let newWidth = 0;
             if (firstCard && firstCard.offsetWidth > 0) {
                 newWidth = firstCard.offsetWidth;
             } else if (modulesContainer.offsetWidth > 0) {
-                const cols = getGridColumns() || 1;
+                const cols = columns || getGridColumns() || 1;
                 const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--layout-gap")) || 44;
                 const totalGap = (cols - 1) * gap;
                 newWidth = Math.max(0, (modulesContainer.offsetWidth - totalGap) / cols);
@@ -2519,12 +2480,12 @@
             }
         }
 
-        function updateCardLayerOrder() {
+        function updateCardLayerOrder(columns = null) {
             const cards = modulesContainer.querySelectorAll(".module-card, .loading-card");
             const count = cards.length;
             if (!count) return;
-            
-            const cols = getGridColumns() || 1;
+
+            const cols = columns || getGridColumns() || 1;
             for (let i = 0; i < count; i++) {
                 const r = Math.floor(i / cols);
                 const c = i % cols;
@@ -2535,45 +2496,45 @@
             }
         }
 
-        let resizeTimer = null;
-        function scheduleCardLayerUpdate() {
-            clearTimeout(resizeTimer);
-            updateControlBarLayout();
-            resizeTimer = setTimeout(() => {
-                updateCardWidth();
-                updateCardLayerOrder();
-                updateControlBarLayout();
+        let layoutRaf = 0;
+        let resizeEndTimer = null;
+
+        function scheduleLayoutUpdate() {
+            if (layoutRaf) return;
+
+            layoutRaf = requestAnimationFrame(() => {
+                layoutRaf = 0;
+
+                const columns = getGridColumns() || 1;
+                updateControlBarLayout(columns);
+                updateCardWidth(columns);
+                updateCardLayerOrder(columns);
+                updateAlphabetPosition();
+                if (!isTabAnimating) updateTabIndicator(false);
                 checkScrollLock();
-            }, 40);
+            });
         }
 
-        let resizeDebounceTimer = null;
+        // 保留一个轻量的 resize 结束标记，避免连续 resize 时反复触发完整布局计算。
         window.addEventListener("resize", () => {
             document.documentElement.classList.add("is-resizing");
-            clearTimeout(resizeDebounceTimer);
-            
             isTabAnimating = false;
-            updateControlBarLayout();
-            updateTabIndicator(false);
-            scheduleCardLayerUpdate();
-            updateAlphabetPosition();
-            
-            resizeDebounceTimer = setTimeout(() => {
+
+            clearTimeout(resizeEndTimer);
+            resizeEndTimer = setTimeout(() => {
                 document.documentElement.classList.remove("is-resizing");
-                updateControlBarLayout();
-                updateTabIndicator(false);
-                checkScrollLock();
+                scheduleLayoutUpdate();
             }, 120);
+
+            scheduleLayoutUpdate();
         }, { passive: true });
 
         if (typeof ResizeObserver !== "undefined") {
             if (modulesContainer) {
-                new ResizeObserver(() => scheduleCardLayerUpdate()).observe(modulesContainer);
+                new ResizeObserver(scheduleLayoutUpdate).observe(modulesContainer);
             }
             if (tabBarEl) {
-                new ResizeObserver(() => {
-                    if (!isTabAnimating) updateTabIndicator(false);
-                }).observe(tabBarEl);
+                new ResizeObserver(scheduleLayoutUpdate).observe(tabBarEl);
             }
         }
 
@@ -2656,7 +2617,7 @@
             statusDot.className = "status-dot";
 
             window.scrollTo({ top: 0, behavior: "smooth" });
-            scheduleCardLayerUpdate();
+            scheduleLayoutUpdate();
             checkScrollLock();
         }
 
@@ -2786,6 +2747,7 @@
         let fastIndexChars = [];
         let fastIndexCharHeight = 0;
         let fastIndexTop = 0;
+        let fastIndexHeight = 0;
         let fastIndexRightOffset = 0;
         let lastSelectedLetter = null;
 
@@ -2802,10 +2764,11 @@
                 : indexRect;
 
             fastIndexTop = firstRect.top;
-            fastIndexCharHeight = firstRect.height || (indexRect.height / fastIndexChars.length);
+            fastIndexHeight = indexRect.height;
+            fastIndexCharHeight = firstRect.height || (fastIndexHeight / fastIndexChars.length);
             fastIndexRightOffset = (contentRect.right - indexRect.left) + 10;
 
-            return fastIndexCharHeight > 0;
+            return fastIndexCharHeight > 0 && fastIndexHeight > 0;
         }
 
         function updateFastIndexSelection(clientX, clientY) {
@@ -2838,13 +2801,13 @@
             }
 
             if (alphabetPopupBubble) {
-                const indexRect = alphabetFastIndex.getBoundingClientRect();
-                let relativeY = clientY - indexRect.top;
+                // touchmove 阶段只使用缓存的几何数据，避免强制同步布局导致气泡跟手延迟。
+                let relativeY = clientY - fastIndexTop;
                 const bubbleHalfH = 24;
 
                 relativeY = Math.max(
                     bubbleHalfH,
-                    Math.min(relativeY, indexRect.height - bubbleHalfH)
+                    Math.min(relativeY, fastIndexHeight - bubbleHalfH)
                 );
 
                 alphabetPopupBubble.textContent = letter;
@@ -2933,6 +2896,7 @@
             /* 容器尺寸或位置改变后，下次触摸重新测量 */
             fastIndexChars = [];
             fastIndexCharHeight = 0;
+            fastIndexHeight = 0;
         }
 
         let listViewTransitionTimer = null;
@@ -2980,7 +2944,7 @@
                 document.body.style.minHeight = "";
                 
                 checkScrollLock();
-                scheduleCardLayerUpdate();
+                scheduleLayoutUpdate();
 
                 if (restoreScroll && !state.wasFloatingBeforeActive) {
                     const targetScrollY = Math.max(0, state.listViewReturnScrollY);
@@ -3252,7 +3216,7 @@
                 sentinel.style.display = "none";
                 modulesContainer.innerHTML = `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>${escapeHTML(langObj.emptyText(currentLabel))}</div>`;
                 countText.textContent = langObj.countText(0, currentLabel);
-                scheduleCardLayerUpdate();
+                scheduleLayoutUpdate();
                 checkScrollLock();
                 return;
             }
