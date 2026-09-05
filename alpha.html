@@ -657,7 +657,63 @@
             background: transparent; 
             display: flex;
             align-items: center;
+            gap: 10px;
             width: 100%;
+        }
+
+        /* 独立的资源列表按钮（放置于搜索框左侧） */
+        .standalone-list-btn {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            box-shadow: var(--shadow-glass-ui);
+            border-top-color: var(--glass-border-t);
+            border-left-color: var(--glass-border-l);
+            border-right-color: var(--glass-border-r);
+            border-bottom-color: var(--glass-border-b);
+            transition: 
+                transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.3s ease,
+                color 0.2s ease,
+                border-color 0.35s ease;
+            outline: none;
+            padding: 0;
+            z-index: 15;
+        }
+        [data-theme="dark"] .standalone-list-btn {
+            border: 1px solid var(--border-subtle);
+        }
+        .standalone-list-btn svg {
+            display: block;
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+        }
+        .standalone-list-btn:hover {
+            background-image: var(--noise-pattern), var(--glass-bg-hover);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-glass-ui-hover);
+        }
+        [data-theme="dark"] .standalone-list-btn:hover {
+            background-image: var(--noise-pattern);
+            background-color: var(--border-subtle);
+            color: var(--text-primary);
+        }
+        .standalone-list-btn:active {
+            transform: scale(0.92);
+        }
+        .standalone-list-btn.active {
+            color: var(--primary);
+            border-color: var(--primary);
+            background-color: var(--primary-soft);
         }
 
         .search-box-inner {
@@ -671,7 +727,7 @@
             border-radius: 22px; 
             box-shadow: var(--shadow-search); 
             padding: 6px; 
-            cursor: pointer;
+            cursor: text;
             -webkit-transform: translateZ(0); 
             transform: translateZ(0);
             transition: 
@@ -680,26 +736,20 @@
                 background-color 0.35s ease;
         }
 
-        body.is-list-view .search-box-inner {
-            cursor: text;
-        }
-
-        .search-box-inner:focus-within,
-        body.is-list-view .search-box-inner {
+        .search-box-inner:focus-within {
             background-image: var(--noise-pattern), var(--glass-bg-hover);
             border-color: rgba(255,255,255,0.85); 
             box-shadow: var(--shadow-search-hover); 
         }
         
-        [data-theme="dark"] .search-box-inner:focus-within,
-        [data-theme="dark"] body.is-list-view .search-box-inner {
+        [data-theme="dark"] .search-box-inner:focus-within {
             background-image: var(--noise-pattern);
             background-color: var(--border-subtle);
             border-color: var(--text-tertiary); 
             box-shadow: var(--shadow-search-hover);
         }
         
-        .search-icon, .list-toggle-icon { 
+        .search-icon, .search-clear-btn { 
             width: 32px; height: 32px; flex: 0 0 32px; border-radius: 50%;
             background: transparent; box-shadow: none; border: 1px solid var(--border-subtle);
             display: flex; align-items: center; justify-content: center;
@@ -718,7 +768,7 @@
             pointer-events: none;
         }
         
-        .list-toggle-icon {
+        .search-clear-btn {
             cursor: pointer;
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
             outline: none;
@@ -726,25 +776,26 @@
             border-style: solid;
             position: relative;
             z-index: 15;
+            display: none;
         }
-        .list-toggle-icon svg {
+        .search-clear-btn svg {
             display: block;
             width: 15px;
             height: 15px;
             pointer-events: none;
         }
-        .list-toggle-icon:hover {
+        .search-clear-btn:hover {
             border-color: var(--primary);
             background-color: var(--primary-soft);
             transform: scale(1.05);
+            color: var(--primary);
         }
-        .list-toggle-icon:active {
+        .search-clear-btn:active {
             transform: scale(0.92);
         }
-        .list-toggle-icon.active {
-            border-color: var(--primary);
-            background-color: var(--primary-soft);
-            color: var(--primary);
+
+        body.has-search-text .search-clear-btn {
+            display: flex;
         }
         
         .input-wrapper {
@@ -760,13 +811,8 @@
             color: var(--text-primary); font-size: 15px; font-weight: 400; vertical-align: middle;
             -webkit-appearance: none; appearance: none; border-radius: 0;
             z-index: 2;
-            cursor: pointer;
-            text-shadow: none; 
-        }
-
-        body.is-list-view .search,
-        .search:focus {
             cursor: text;
+            text-shadow: none; 
         }
         
         .search::placeholder { color: transparent; }
@@ -787,8 +833,7 @@
         }
 
         .search:focus ~ .placeholder-track,
-        .search:not(:placeholder-shown) ~ .placeholder-track,
-        body.is-list-view .placeholder-track {
+        .search:not(:placeholder-shown) ~ .placeholder-track {
             opacity: 0;
             transition: opacity 0.2s ease;
         }
@@ -806,25 +851,8 @@
             transition: color 0.2s ease, opacity 0.2s ease; 
         }
 
-        .search-mask-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 48px;
-            bottom: 0;
-            border-radius: 22px;
-            z-index: 10;
-            cursor: pointer;
-            background: transparent;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body.is-list-view .search-mask-overlay,
-        body.has-search-focus .search-mask-overlay,
-        body.has-search-text .search-mask-overlay,
-        .search-box-inner:focus-within .search-mask-overlay {
-            display: none !important;
-            pointer-events: none !important;
+        body.has-search-text .search-shortcut {
+            display: none;
         }
 
         .back-to-top-btn {
@@ -1194,6 +1222,7 @@
             pointer-events: none;
         }
 
+        .control-bar.is-single-column .standalone-list-btn,
         .control-bar.is-single-column .search-box-inner,
         .control-bar.is-single-column .back-to-top-btn {
             pointer-events: auto;
@@ -1450,7 +1479,6 @@
             color: inherit;
         }
 
-        /* 取消标签的胶囊背景，仅保留纯文字样式 */
         .alphabet-item-type {
             font-size: 12px;
             font-weight: 400;
@@ -1543,7 +1571,7 @@
             pointer-events: none;
         }
 
-        /* 滑动字母放大预选效果：z-index 设为 30，确保高于左侧资源列表卡片 (10) */
+        /* 滑动字母放大预选效果：z-index 设为 30 */
         .alphabet-popup-bubble {
             position: absolute;
             width: 44px;
@@ -1853,11 +1881,17 @@
             </nav>
 
             <div class="search-wrapper">
+                <!-- 独立的资源列表按钮：放在搜索框左侧 -->
+                <button id="standaloneListBtn" class="standalone-list-btn glass-element" type="button" aria-label="首字母资源列表" title="首字母资源列表">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg>
+                </button>
+
+                <!-- 恢复原生输入功能的搜索框（去掉了所有阻挡输入的旧遮罩与 readonly 限制） -->
                 <div id="searchBoxInner" class="search-box-inner glass-element" role="search">
                     <div class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg></div>
                     
                     <div class="input-wrapper">
-                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块" disabled readonly>
+                        <input id="search" class="search" type="text" inputmode="search" placeholder=" " autocomplete="off" spellcheck="false" aria-label="搜索模块">
                         
                         <div id="placeholderTrack" class="placeholder-track">
                             <div id="mainPlaceholder" class="placeholder-item">请在加载完成后执行搜索...</div>
@@ -1867,9 +1901,9 @@
                     </div>
 
                     <span class="search-shortcut">/</span>
-                    <button id="listToggleBtn" class="list-toggle-icon" type="button" aria-label="首字母资源列表" title="首字母资源列表"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><line x1="8" y1="8" x2="16" y2="8"></line><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="13" y2="16"></line></svg></button>
-                    
-                    <div id="searchMaskOverlay" class="search-mask-overlay" title="首字母资源列表" aria-label="首字母资源列表"></div>
+                    <button id="searchClearBtn" class="search-clear-btn" type="button" aria-label="清空搜索" title="清空搜索">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
 
                 <button id="backToTopBtn" class="theme-toggle glass-element back-to-top-btn" type="button" aria-label="返回顶部" title="返回顶部">
@@ -1918,7 +1952,7 @@
     <div id="toast" class="toast glass-element">已复制资源链接</div>
 
     <script>
-        const CACHE_VERSION = "20260905"; 
+        const CACHE_VERSION = "20260904"; 
         
         const CONFIG = {
             DATA_JSON_URL: "https://raw.githubusercontent.com/LOWERTOP/Shadowrocket-First/README/modules.json", 
@@ -2063,7 +2097,7 @@
             {
                 category: "more",
                 i18n: {
-                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块、规则、配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
+                    zh: { name: "配色与配置仓库", description: "Shadowrocket 精选模块,规则,配色方案的聚合类型资源仓库，汇聚了众多开源社区优质资源，也是本站的核心数据处理仓库。", primaryBtnText: "访问仓库" },
                     en: { name: "Theme & Config Repo", description: "Curated community repository for modules, rules, and color themes, also serving as the core data processing hub.", primaryBtnText: "Visit Repo" }
                 },
                 icon: "https://avatars.githubusercontent.com/u/16624731?v=4",
@@ -2096,11 +2130,11 @@
 
         const controlBarEl = document.getElementById("controlBar");
         const searchBoxInner = document.getElementById('searchBoxInner');
-        const searchMaskOverlay = document.getElementById('searchMaskOverlay');
         const modulesContainer = document.getElementById("modules");
         const searchInput = document.getElementById("search");
         const searchShortcut = document.querySelector(".search-shortcut");
-        const listToggleBtn = document.getElementById("listToggleBtn");
+        const standaloneListBtn = document.getElementById("standaloneListBtn");
+        const searchClearBtn = document.getElementById("searchClearBtn");
         const statusText = document.getElementById("statusText");
         const statusDot = document.getElementById("statusDot");
         const countText = document.getElementById("countText");
@@ -2545,23 +2579,22 @@
             return "#";
         }
 
-        function updateRightActionButton() {
+        function updateStandaloneButtonState() {
             const hasText = searchInput.value.length > 0;
-            const shouldShowClose = state.isListView || hasText || state.focusedModuleId;
+            const shouldActive = state.isListView || state.focusedModuleId;
 
-            if (shouldShowClose) {
-                listToggleBtn.innerHTML = CLOSE_SVG;
-                listToggleBtn.classList.add("active");
-                listToggleBtn.setAttribute("title", I18N[state.currentLang].searchClearTitle);
-                listToggleBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
-                if (searchShortcut) searchShortcut.style.display = "none";
+            if (shouldActive) {
+                standaloneListBtn.classList.add("active");
+                standaloneListBtn.setAttribute("title", I18N[state.currentLang].searchClearTitle);
+                standaloneListBtn.setAttribute("aria-label", I18N[state.currentLang].searchClearTitle);
+                standaloneListBtn.innerHTML = CLOSE_SVG;
             } else {
-                listToggleBtn.innerHTML = LIST_SVG;
-                listToggleBtn.classList.remove("active");
-                listToggleBtn.setAttribute("title", "首字母资源列表");
-                listToggleBtn.setAttribute("aria-label", "首字母资源列表");
-                if (searchShortcut) searchShortcut.style.display = "";
+                standaloneListBtn.classList.remove("active");
+                standaloneListBtn.setAttribute("title", "首字母资源列表");
+                standaloneListBtn.setAttribute("aria-label", "首字母资源列表");
+                standaloneListBtn.innerHTML = LIST_SVG;
             }
+            document.body.classList.toggle("has-search-text", hasText);
         }
 
         function focusSingleResource(mod) {
@@ -2569,11 +2602,10 @@
             setListViewMode(false, false);
 
             searchInput.value = mod.name;
-            searchInput.readOnly = true;
             searchInput.blur();
             document.body.classList.remove("has-search-focus");
             document.body.classList.add("has-search-text");
-            updateRightActionButton();
+            updateStandaloneButtonState();
 
             if (state.activeTab !== mod.category) {
                 state.activeTab = mod.category;
@@ -2830,7 +2862,6 @@
             let bottomPos = 16;
             const isSingleCol = controlBarEl && controlBarEl.classList.contains("is-single-column");
             
-            /* 下边缘位置精确等于标签栏下沉后距离底部的边缘位置 */
             if (isSingleCol) {
                 const bottomOffsetVal = parseFloat(window.getComputedStyle(document.documentElement).getPropertyValue('--bottom-offset')) || 16;
                 bottomPos = Math.round(bottomOffsetVal);
@@ -2859,9 +2890,7 @@
                 state.focusedModuleId = null;
 
                 document.body.classList.add("is-list-view");
-                updateRightActionButton();
-
-                searchInput.readOnly = false;
+                updateStandaloneButtonState();
 
                 floatSearchToTarget(true);
 
@@ -2886,16 +2915,12 @@
                 state.isListView = false;
                 alphabetViewContainer.classList.remove("is-visible");
                 document.body.classList.remove("is-list-view");
-                updateRightActionButton();
+                updateStandaloneButtonState();
                 
                 document.body.style.minHeight = "";
                 
                 checkScrollLock();
                 scheduleCardLayerUpdate();
-
-                if (searchInput.value.length === 0 && document.activeElement !== searchInput) {
-                    searchInput.readOnly = true;
-                }
 
                 if (restoreScroll && !state.wasFloatingBeforeActive) {
                     const targetScrollY = Math.max(0, state.listViewReturnScrollY);
@@ -2917,73 +2942,26 @@
             }
             if (e.target.closest("#alphabetViewContainer") || 
                 e.target.closest("#controlBar") || 
-                e.target.closest(".search-box-inner") ||
+                e.target.closest("#standaloneListBtn") ||
                 e.target.closest("#toast") || 
                 e.target.closest("#pullRefreshIndicator")) {
                 return;
             }
             setListViewMode(false);
-            if (searchInput.value.length === 0) {
-                searchInput.readOnly = true;
-            }
         });
 
-        if (searchMaskOverlay) {
-            searchMaskOverlay.addEventListener("click", (e) => {
-                e.stopPropagation();
-                if (searchInput.disabled) return;
-                ignoreNextClick = true;
-                searchInput.readOnly = true;
-                searchInput.blur();
-                setListViewMode(true);
-            });
-        }
-
-        if (searchBoxInner) {
-            searchBoxInner.addEventListener("click", (e) => {
-                if (searchInput.disabled) return;
-                if (e.target.closest("#listToggleBtn") || e.target.closest("#searchMaskOverlay")) return;
-
-                if (state.isListView) {
-                    if (document.activeElement !== searchInput) {
-                        searchInput.readOnly = false;
-                        searchInput.focus();
-                    }
-                }
-            });
-        }
-
-        searchInput.addEventListener("focus", () => {
-            document.body.classList.add("has-search-focus");
-            if (state.isListView) {
-                setListViewMode(false, false);
-                window.scrollTo(0, 0);
-            } else {
-                floatSearchToTarget(true);
-            }
-        });
-
-        searchInput.addEventListener("blur", () => {
-            document.body.classList.remove("has-search-focus");
-            if (searchInput.value.length === 0 && !state.isListView && !state.focusedModuleId) {
-                searchInput.readOnly = true;
-            }
-        });
-
-        listToggleBtn.addEventListener("click", (e) => {
+        // 独立的资源列表按钮点击事件
+        standaloneListBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             const hasText = searchInput.value.length > 0;
 
             if (state.isListView) {
                 setListViewMode(false);
-                searchInput.readOnly = true;
-                searchInput.blur();
             } else if (hasText || state.focusedModuleId) {
                 state.focusedModuleId = null;
                 searchInput.value = "";
-                searchInput.readOnly = true;
                 searchInput.blur();
-                document.body.classList.remove("has-search-text", "has-search-focus");
+                document.body.classList.remove("has-search-focus");
                 setListViewMode(false);
                 
                 state.activeTab = "module";
@@ -2998,13 +2976,45 @@
                 if (state.statusKey && I18N[state.currentLang][state.statusKey]) {
                     statusText.textContent = I18N[state.currentLang][state.statusKey];
                 }
-                updateRightActionButton();
+                updateStandaloneButtonState();
             } else {
                 ignoreNextClick = true;
-                searchInput.readOnly = true;
                 searchInput.blur();
                 setListViewMode(true);
             }
+        });
+
+        // 搜索框内部的清空按钮事件
+        searchClearBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            searchInput.value = "";
+            document.body.classList.remove("has-search-text");
+            filterModules();
+            updateStandaloneButtonState();
+            searchInput.focus();
+        });
+
+        /* 恢复搜索框原生功能：点击搜索框本身仅激活输入焦点，不触发资源列表 */
+        searchBoxInner.addEventListener("click", (e) => {
+            if (searchInput.disabled) return;
+            if (e.target.closest("#searchClearBtn")) return;
+            if (document.activeElement !== searchInput) {
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener("focus", () => {
+            document.body.classList.add("has-search-focus");
+            if (state.isListView) {
+                setListViewMode(false, false);
+                window.scrollTo(0, 0);
+            } else {
+                floatSearchToTarget(true);
+            }
+        });
+
+        searchInput.addEventListener("blur", () => {
+            document.body.classList.remove("has-search-focus");
         });
 
         function renderAuthor(module) {
@@ -3205,7 +3215,7 @@
         function filterModules() {
             const keyword = searchInput.value.trim().normalize("NFKC").toLowerCase();
             document.body.classList.toggle("has-search-text", keyword.length > 0);
-            updateRightActionButton();
+            updateStandaloneButtonState();
 
             let result = [];
             const langObj = I18N[state.currentLang];
@@ -3227,7 +3237,6 @@
                 if (state.isListView) {
                     setListViewMode(false, false);
                 }
-                searchInput.readOnly = true;
                 searchInput.blur();
                 document.body.classList.remove("has-search-focus");
                 if (state.activeTab === targetTab && !state.focusedModuleId) return;
@@ -3235,7 +3244,7 @@
                 state.focusedModuleId = null;
                 searchInput.value = "";
                 document.body.classList.remove("has-search-text");
-                updateRightActionButton();
+                updateStandaloneButtonState();
 
                 state.activeTab = targetTab;
                 tabItems.forEach(t => {
@@ -3276,26 +3285,21 @@
                 e.preventDefault();
                 setListViewMode(false, false);
                 window.scrollTo(0, 0);
-                searchInput.readOnly = false;
                 searchInput.focus();
                 searchInput.select();
             } else if (e.key === "Escape") {
                 state.focusedModuleId = null;
                 searchInput.value = "";
-                searchInput.readOnly = true;
                 searchInput.blur();
                 document.body.classList.remove("has-search-text", "has-search-focus");
                 setListViewMode(false);
                 filterModules();
-                updateRightActionButton();
+                updateStandaloneButtonState();
             }
         });
 
         function setSearchState(enabled) {
             searchInput.disabled = !enabled;
-            if (enabled) {
-                searchInput.readOnly = true;
-            }
             const langObj = I18N[state.currentLang];
             const text = enabled ? langObj.searchPlaceholderReady : langObj.searchPlaceholderWait;
             const mainP = document.getElementById("mainPlaceholder");
@@ -3307,7 +3311,7 @@
 
             if (!enabled) {
                 searchInput.value = "";
-                updateRightActionButton();
+                updateStandaloneButtonState();
             }
         }
 
@@ -3501,7 +3505,7 @@
 
             setSearchState(!searchInput.disabled);
             updateThemeUI();
-            updateRightActionButton();
+            updateStandaloneButtonState();
 
             if (!state.focusedModuleId && state.statusKey && dict[state.statusKey]) {
                 statusText.textContent = dict[state.statusKey];
